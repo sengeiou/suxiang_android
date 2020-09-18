@@ -72,6 +72,7 @@ class LoginActivity : BaseActivity() ,SXContract.View{
                         data.userId = data.id.toString()
                         C.USER_ID = data.userId
                         data.save()
+                        ////
                     }
                 }
                 else -> {
