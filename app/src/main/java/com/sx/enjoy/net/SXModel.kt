@@ -18,13 +18,34 @@ class SXModel  : SXContract.Model{
     }
 
 
-    override fun register(code: String,electCode: String,password: String,repNewPassword: String,userPhone:String): Observable<HttpResult<String>> {
-        val mapValue = mapOf("code" to code,"electCode" to electCode,"password" to password,"repNewPassword" to repNewPassword,"userPhone" to userPhone)
-        return Api.getDefault().register(mapValue)
+    override fun register(code: String, electCode: String, password: String, repNewPassword: String, userPhone: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("code", code)
+            jsonObject.put("electCode", electCode)
+            jsonObject.put("password", password)
+            jsonObject.put("repNewPassword", repNewPassword)
+            jsonObject.put("userPhone", userPhone)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().register(body)
     }
 
     override fun login(phone: String, password: String): Observable<HttpResult<UserBean>> {
-        val mapValue = mapOf("phone" to phone,"password" to password)
-        return Api.getDefault().login(mapValue)
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("phone", phone)
+            jsonObject.put("password", password)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().login(body)
     }
 }

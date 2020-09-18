@@ -14,13 +14,12 @@ interface ApiService {
     fun sendCode(@QueryMap map:Map<String,String>):Observable<HttpResult<String>>
 
     //注册
-    @FormUrlEncoded
-    @POST("api-user/user/register")
-    fun register(@FieldMap map:Map<String,String>):Observable<HttpResult<String>>
+    @POST("app/users/register")
+    fun register(@Body body : RequestBody):Observable<HttpResult<String>>
 
     //登录
     @FormUrlEncoded
     @POST("api-user/user/login")
-    fun login(@FieldMap map:Map<String,String>):Observable<HttpResult<UserBean>>
+    fun login(@Body body : RequestBody):Observable<HttpResult<UserBean>>
 
 }
