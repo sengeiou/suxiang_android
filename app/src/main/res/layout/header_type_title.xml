@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <View
+        android:layout_width="@dimen/dimen_80"
+        android:layout_height="@dimen/dimen_1"
+        android:background="@color/color_C8C8C8"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_48"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"
+        android:textSize="@dimen/text_16"
+        android:textColor="@color/color_585858"
+        android:text="外套专区"/>
+
+    <View
+        android:layout_width="@dimen/dimen_80"
+        android:layout_height="@dimen/dimen_1"
+        android:background="@color/color_C8C8C8"/>
+
+</LinearLayout>

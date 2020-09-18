@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen_360"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dimen_48"
+    android:paddingBottom="@dimen/dimen_30"
+    android:background="@drawable/bg_white_full_5">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/title_main_color"
+        android:textSize="@dimen/text_16"
+        android:text="恭喜你，升级成功"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:src="@mipmap/ic_members_success"/>
+
+    <TextView
+        android:id="@+id/tv_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_45"
+        android:background="@drawable/bg_main_full_24"
+        android:layout_marginLeft="@dimen/dimen_45"
+        android:layout_marginRight="@dimen/dimen_45"
+        android:layout_marginTop="@dimen/dimen_45"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        android:text="确定"/>
+
+</LinearLayout>

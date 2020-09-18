@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".modules.home.SignAnswerActivity">
+
+    <include layout="@layout/title_public_view"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/bg_sign_answer" />
+
+        <RelativeLayout
+            android:id="@+id/rl_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="@dimen/dimen_20"
+            android:layout_marginRight="@dimen/dimen_20"
+            android:background="@drawable/bg_white_full_18">
+
+            <TextView
+                android:id="@+id/tv_question_number"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:gravity="center"
+                android:textColor="@color/title_main_color"
+                android:textSize="@dimen/text_18"
+                android:text="第一题"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1"
+                android:layout_below="@+id/tv_question_number"
+                android:background="@color/background" />
+
+            <TextView
+                android:id="@+id/tv_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_question_number"
+                android:layout_margin="@dimen/dimen_15"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_16"
+                android:text="（1）看到一个美女，你的想法是什么？"/>
+
+            <TextView
+                android:id="@+id/tv_operation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_question"
+                android:layout_marginLeft="@dimen/dimen_20"
+                android:layout_marginTop="@dimen/dimen_5"
+                android:layout_marginRight="@dimen/dimen_15"
+                android:layout_marginBottom="@dimen/dimen_5"
+                android:text=" A：当做什么也没有发生\n\n B：搞恶作剧：\n\n C：快速跑过\n" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1"
+                android:layout_below="@+id/tv_operation"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:layout_marginRight="@dimen/dimen_15"
+                android:background="@color/background" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcy_answer_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_operation"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="@dimen/dimen_20"
+                android:layout_marginTop="@dimen/dimen_10"
+                android:layout_marginRight="@dimen/dimen_20" />
+
+            <TextView
+                android:id="@+id/tv_submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_below="@+id/rcy_answer_list"
+                android:layout_marginLeft="@dimen/dimen_45"
+                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginRight="@dimen/dimen_45"
+                android:layout_marginBottom="@dimen/dimen_20"
+                android:background="@drawable/bg_purple_full_25"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_16"
+                android:text="提交"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
