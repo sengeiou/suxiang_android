@@ -1,42 +1,41 @@
 package com.sx.enjoy.adapter
 
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.sx.enjoy.R
+import com.sx.enjoy.bean.OptionsList
 
-class AnswerListAdapter: BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_answer_list){
-    override fun convert(helper: BaseViewHolder?, item: String?) {
-        helper?.setText(R.id.tv_answer_name,item)
+class AnswerListAdapter: BaseQuickAdapter<OptionsList, BaseViewHolder>(R.layout.item_answer_list){
+    override fun convert(helper: BaseViewHolder?, item: OptionsList) {
+        helper?.setText(R.id.tv_answer_name,item.options)
+        helper?.getView<TextView>(R.id.tv_answer_name)?.isSelected = item.isSelected
     }
 
-    fun setAnswerList(count:Int){
-        data.clear()
-        when(count){
-            1 -> data.add("A")
-            2 -> {
-                data.add("A")
-                data.add("B")
+    fun selectItem (position:Int){
+        if(position == -1){
+            data.forEach {
+                it.isSelected = false
             }
-            3 -> {
-                data.add("A")
-                data.add("B")
-                data.add("C")
+            notifyDataSetChanged()
+        }else{
+            data.forEach {
+                it.isSelected = false
             }
-            4 -> {
-                data.add("A")
-                data.add("B")
-                data.add("C")
-                data.add("D")
-            }
-            5 -> {
-                data.add("A")
-                data.add("B")
-                data.add("C")
-                data.add("D")
-                data.add("E")
+            data[position].isSelected = true
+            notifyDataSetChanged()
+        }
+    }
+
+    fun getSelectItem():String{
+        var item = ""
+        for(i in data.indices) {
+            if(data[i].isSelected){
+                item = data[i].options
+                break
             }
         }
-        notifyDataSetChanged()
+        return item
     }
 
 }

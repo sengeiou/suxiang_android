@@ -10,13 +10,28 @@ import com.likai.lib.base.BaseFragment
 import com.likai.lib.commonutils.DensityUtils
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.HomeListAdapter
+import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.constans.C
+import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.net.SXContract
+import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.GlideImageLoader
+import com.sx.enjoy.view.dialog.SignDialog
+import com.sx.enjoy.view.dialog.SignOverDialog
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.header_home_view.*
 import kotlinx.android.synthetic.main.header_home_view.view.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
+import org.litepal.LitePal
 
 
-class HomeFragment : BaseFragment(){
+class HomeFragment : BaseFragment(),SXContract.View{
+
+    private lateinit var signDialog: SignDialog
+    private lateinit var signOverDialog: SignOverDialog
+
+    private lateinit var present: SXPresent
 
     private lateinit var headView:View
     private lateinit var mAdapter:HomeListAdapter
@@ -26,9 +41,15 @@ class HomeFragment : BaseFragment(){
 
     override fun getLayoutResource() = R.layout.fragment_home
 
+    override fun beForInitView() {
+        present = SXPresent(this)
+    }
 
     override fun initView() {
         ImmersionBar.with(activity!!).statusBarDarkFont(true).titleBar(tb_home_title).init()
+
+        signDialog = SignDialog(activity!!)
+        signOverDialog = SignOverDialog(activity!!)
 
         mAdapter = HomeListAdapter()
         rcy_home_list.layoutManager = LinearLayoutManager(activity)
@@ -36,6 +57,8 @@ class HomeFragment : BaseFragment(){
 
         headView = View.inflate(activity,R.layout.header_home_view,null)
         mAdapter.addHeaderView(headView)
+
+
 
 
         val noticeList = arrayListOf<String>()
@@ -69,9 +92,14 @@ class HomeFragment : BaseFragment(){
         initEvent()
     }
 
+
     private fun initEvent(){
         iv_home_sign.setOnClickListener {
-            activity?.startActivity<SignAnswerActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                present.getSignResult(C.USER_ID,true)
+            }
         }
         tv_note_list.setOnClickListener {
             activity?.startActivity<WalkHistoryActivity>(Pair("titleType",titleType))
@@ -97,9 +125,16 @@ class HomeFragment : BaseFragment(){
                 }
             }
         }
+        signDialog.setOnNoticeConfirmListener(object :SignDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                activity?.startActivity<SignAnswerActivity>()
+            }
+        })
+
         swipe_refresh_layout.setOnRefreshListener {
             Log.e("Test","刷新------------>")
         }
+
         rcy_home_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -135,6 +170,21 @@ class HomeFragment : BaseFragment(){
         headView.tb_home_notice.startViewAnimator()
         headView.ban_top_list.startAutoPlay()
         headView. ban_bottom_list.startAutoPlay()
+
+        val user = LitePal.findLast(UserBean::class.java)
+        if(user!=null){
+            headView.tv_user_activity.text = user.userActivity.toString()
+            headView.tv_user_contribution.text = user.userContrib.toString()
+            headView.tv_user_rice.text = user.riceGrains.toString()
+        }else{
+            headView.tv_user_activity.text = "0"
+            headView.tv_user_contribution.text = "0"
+            headView.tv_user_rice.text = "0"
+        }
+        if(!C.IS_SIGN_REQUEST&&C.USER_ID.isNotEmpty()){
+            C.IS_SIGN_REQUEST = true
+            present.getSignResult(C.USER_ID,false)
+        }
     }
 
     override fun onStop() {
@@ -143,6 +193,45 @@ class HomeFragment : BaseFragment(){
         headView.ban_top_list.stopAutoPlay()
         headView.ban_bottom_list.stopAutoPlay()
     }
+
+
+
+    override fun onSuccess(flag: String?, data: Any?) {
+        flag?.let {
+            when (flag) {
+                SXContract.GETSIGNRESULT+"0" -> {
+                    data?.let {
+                        data as Boolean
+                        if(!data){
+                            signDialog.show()
+                        }
+                    }
+                }
+                SXContract.GETSIGNRESULT+"1" -> {
+                    data?.let {
+                        data as Boolean
+                        if(data){
+                            signOverDialog.show()
+                        }else{
+                            activity?.startActivity<SignAnswerActivity>()
+                        }
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+
+    override fun onFailed(string: String?,isRefreshList:Boolean) {
+        activity?.toast(string!!)
+    }
+
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {}
+
+
 
     companion object {
         fun newInstance(): HomeFragment {

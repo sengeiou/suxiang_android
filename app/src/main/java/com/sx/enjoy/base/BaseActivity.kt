@@ -20,6 +20,7 @@ abstract class BaseActivity : MyBaseActivity()  , TokenLoseEfficacy.OnTokenLoseE
     private fun initTitle(){
         val d = getTitleType()
         if(d.type == C.TITLE_CUSTOM){
+
             return
         }
         ImmersionBar.with(this).statusBarDarkFont(true).titleBar(public_title).init()
@@ -30,7 +31,7 @@ abstract class BaseActivity : MyBaseActivity()  , TokenLoseEfficacy.OnTokenLoseE
             C.TITLE_RIGHT_TEXT -> {
                 tv_public_title.text = d.title
                 tv_public_right.text = d.right
-                tv_public_right.setTextColor(d.rightTextColor)
+                tv_public_right.setTextColor(resources.getColor(d.rightTextColor))
             }
         }
         ll_public_back.setOnClickListener {
@@ -53,7 +54,7 @@ abstract class BaseActivity : MyBaseActivity()  , TokenLoseEfficacy.OnTokenLoseE
 
         constructor(type:Int,title:String,right:String):this(type,title,right,0)
 
-        constructor(type:Int,title:String,right:String,rightImg:Int):this(type,title,right,rightImg,0)
+        constructor(type:Int,title:String,right:String,rightImg:Int):this(type,title,right,rightImg,R.color.main_color)
 
         constructor(type:Int,title:String,right:String,rightImg:Int,rightTextColor:Int){
             this.type = type

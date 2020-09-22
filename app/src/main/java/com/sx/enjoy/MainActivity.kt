@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.SwitchPagerEvent
 import com.sx.enjoy.modules.home.HomeFragment
 import com.sx.enjoy.modules.market.MarketFragment
 import com.sx.enjoy.modules.mine.MineFragment
@@ -12,6 +13,9 @@ import com.sx.enjoy.modules.store.StoreFragment
 import com.sx.enjoy.modules.task.TaskFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_bottom_tab_button.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class MainActivity :BaseActivity() {
 
@@ -22,9 +26,9 @@ class MainActivity :BaseActivity() {
     override fun getLayoutResource() = R.layout.activity_main
 
     override fun initView() {
+        EventBus.getDefault().register(this)
 
         initFragment()
-
     }
 
     private fun initFragment(){
@@ -126,6 +130,22 @@ class MainActivity :BaseActivity() {
                 vp_home.setCurrentItem(4, false)
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun switchPager(event: SwitchPagerEvent){
+        if(event.isShowPager){
+            vp_home.setCurrentItem(4,false)
+        }
+        when(event.position){
+            4 -> (fragments[event.position] as MineFragment).backToHead()
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }

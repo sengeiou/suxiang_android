@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv_mine"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background">
@@ -61,6 +62,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_8"
@@ -73,6 +75,7 @@
                         android:background="@drawable/bg_white_full_32">
 
                         <com.sx.enjoy.view.CircleImageView
+                            android:id="@+id/iv_user_head"
                             android:layout_width="@dimen/dimen_60"
                             android:layout_height="@dimen/dimen_60"
                             android:layout_centerInParent="true"
@@ -85,16 +88,19 @@
                         android:layout_height="@dimen/dimen_60"
                         android:layout_marginLeft="@dimen/dimen_15"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tv_user_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="佐助"
+                            android:text="未命名"
                             android:textColor="@color/title_main_color"
                             android:textSize="@dimen/text_17" />
 
                         <LinearLayout
+                            android:id="@+id/ll_sub_data"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
@@ -115,10 +121,11 @@
                                     android:textSize="@dimen/text_12" />
 
                                 <TextView
+                                    android:id="@+id/tv_user_contribution"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/dimen_5"
-                                    android:text="333"
+                                    android:text="0"
                                     android:textColor="@color/title_main_color"
                                     android:textSize="@dimen/text_15" />
 
@@ -133,10 +140,11 @@
                                     android:textSize="@dimen/text_12" />
 
                                 <TextView
+                                    android:id="@+id/tv_user_activity"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/dimen_5"
-                                    android:text="333"
+                                    android:text="0"
                                     android:textColor="@color/title_main_color"
                                     android:textSize="@dimen/text_15" />
 
@@ -146,16 +154,36 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_member_level"
-                        android:layout_width="@dimen/dimen_75"
-                        android:layout_height="@dimen/dimen_30"
-                        android:background="@mipmap/ic_my_members"
-                        android:gravity="center_vertical|right"
-                        android:paddingRight="@dimen/dimen_12"
-                        android:text="一级"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_12" />
+                    <LinearLayout
+                        android:id="@+id/ll_member_level"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/dimen_30"
+                            android:background="@drawable/bg_red_left_full_15"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/dimen_15"
+                            android:paddingRight="@dimen/dimen_10">
+
+                            <ImageView
+                                android:layout_width="@dimen/dimen_18"
+                                android:layout_height="@dimen/dimen_18"
+                                android:src="@mipmap/ic_member_level" />
+
+                            <TextView
+                                android:id="@+id/tv_member_level"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dimen_10"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_12" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -174,9 +202,10 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_rice_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="33333"
+                            android:text="0"
                             android:textColor="@color/title_main_color"
                             android:textSize="@dimen/text_27"
                             android:textStyle="bold" />
@@ -206,6 +235,7 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_balance_money"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0.00"

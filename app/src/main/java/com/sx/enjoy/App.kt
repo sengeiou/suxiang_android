@@ -25,9 +25,7 @@ class App: BaseApplication(){
         LitePal.getDatabase()
 
         val user = LitePal.findLast(UserBean::class.java)
-        Log.e("Test","user----------->$user")
         if(user!=null){
-            Log.e("Test","id----------->"+user.userId)
             C.USER_ID = user.userId
         }
     }

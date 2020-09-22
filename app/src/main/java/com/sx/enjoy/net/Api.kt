@@ -68,7 +68,7 @@ class Api private constructor(hostType: Int) {
         //增加头部信息
         val headerInterceptor = Interceptor{ chain ->
             val build = chain.request().newBuilder()
-
+            build.addHeader("Content-Type", "application/json; charset=utf-8")
             chain.proceed(build.build())
         }
 

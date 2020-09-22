@@ -25,6 +25,7 @@ class RegisterActivity : BaseActivity() ,TimeCountUtil.OnCountDownListener ,SXCo
 
     private var isShowPassword1 = false
     private var isShowPassword2 = false
+    private var isGetCode = false
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL, "")
 
@@ -72,15 +73,17 @@ class RegisterActivity : BaseActivity() ,TimeCountUtil.OnCountDownListener ,SXCo
             et_password_2.setSelection(et_password_2.text.length)
         }
         tv_register_code.setOnClickListener {
-            if(et_user_phone.text.isEmpty()){
-                toast("请输入手机号")
-                return@setOnClickListener
+            if(!isGetCode){
+                if(et_user_phone.text.isEmpty()){
+                    toast("请输入手机号")
+                    return@setOnClickListener
+                }
+                if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
+                    toast("手机号不正确")
+                    return@setOnClickListener
+                }
+                present.sendCode(et_user_phone.text.toString(),"0")
             }
-            if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("手机号不正确")
-                return@setOnClickListener
-            }
-            present.sendCode(et_user_phone.text.toString(),"0")
         }
         tv_register.setOnClickListener {
             if(et_user_phone.text.isEmpty()){
@@ -120,6 +123,7 @@ class RegisterActivity : BaseActivity() ,TimeCountUtil.OnCountDownListener ,SXCo
 
     override fun OnFinishChanger() {
         tv_register_code.text = "重新发送"
+        isGetCode = false
     }
 
     override fun onDestroy() {
@@ -132,16 +136,11 @@ class RegisterActivity : BaseActivity() ,TimeCountUtil.OnCountDownListener ,SXCo
         flag?.let {
             when (flag) {
                 SXContract.SENDCODE -> {
-                    data?.let {
-                        data as String
-                        time.start()
-                    }
+                    time.start()
+                    isGetCode = true
                 }
                 SXContract.REGISTER -> {
-                    data?.let {
-                        data as String
-                        noticeDialog.showNotice(1)
-                    }
+                    noticeDialog.showNotice(1)
                 }
                 else -> {
 

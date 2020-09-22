@@ -178,6 +178,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_user_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_12"
@@ -223,6 +224,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_user_contribution"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_12"
@@ -268,6 +270,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_user_rice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dimen_12"

@@ -2,21 +2,30 @@ package com.sx.enjoy.modules.mine
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.MineMoreAdapter
 import com.sx.enjoy.bean.MineMoreBean
+import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.net.SXContract
+import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.GlideImageLoader
+import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.NoScrollGridManager
 import kotlinx.android.synthetic.main.fragment_mine.*
-import kotlinx.android.synthetic.main.header_home_view.view.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
+import org.litepal.LitePal
 import q.rorbin.badgeview.Badge
 import q.rorbin.badgeview.QBadgeView
 
-class MineFragment : BaseFragment(){
+class MineFragment : BaseFragment(),SXContract.View{
 
+    private lateinit var present: SXPresent
 
     private lateinit var moreAdapter: MineMoreAdapter
 
@@ -27,6 +36,9 @@ class MineFragment : BaseFragment(){
 
     override fun getLayoutResource() = R.layout.fragment_mine
 
+    override fun beForInitView() {
+        present = SXPresent(this)
+    }
 
     override fun initView() {
         moreAdapter = MineMoreAdapter()
@@ -55,7 +67,6 @@ class MineFragment : BaseFragment(){
 
 
 
-
         qbv1?.badgeNumber = 12
         qbv2?.badgeNumber = 5
 
@@ -68,14 +79,56 @@ class MineFragment : BaseFragment(){
         ban_mine_list.start()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initUser()
+    }
+
+    private fun initUser(){
+        if(C.USER_ID.isEmpty()){
+            ll_sub_data.visibility = View.GONE
+            tv_user_name.text = "登录/注册"
+            iv_user_head.setImageResource(R.mipmap.ic_user_head)
+            tv_user_contribution.text = "0"
+            tv_user_activity.text = "0"
+            ll_member_level.visibility = View.GONE
+            tv_rice_count.text = "0"
+            tv_balance_money.text = "0.00"
+        }else{
+            val user = LitePal.findLast(UserBean::class.java)
+            showUserInfo(user)
+            present.getUserInfo(C.USER_ID)
+        }
+    }
+
+    private fun showUserInfo(user:UserBean){
+        ll_sub_data.visibility = View.VISIBLE
+        tv_user_name.text = if(user.userName.isEmpty()) user.userPhone else user.userName
+        ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
+        tv_user_contribution.text = user.userContrib.toString()
+        tv_user_activity.text = user.userActivity.toString()
+        ll_member_level.visibility = View.VISIBLE
+        if(user.membershipLevel.isEmpty()){
+            tv_member_level.text = "开通会员"
+        }else{
+            tv_member_level.text = user.membershipLevel+"级"
+        }
+        tv_rice_count.text = user.riceGrains.toString()
+        tv_balance_money.text = "0.00"
+    }
+
     private fun initEvent(){
-        ll_mine_setting.setOnClickListener {
-            activity?.startActivity<AccountActivity>()
+        ll_user_info.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<AccountActivity>()
+            }
         }
         ll_mine_feedback.setOnClickListener {
             activity?.startActivity<FeedbackActivity>()
         }
-        tv_member_level.setOnClickListener {
+        ll_member_level.setOnClickListener {
             activity?.startActivity<MemberUpActivity>()
         }
         ll_withdraw_money.setOnClickListener {
@@ -116,6 +169,39 @@ class MineFragment : BaseFragment(){
             }
         }
 
+    }
+
+    fun backToHead(){
+        nsv_mine.fullScroll(View.FOCUS_UP)
+    }
+
+    override fun onSuccess(flag: String?, data: Any?) {
+        flag?.let {
+            when (flag) {
+                SXContract.GETUSERINFO -> {
+                    data?.let {
+                        data as UserBean
+                        data.userId = data.id.toString()
+                        data.updateAll("userId = ?", data.userId)
+                        showUserInfo(data)
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+
+    override fun onFailed(string: String?,isRefreshList:Boolean) {
+        activity?.toast(string!!)
+    }
+
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        if(boolean){
+            activity?.toast("请检查网络连接")
+        }
     }
 
 

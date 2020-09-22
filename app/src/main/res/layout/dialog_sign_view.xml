@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen_360"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_300"
+        android:background="@drawable/bg_white_full_7">
+        
+        <ImageView
+            android:id="@+id/iv_sign_head"
+            android:layout_width="match_parent"
+            android:scaleType="fitXY"
+            android:layout_height="@dimen/dimen_120"
+            android:src="@mipmap/ic_sign_bg"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_40"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_16"
+            android:textColor="@color/color_FA983E"
+            android:text="今日未签到"/>
+
+
+        <ImageView
+            android:id="@+id/iv_center_sign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_answer_sign"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dimen_90"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_center_sign"
+            android:layout_marginTop="@dimen/dimen_30"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/text_13"
+            android:textColor="@color/main_color"
+            android:text="去签到获取活跃度"/>
+
+
+        <Button
+            android:id="@+id/tv_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dimen_30"
+            android:layout_marginRight="@dimen/dimen_30"
+            android:layout_marginBottom="@dimen/dimen_20"
+            android:background="@drawable/bg_main_full_20"
+            android:textSize="@dimen/text_15"
+            android:textColor="@color/white"
+            android:text="立即签到"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:src="@mipmap/ic_close_white"/>
+
+</LinearLayout>
