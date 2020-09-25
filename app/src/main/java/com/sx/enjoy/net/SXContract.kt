@@ -2,12 +2,15 @@ package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
 import com.sx.enjoy.base.BaseView
-import com.sx.enjoy.bean.QuestionBean
-import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.bean.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
+import java.io.File
 
 interface SXContract {
 
@@ -24,6 +27,16 @@ interface SXContract {
         var GETSIGNRESULT = "getSignResult"
         var GETQUESTIONLIST = "getQuestionList"
         var USERSIGN = "userSign"
+        var GETTASKLIST = "getTaskList"
+        var GETMYTASKLIST = "getMyTaskList"
+        var BUYTASK = "buyTask"
+        var GETTASKRICEGRAINS = "getTaskRiceGrains"
+        var GETMARKETLIST = "getMarketList"
+        var GETMARKETQUOTES = "getMarketQuotes"
+        var GETMARKETDETAILS = "getMarketDetails"
+        var GETRICERECORDLIST = "getRiceRecordList"
+        var GETSTORECATEGORY = "getStoreCategory"
+        var GETMYMARKETORDERLIST = "getMyMarketOrderList"
     }
 
     interface View: BaseView
@@ -41,6 +54,17 @@ interface SXContract {
         fun getSignResult(userId:String):Observable<HttpResult<Boolean>>
         fun getQuestionList():Observable<HttpResult<List<QuestionBean>>>
         fun userSign(userId:String):Observable<HttpResult<String>>
+        fun getTaskList():Observable<HttpResult<List<TaskListBean>>>
+        fun getMyTaskList(userId:String,status:String,page:String,limit:String):Observable<HttpResult<List<TaskListBean>>>
+        fun buyTask(userId:String,taskId:String,payPassword:String):Observable<HttpResult<String>>
+        fun getTaskRiceGrains(userId:String):Observable<HttpResult<TaskRiceBean>>
+        fun getMarketList(pager:String,limit:String):Observable<HttpResult<List<MarketListBean>>>
+        fun getMarketQuotes(pager:String,limit:String):Observable<HttpResult<List<MarketQuotesBean>>>
+        fun getMarketDetails(id:String):Observable<HttpResult<MarketListBean>>
+        fun getRiceRecordList(userId:String,type:String,pager:String,limit:String):Observable<HttpResult<List<RiceRecordListBean>>>
+        fun getStoreCategory(pid:String):Observable<HttpResult<List<StoreCategoryBean>>>
+        fun uploadFile(imageFile: File): Call<HttpResult<UploadImageBean>>
+        fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String):Observable<HttpResult<List<MarketTransactionListBean>>>
     }
 
     interface Present{
@@ -56,6 +80,17 @@ interface SXContract {
         fun getSignResult(userId:String,isShow:Boolean)
         fun getQuestionList()
         fun userSign(userId:String)
+        fun getTaskList()
+        fun getMyTaskList(userId:String,status:String,page:String,limit:String)
+        fun buyTask(userId:String,taskId:String,payPassword:String)
+        fun getTaskRiceGrains(userId:String)
+        fun getMarketList(pager:String,limit:String)
+        fun getMarketQuotes(pager:String,limit:String)
+        fun getMarketDetails(id:String)
+        fun getRiceRecordList(userId:String,type:String,pager:String,limit:String)
+        fun getStoreCategory(pid:String)
+        fun uploadFile(imageFile:File):HttpResult<UploadImageBean>?
+        fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String)
     }
 
 }

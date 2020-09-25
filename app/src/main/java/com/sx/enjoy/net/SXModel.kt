@@ -1,13 +1,15 @@
 package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
-import com.sx.enjoy.bean.QuestionBean
-import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.bean.*
 import io.reactivex.Observable
 import okhttp3.MediaType
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.Call
+import java.io.File
 
 class SXModel  : SXContract.Model{
 
@@ -158,5 +160,85 @@ class SXModel  : SXContract.Model{
         val json = jsonObject.toString()
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return Api.getDefault().userSign(body)
+    }
+
+    override fun getTaskList(): Observable<HttpResult<List<TaskListBean>>> {
+        return Api.getDefault().getTaskList()
+    }
+
+    override fun getMyTaskList(userId: String, status: String,page:String,limit:String): Observable<HttpResult<List<TaskListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["status"] = status
+        keyMap["page"] = page
+        keyMap["limit"] = limit
+        return Api.getDefault().getMyTaskList(keyMap)
+    }
+
+    override fun buyTask(userId: String, taskId: String, payPassword: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("taskId", taskId)
+            jsonObject.put("payPassword", payPassword)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().buyTask(body)
+    }
+
+    override fun getTaskRiceGrains(userId: String): Observable<HttpResult<TaskRiceBean>> {
+        return Api.getDefault().getTaskRiceGrains(userId)
+    }
+
+    override fun getMarketList(pager: String, limit: String): Observable<HttpResult<List<MarketListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["page"] = pager
+        keyMap["limit"] = limit
+        return Api.getDefault().getMarketList(keyMap)
+    }
+
+    override fun getMarketQuotes(pager:String,limit:String): Observable<HttpResult<List<MarketQuotesBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["page"] = pager
+        keyMap["limit"] = limit
+        return Api.getDefault().getMarketQuotes(keyMap)
+    }
+
+    override fun getMarketDetails(id: String): Observable<HttpResult<MarketListBean>> {
+        return Api.getDefault().getMarketDetails(id)
+    }
+
+    override fun getRiceRecordList(userId: String, type: String, pager: String, limit: String): Observable<HttpResult<List<RiceRecordListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["type"] = type
+        keyMap["page"] = pager
+        keyMap["limit"] = limit
+        return Api.getDefault().getRiceRecordList(keyMap)
+    }
+
+    override fun getStoreCategory(pid: String): Observable<HttpResult<List<StoreCategoryBean>>> {
+        return Api.getDefault().getStoreCategory(pid)
+    }
+
+    override fun uploadFile(imageFile: File): Call<HttpResult<UploadImageBean>> {
+        val requestParam = MultipartBody.Builder().setType(MultipartBody.FORM)
+        val image = imageFile.name.split(".")
+        requestParam.addFormDataPart("file", imageFile.name, RequestBody.create(MediaType.parse("image/${image[1]}"), imageFile))
+        return Api.getDefault().uploadFile(requestParam.build() as RequestBody)
+    }
+
+    override fun getMyMarketOrderList(userId: String, type: String, status: String, pager: String, limit: String): Observable<HttpResult<List<MarketTransactionListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["type"] = type
+        keyMap["status"] = status
+        keyMap["page"] = pager
+        keyMap["limit"] = limit
+        return Api.getDefault().getMyMarketOrderList(keyMap)
     }
 }

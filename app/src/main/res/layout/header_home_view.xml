@@ -335,7 +335,7 @@
             app:indicator_height="@dimen/dimen_2"
             app:indicator_drawable_selected="@drawable/bg_shade_full"
             app:indicator_drawable_unselected="@drawable/bg_white_full"
-            app:banner_default_image="@mipmap/ic_default_logo"/>
+            app:banner_default_image="@mipmap/ic_title_logo"/>
 
         <com.youth.banner.Banner
             android:id="@+id/ban_bottom_list"
@@ -350,7 +350,7 @@
             app:indicator_height="@dimen/dimen_2"
             app:indicator_drawable_selected="@drawable/bg_shade_full"
             app:indicator_drawable_unselected="@drawable/bg_white_full"
-            app:banner_default_image="@mipmap/ic_default_logo"/>
+            app:banner_default_image="@mipmap/ic_title_logo"/>
 
     </LinearLayout>
 

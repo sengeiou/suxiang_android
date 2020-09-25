@@ -1,11 +1,13 @@
 package com.sx.enjoy.net
 
+import android.util.Log
 import com.likai.lib.base.BasePresent
 import com.likai.lib.net.BaseObserver
 import com.likai.lib.net.HttpResult
 import com.likai.lib.rx.RxSchedulersHelper
-import com.sx.enjoy.bean.QuestionBean
-import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.bean.*
+import org.jetbrains.anko.startActivity
+import java.io.File
 
 class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseView) ,SXContract.Present{
 
@@ -206,6 +208,170 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTaskList() {
+        model.getTaskList()
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<TaskListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<TaskListBean>>?) {
+                    view.onSuccess(SXContract.GETTASKLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<TaskListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getMyTaskList(userId: String, status: String,page:String,limit:String) {
+        model.getMyTaskList(userId,status,page,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<TaskListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<TaskListBean>>?) {
+                    view.onSuccess(SXContract.GETMYTASKLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<TaskListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun buyTask(userId: String, taskId: String, payPassword: String) {
+        model.buyTask(userId,taskId,payPassword)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.BUYTASK,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTaskRiceGrains(userId: String) {
+        model.getTaskRiceGrains(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<TaskRiceBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<TaskRiceBean>?) {
+                    view.onSuccess(SXContract.GETTASKRICEGRAINS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<TaskRiceBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getMarketList(pager: String, limit: String) {
+        model.getMarketList(pager,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<MarketListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<MarketListBean>>?) {
+                    view.onSuccess(SXContract.GETMARKETLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<MarketListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getMarketQuotes(pager:String,limit:String) {
+        model.getMarketQuotes(pager,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<MarketQuotesBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<MarketQuotesBean>>?) {
+                    view.onSuccess(SXContract.GETMARKETQUOTES,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<MarketQuotesBean>>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getMarketDetails(id: String) {
+        model.getMarketDetails(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<MarketListBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<MarketListBean>?) {
+                    view.onSuccess(SXContract.GETMARKETDETAILS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<MarketListBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getRiceRecordList(userId: String, type: String, pager: String, limit: String) {
+        model.getRiceRecordList(userId,type,pager,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<RiceRecordListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<RiceRecordListBean>>?) {
+                    view.onSuccess(SXContract.GETRICERECORDLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<RiceRecordListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getStoreCategory(pid: String) {
+        model.getStoreCategory(pid)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<StoreCategoryBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<StoreCategoryBean>>?) {
+                    view.onSuccess(SXContract.GETSTORECATEGORY,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<StoreCategoryBean>>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun uploadFile(imageFile: File): HttpResult<UploadImageBean>? {
+        return model.uploadFile(imageFile).execute().body()
+    }
+
+    override fun getMyMarketOrderList(userId: String, type: String, status: String, pager: String, limit: String) {
+        model.getMyMarketOrderList(userId,type,status,pager,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<MarketTransactionListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<MarketTransactionListBean>>?) {
+                    view.onSuccess(SXContract.GETMYMARKETORDERLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<MarketTransactionListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }

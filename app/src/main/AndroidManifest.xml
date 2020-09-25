@@ -16,8 +16,9 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <uses-feature android:name="android.hardware.sensor.stepcounter"/>
-    <uses-feature android:name="feature:android.hardware.sensor.stepdetector"/>
+
+    <uses-feature android:name="android.hardware.sensor.stepcounter" />
+    <uses-feature android:name="feature:android.hardware.sensor.stepdetector" />
 
     <application
         android:name=".App"
@@ -29,7 +30,8 @@
         android:resizeableActivity="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".modules.mine.OrderDetailsActivity"></activity>
+        <activity android:name=".modules.mine.TransactionActivity"></activity>
+        <activity android:name=".modules.mine.OrderDetailsActivity" />
         <activity android:name=".modules.mine.OrderListActivity" />
         <activity android:name=".modules.store.OrderPayActivity" />
         <activity android:name=".modules.store.AddressEditActivity" />

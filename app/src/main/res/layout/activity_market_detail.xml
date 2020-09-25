@@ -23,10 +23,11 @@
             android:padding="@dimen/dimen_15">
 
             <com.sx.enjoy.view.CircleImageView
+                android:id="@+id/iv_user_head"
                 android:layout_width="@dimen/dimen_60"
                 android:layout_height="@dimen/dimen_60"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_default_logo"/>
+                android:src="@mipmap/ic_user_head"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -35,19 +36,21 @@
                 android:layout_marginLeft="@dimen/dimen_10">
 
                 <TextView
+                    android:id="@+id/tv_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:textColor="@color/title_main_color"
                     android:textSize="@dimen/text_16"
-                    android:text="佐助"/>
+                    android:text=""/>
 
                 <TextView
+                    android:id="@+id/tv_market_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/title_second_color"
                     android:textSize="@dimen/text_16"
-                    android:text="2020-09-10 10:51:59"/>
+                    android:text=""/>
 
             </LinearLayout>
 
@@ -76,11 +79,12 @@
                 android:text="价格"/>
 
             <TextView
+                android:id="@+id/tv_market_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_color"
                 android:textSize="@dimen/text_18"
-                android:text="¥33.33"/>
+                android:text=""/>
 
         </LinearLayout>
 
@@ -107,11 +111,12 @@
                 android:text="数量"/>
 
             <TextView
+                android:id="@+id/tv_market_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
                 android:textSize="@dimen/text_18"
-                android:text="122"/>
+                android:text=""/>
 
         </LinearLayout>
 
@@ -138,11 +143,12 @@
                 android:text="支付宝账号"/>
 
             <TextView
+                android:id="@+id/tv_zfb_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
                 android:textSize="@dimen/text_18"
-                android:text="18715059965"/>
+                android:text=""/>
 
         </LinearLayout>
 
@@ -156,6 +162,7 @@
     <TextView
         android:id="@+id/tv_confirm"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dimen_47"
         android:gravity="center"
         android:layout_marginLeft="@dimen/dimen_30"

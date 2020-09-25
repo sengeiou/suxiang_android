@@ -9,6 +9,7 @@ import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.utils.RegularUtil
 import com.sx.enjoy.utils.TimeCountUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
@@ -110,7 +111,8 @@ class PasswordForgetActivity : BaseActivity()  ,TimeCountUtil.OnCountDownListene
                 toast("密码不一致")
                 return@setOnClickListener
             }
-            present.forgetPassword(et_user_phone.text.toString(),et_code.text.toString(),et_password_1.text.toString(),et_password_2.text.toString())
+            present.forgetPassword(et_user_phone.text.toString(),et_code.text.toString(),
+                EncryptionUtil.MD5(et_password_1.text.toString()),EncryptionUtil.MD5(et_password_2.text.toString()))
         }
         noticeDialog.setOnDismissListener {
             finish()

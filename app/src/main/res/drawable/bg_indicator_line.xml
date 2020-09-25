@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:width="@dimen/dimen_20"
+        android:width="@dimen/dimen_60"
         android:gravity="center">
         <shape>
             <corners android:radius="@dimen/dimen_2" />

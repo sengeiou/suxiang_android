@@ -19,7 +19,6 @@ import com.sx.enjoy.utils.GlideImageLoader
 import com.sx.enjoy.view.dialog.SignDialog
 import com.sx.enjoy.view.dialog.SignOverDialog
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.header_home_view.*
 import kotlinx.android.synthetic.main.header_home_view.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -89,9 +88,30 @@ class HomeFragment : BaseFragment(),SXContract.View{
         mList.add("")
         mAdapter.setNewData(mList)
 
+        initData()
         initEvent()
     }
 
+
+    override fun initData() {
+        if(!C.IS_SIGN_REQUEST&&C.USER_ID.isNotEmpty()){
+            C.IS_SIGN_REQUEST = true
+            present.getSignResult(C.USER_ID,false)
+        }
+    }
+
+    fun initUser(){
+        val user = LitePal.findLast(UserBean::class.java)
+        if(user!=null){
+            headView.tv_user_activity.text = user.userActivity.toString()
+            headView.tv_user_contribution.text = user.userContrib.toString()
+            headView.tv_user_rice.text = user.riceGrains.toString()
+        }else{
+            headView.tv_user_activity.text = "0"
+            headView.tv_user_contribution.text = "0"
+            headView.tv_user_rice.text = "0"
+        }
+    }
 
     private fun initEvent(){
         iv_home_sign.setOnClickListener {
@@ -170,22 +190,9 @@ class HomeFragment : BaseFragment(),SXContract.View{
         headView.tb_home_notice.startViewAnimator()
         headView.ban_top_list.startAutoPlay()
         headView. ban_bottom_list.startAutoPlay()
-
-        val user = LitePal.findLast(UserBean::class.java)
-        if(user!=null){
-            headView.tv_user_activity.text = user.userActivity.toString()
-            headView.tv_user_contribution.text = user.userContrib.toString()
-            headView.tv_user_rice.text = user.riceGrains.toString()
-        }else{
-            headView.tv_user_activity.text = "0"
-            headView.tv_user_contribution.text = "0"
-            headView.tv_user_rice.text = "0"
-        }
-        if(!C.IS_SIGN_REQUEST&&C.USER_ID.isNotEmpty()){
-            C.IS_SIGN_REQUEST = true
-            present.getSignResult(C.USER_ID,false)
-        }
     }
+
+
 
     override fun onStop() {
         super.onStop()

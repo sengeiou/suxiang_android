@@ -1,19 +1,39 @@
 package com.sx.enjoy.modules.mine
 
 import android.support.v7.widget.LinearLayoutManager
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.RiceRecordAdapter
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.MarketListBean
+import com.sx.enjoy.bean.MarketQuotesBean
+import com.sx.enjoy.bean.RiceRecordListBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.net.SXContract
+import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_rice_record.*
+import kotlinx.android.synthetic.main.activity_rice_record.swipe_refresh_layout
+import kotlinx.android.synthetic.main.fragment_market.*
+import kotlinx.android.synthetic.main.header_market_view.view.*
+import org.jetbrains.anko.toast
 
-class RiceRecordActivity : BaseActivity() {
+class RiceRecordActivity : BaseActivity() , SXContract.View{
+
+    private lateinit var present: SXPresent
 
     private lateinit var mAdapter : RiceRecordAdapter
+
+    private var pager = 1
 
     override fun getTitleType() = PublicTitleData (C.TITLE_NORMAL,"米粒明细")
 
     override fun getLayoutResource() = R.layout.activity_rice_record
+
+    override fun beForSetContentView() {
+        present = SXPresent(this)
+    }
 
     override fun initView() {
 
@@ -22,13 +42,83 @@ class RiceRecordActivity : BaseActivity() {
         rcy_rice_record.adapter = mAdapter
 
 
-        val mList = arrayListOf<String>()
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mAdapter.setNewData(mList)
+        getRiceRecordList(true)
+
+        initEvent()
     }
+
+    private fun initEvent(){
+        swipe_refresh_layout.setOnRefreshListener {
+            getRiceRecordList(true)
+        }
+        mAdapter.setOnLoadMoreListener {
+            getRiceRecordList(false)
+        }
+    }
+
+    private fun getRiceRecordList(isRefresh: Boolean){
+        if(isRefresh){
+            pager = 1
+            mAdapter.loadMoreComplete()
+            mAdapter.setEnableLoadMore(false)
+        }else{
+            pager++
+            swipe_refresh_layout.finishRefresh()
+        }
+        present.getRiceRecordList(C.USER_ID,"0",pager.toString(), C.PUBLIC_PAGER_NUMBER)
+    }
+
+    override fun onSuccess(flag: String?, data: Any?) {
+        flag?.let {
+            when (flag) {
+                SXContract.GETRICERECORDLIST -> {
+                    data?.let {
+                        data as List<RiceRecordListBean>
+                        if(pager<=1){
+                            swipe_refresh_layout.finishRefresh()
+                            mAdapter.setEnableLoadMore(true)
+                            mAdapter.setNewData(data)
+                        }else{
+                            if(data.isEmpty()){
+                                mAdapter.loadMoreEnd()
+                            }else{
+                                mAdapter.addData(data)
+                                mAdapter.loadMoreComplete()
+                            }
+                        }
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
+
+
+    override fun onFailed(string: String?,isRefreshList:Boolean) {
+        toast(string!!)
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }
+    }
+
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }else{
+            toast("请检查网络连接")
+        }
+    }
+
 }

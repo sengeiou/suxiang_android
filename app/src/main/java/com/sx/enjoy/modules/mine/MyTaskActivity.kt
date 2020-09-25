@@ -17,20 +17,20 @@ class MyTaskActivity : BaseActivity() {
 
     override fun initView() {
 
-        mAdapter = TaskListAdapter()
+        mAdapter = TaskListAdapter(0)
         rcy_my_task.layoutManager = LinearLayoutManager(this)
         rcy_my_task.adapter = mAdapter
 
 
-        val mList = arrayListOf<String>()
-        mList.add("1")
-        mList.add("2")
-        mList.add("3")
-        mList.add("4")
-        mList.add("5")
-        mList.add("6")
-        mList.add("7")
-        mAdapter.setNewData(mList)
+//        val mList = arrayListOf<String>()
+//        mList.add("1")
+//        mList.add("2")
+//        mList.add("3")
+//        mList.add("4")
+//        mList.add("5")
+//        mList.add("6")
+//        mList.add("7")
+//        mAdapter.setNewData(mList)
 
     }
 }

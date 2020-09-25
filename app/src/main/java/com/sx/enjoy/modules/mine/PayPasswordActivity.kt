@@ -2,12 +2,15 @@ package com.sx.enjoy.modules.mine
 
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_pay_password.*
 import org.jetbrains.anko.toast
+import org.litepal.LitePal
 
 class PayPasswordActivity : BaseActivity()  , SXContract.View{
 
@@ -46,7 +49,9 @@ class PayPasswordActivity : BaseActivity()  , SXContract.View{
                 toast("新密码不可与旧密码一致")
                 return@setOnClickListener
             }
-            present.updatePayPassword(C.USER_ID,et_old_password.text.toString(),et_new_password_1.text.toString(),et_new_password_2.text.toString())
+            present.updatePayPassword(C.USER_ID,
+                EncryptionUtil.MD5(et_old_password.text.toString()),EncryptionUtil.MD5(et_new_password_1.text.toString()),
+                EncryptionUtil.MD5(et_new_password_2.text.toString()))
         }
     }
 
@@ -54,7 +59,12 @@ class PayPasswordActivity : BaseActivity()  , SXContract.View{
         flag?.let {
             when (flag) {
                 SXContract.UPDATEPAYPASSWORD -> {
-                    noticeDialog.showNotice(4)
+                    val user = LitePal.findLast(UserBean::class.java)
+                    if(user.isPayPwd != 1){
+                        user.isPayPwd = 1
+                        user.updateAll("userId = ?", user.userId)
+                    }
+                    noticeDialog.showNotice(2)
                 }
                 else -> {
 

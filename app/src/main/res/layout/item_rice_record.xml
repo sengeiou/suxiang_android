@@ -19,6 +19,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_rice_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/text_16"
@@ -26,6 +27,7 @@
                 android:text="每日签到"/>
 
             <TextView
+                android:id="@+id/tv_rice_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_8"
@@ -33,17 +35,10 @@
                 android:textColor="@color/title_second_color"
                 android:text="2020-09-11 14:19:59"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_8"
-                android:textSize="@dimen/text_14"
-                android:textColor="@color/color_666666"
-                android:text="备注：走的越多，赚的越多"/>
-
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_rice_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_rice_circle"

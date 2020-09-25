@@ -15,18 +15,36 @@ import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.MarketListAdapter
+import com.sx.enjoy.bean.MarketListBean
+import com.sx.enjoy.bean.MarketQuotesBean
+import com.sx.enjoy.bean.TaskListBean
+import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.TaskBuySuccessEvent
+import com.sx.enjoy.net.SXContract
+import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.fragment_market.*
+import kotlinx.android.synthetic.main.fragment_market.swipe_refresh_layout
+import kotlinx.android.synthetic.main.fragment_task_child.*
 import kotlinx.android.synthetic.main.header_market_view.view.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 
 
-class MarketFragment : BaseFragment(){
+class MarketFragment : BaseFragment(), SXContract.View{
+
+    private lateinit var present: SXPresent
 
     private lateinit var headView:View
     private lateinit var mAdapter: MarketListAdapter
 
+    private var pager = 1
+
     override fun getLayoutResource() = R.layout.fragment_market
 
+    override fun beForInitView() {
+        present = SXPresent(this)
+    }
 
     override fun initView() {
         ImmersionBar.with(activity!!).statusBarDarkFont(true).titleBar(tb_market_title).init()
@@ -40,27 +58,38 @@ class MarketFragment : BaseFragment(){
 
 
         initMarkChartView()
+        initData()
         initEvent()
 
-        val mList = arrayListOf<String>()
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mAdapter.setNewData(mList)
-
-        setMarkChartData()
     }
 
     override fun initData() {
+        present.getMarketQuotes("1","7")
+        present.getMarketList(pager.toString(), C.PUBLIC_PAGER_NUMBER)
+    }
 
+    private fun getMarketList(isRefresh: Boolean){
+        if(isRefresh){
+            pager = 1
+            mAdapter.loadMoreComplete()
+            mAdapter.setEnableLoadMore(false)
+            present.getMarketQuotes("1","7")
+        }else{
+            pager++
+            swipe_refresh_layout.finishRefresh()
+        }
+        present.getMarketList(pager.toString(), C.PUBLIC_PAGER_NUMBER)
     }
 
     private fun initEvent(){
         tv_market_income.setOnClickListener {
             activity?.startActivity<IncomeActivity>()
+        }
+        swipe_refresh_layout.setOnRefreshListener {
+            getMarketList(true)
+        }
+        mAdapter.setOnLoadMoreListener {
+            getMarketList(false)
         }
         headView.tv_buy_in.setOnClickListener {
             activity?.startActivity<BuyInActivity>()
@@ -69,7 +98,7 @@ class MarketFragment : BaseFragment(){
             activity?.startActivity<SellOutActivity>()
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            activity?.startActivity<MarkDetailActivity>()
+            activity?.startActivity<MarkDetailActivity>(Pair("marketId",mAdapter.data[position].id), Pair("type",mAdapter.data[position].type))
         }
     }
 
@@ -97,10 +126,7 @@ class MarketFragment : BaseFragment(){
         xAxis.setDrawLabels(true) //绘制标签  指x轴上的对应数值
         xAxis.position = XAxis.XAxisPosition.BOTTOM //设置x轴的显示位置
         xAxis.granularity = 1f //禁止放大后x轴标签重绘
-        val xAxisName = arrayOf("3/23", "3/24", "3/25", "3/26", "3/27", "3/28", "3/29")
-        xAxis.valueFormatter = IAxisValueFormatter { value, axis ->
-            xAxisName[value.toInt()]
-        }
+
 
         //透明化图例
         val legend: Legend = headView.lc_market_quotations.legend
@@ -113,29 +139,84 @@ class MarketFragment : BaseFragment(){
         headView.lc_market_quotations.description = description
     }
 
-    private fun setMarkChartData() {
-        val entries = arrayListOf<Entry>()
-        entries.add(Entry(0f, 4f))
-        entries.add(Entry(1f, 9f))
-        entries.add(Entry(2f, 11f))
-        entries.add(Entry(3f, 5f))
-        entries.add(Entry(4f, 20f))
-        entries.add(Entry(5f, 15f))
-        entries.add(Entry(6f, 20f))
-        val dataSet = LineDataSet(entries, "")
 
-        dataSet.setDrawValues(true) // 设置是否显示数据点的值
-        dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
-        dataSet.circleSize = 5f // 设置数据点的大小
-        dataSet.lineWidth = 2f //线条宽度
-        dataSet.valueTextSize = 11f
-        dataSet.color = resources.getColor(R.color.color_086E07)
-        dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
+    override fun onSuccess(flag: String?, data: Any?) {
+        flag?.let {
+            when (flag) {
+                SXContract.GETMARKETLIST -> {
+                    data?.let {
+                        data as List<MarketListBean>
+                        if(pager<=1){
+                            swipe_refresh_layout.finishRefresh()
+                            mAdapter.setEnableLoadMore(true)
+                            mAdapter.setNewData(data)
+                        }else{
+                            if(data.isEmpty()){
+                                mAdapter.loadMoreEnd()
+                            }else{
+                                mAdapter.addData(data)
+                                mAdapter.loadMoreComplete()
+                            }
+                        }
+                    }
+                }
+                SXContract.GETMARKETQUOTES -> {
+                    data?.let {
+                        data as List<MarketQuotesBean>
+                        val xAxis = headView.lc_market_quotations.xAxis
+                        xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
+                            data[value.toInt()].createTime
+                        }
+
+                        val entries = arrayListOf<Entry>()
+                        for (i in data.indices){
+                            entries.add(Entry(i.toFloat(), data[i].amount.toFloat()))
+                        }
+                        val dataSet = LineDataSet(entries, "")
+                        dataSet.setDrawValues(true) // 设置是否显示数据点的值
+                        dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
+                        dataSet.circleSize = 5f // 设置数据点的大小
+                        dataSet.lineWidth = 2f //线条宽度
+                        dataSet.valueTextSize = 11f
+                        dataSet.color = resources.getColor(R.color.color_086E07)
+                        dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
+
+                        val lineData = LineData(dataSet)
+                        headView.lc_market_quotations.data = lineData
+                        headView.lc_market_quotations.invalidate()
+                    }
+                }
+                else -> {
+
+                }
+            }
+        }
+    }
 
 
-        val lineData = LineData(dataSet)
-        headView.lc_market_quotations.data = lineData
-        headView.lc_market_quotations.invalidate()
+    override fun onFailed(string: String?,isRefreshList:Boolean) {
+        activity?.toast(string!!)
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }
+    }
+
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }else{
+            activity?.toast("请检查网络连接")
+        }
     }
 
     companion object {

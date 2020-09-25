@@ -44,7 +44,7 @@
         <com.sx.enjoy.view.RoundImageView
             android:layout_width="@dimen/dimen_110"
             android:layout_height="@dimen/dimen_90"
-            android:src="@mipmap/ic_default_logo"/>
+            android:src="@mipmap/ic_title_logo"/>
 
     </LinearLayout>
 

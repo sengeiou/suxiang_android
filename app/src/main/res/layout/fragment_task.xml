@@ -96,6 +96,7 @@
                             android:layout_marginRight="@dimen/dimen_20">
 
                             <TextView
+                                android:id="@+id/tv_rice_total"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -104,6 +105,7 @@
                                 android:textSize="@dimen/text_13" />
 
                             <TextView
+                                android:id="@+id/tv_walk_total"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -121,6 +123,7 @@
                             android:layout_marginTop="@dimen/dimen_15">
 
                             <TextView
+                                android:id="@+id/tv_car_total"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -129,6 +132,7 @@
                                 android:text="总车行公里数 0"/>
 
                             <TextView
+                                android:id="@+id/tv_activity_total"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -159,23 +163,92 @@
                 android:paddingRight="@dimen/dimen_20"
                 android:background="@color/white">
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tl_task"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_48"
-                    android:background="@color/white"
-                    app:tabIndicatorColor="@color/main_color"
-                    app:tabIndicatorHeight="@dimen/dimen_2"
-                    app:tabIndicatorFullWidth="false"
-                    app:tabSelectedTextColor="@color/title_main_color"
-                    app:tabTextColor="@color/color_666666"
-                    app:tabIndicator="@drawable/bg_indicator_line"
-                    app:tabMode="fixed"
-                    app:tabRippleColor="@android:color/transparent"/>
+                    android:layout_height="@dimen/dimen_48">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_task_all"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tv_task_all"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="@dimen/text_16"
+                            android:textColor="@color/title_main_color"
+                            android:text="任务卷轴"/>
+
+                        <View
+                            android:id="@+id/v_task_all"
+                            android:layout_width="@dimen/dimen_60"
+                            android:layout_height="@dimen/dimen_3"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/bg_indicator_line"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_task_mine"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tv_task_mine"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="@dimen/text_16"
+                            android:textColor="@color/color_666666"
+                            android:text="我的任务"/>
+
+                        <View
+                            android:id="@+id/v_task_mine"
+                            android:layout_width="@dimen/dimen_60"
+                            android:layout_height="@dimen/dimen_3"
+                            android:visibility="gone"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/bg_indicator_line"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl_task_history"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/tv_task_history"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="@dimen/text_16"
+                            android:textColor="@color/color_666666"
+                            android:text="历史任务"/>
+
+                        <View
+                            android:id="@+id/v_task_history"
+                            android:layout_width="@dimen/dimen_60"
+                            android:layout_height="@dimen/dimen_3"
+                            android:visibility="gone"
+                            android:layout_centerHorizontal="true"
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/bg_indicator_line"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <android.support.v4.view.ViewPager
+            <com.sx.enjoy.view.NoScrollViewPager
                 android:id="@+id/vp_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

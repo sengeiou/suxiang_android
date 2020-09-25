@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v4.widget.NestedScrollView
@@ -480,7 +481,7 @@
                     app:indicator_height="@dimen/dimen_2"
                     app:indicator_drawable_selected="@drawable/bg_shade_full"
                     app:indicator_drawable_unselected="@drawable/bg_white_full"
-                    app:banner_default_image="@mipmap/ic_default_logo"/>
+                    app:banner_default_image="@mipmap/ic_title_logo"/>
 
             </LinearLayout>
 

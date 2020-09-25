@@ -1,18 +1,21 @@
 package com.sx.enjoy.modules.mine
 
 import android.content.Intent
-import android.util.Log
+import com.likai.lib.commonutils.LoadingDialog
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.UpLoadImageData
+import com.sx.enjoy.bean.UpLoadImageList
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
-import com.sx.enjoy.event.SwitchPagerEvent
+import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
+import com.sx.enjoy.utils.UpLoadImageUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.ReminderDialog
 import com.sx.enjoy.view.dialog.SexSelectDialog
@@ -30,10 +33,16 @@ class AccountActivity : BaseActivity() ,SXContract.View{
     private lateinit var reminderDialog : ReminderDialog
     private lateinit var sexDialog : SexSelectDialog
     private lateinit var noticeDialog : NoticeDialog
+    private lateinit var loadingDialog : LoadingDialog
 
     private lateinit var present :SXPresent
 
     private lateinit var user : UserBean
+
+    private var uploadTask : UpLoadImageUtil? = null
+
+    private var photo = ""
+
 
     override fun getTitleType() = PublicTitleData(C.TITLE_RIGHT_TEXT,"个人资料","保存")
 
@@ -47,6 +56,9 @@ class AccountActivity : BaseActivity() ,SXContract.View{
         sexDialog = SexSelectDialog(this)
         reminderDialog = ReminderDialog(this)
         noticeDialog = NoticeDialog(this)
+        loadingDialog = LoadingDialog(this)
+
+        uploadTask = UpLoadImageUtil(this,present)
 
         user = LitePal.findLast(UserBean::class.java)
         ImageLoaderUtil().displayHeadImage(this,user.userImg,iv_user_head)
@@ -108,16 +120,39 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                 C.USER_ID = ""
                 C.IS_SIGN_REQUEST = false
                 LitePal.deleteAll(UserBean::class.java)
-                EventBus.getDefault().post(SwitchPagerEvent(4,false))
+                EventBus.getDefault().post(UserStateChangeEvent(0))
                 finish()
             }
         })
+
         ll_public_right.setOnClickListener {
-            user.userName = et_user_name.text.toString()
-            user.sex = tv_user_sex.text.toString()
-            user.email = et_email.text.toString()
-            user.address = et_user_address.text.toString()
-            present.updateUserInfo(C.USER_ID,"",et_user_name.text.toString(),tv_user_sex.text.toString(),et_email.text.toString(),et_user_address.text.toString(),et_user_recommend.text.toString())
+            if(photo.isEmpty()){
+                user.userName = et_user_name.text.toString()
+                user.sex = tv_user_sex.text.toString()
+                user.email = et_email.text.toString()
+                user.address = et_user_address.text.toString()
+                present.updateUserInfo(C.USER_ID,user.userImg,et_user_name.text.toString(),tv_user_sex.text.toString(),et_email.text.toString(),et_user_address.text.toString(),et_user_recommend.text.toString())
+            }else{
+                val imageList = arrayListOf<UpLoadImageData>()
+                val logoImage = arrayListOf<UpLoadImageList>()
+                logoImage.add(UpLoadImageList(photo))
+                imageList.add(UpLoadImageData(logoImage,1,"头像"))
+                uploadTask?.addImagesToSources(imageList)
+                uploadTask?.start()
+                loadingDialog.showLoading("上传中...")
+            }
+        }
+
+        uploadTask?.setOnUploadImageResultListener { result, sources ->
+            loadingDialog.dismiss()
+            if(result){
+                user.userName = et_user_name.text.toString()
+                user.userImg = sources[0].imageList[0].netPath
+                user.sex = tv_user_sex.text.toString()
+                user.email = et_email.text.toString()
+                user.address = et_user_address.text.toString()
+                present.updateUserInfo(C.USER_ID,user.userImg,et_user_name.text.toString(),tv_user_sex.text.toString(),et_email.text.toString(),et_user_address.text.toString(),et_user_recommend.text.toString())
+            }
         }
     }
 
@@ -127,6 +162,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
             when (requestCode) {
                 1001 -> {
                     val selectList = PictureSelector.obtainMultipleResult(data)
+                    photo = selectList[0].compressPath
                     ImageLoaderUtil().displayImage(this,selectList[0].compressPath,iv_user_head)
                 }
                 1002 -> {
@@ -146,6 +182,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                 SXContract.UPDATEUSERINFO -> {
                     noticeDialog.showNotice(4)
                     user.updateAll("userId = ?", user.userId)
+                    EventBus.getDefault().post(UserStateChangeEvent(1))
                 }
                 else -> {
 

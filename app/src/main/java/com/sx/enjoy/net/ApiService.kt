@@ -1,8 +1,7 @@
 package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
-import com.sx.enjoy.bean.QuestionBean
-import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.bean.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -59,4 +58,47 @@ interface ApiService {
     @POST("api-question/signRecord/addSign")
     fun userSign(@Body body : RequestBody):Observable<HttpResult<String>>
 
+    //任务卷轴
+    @GET("api-task/taskmanager")
+    fun getTaskList():Observable<HttpResult<List<TaskListBean>>>
+
+    //我的任务卷轴
+    @GET("api-task/taskorder/status")
+    fun getMyTaskList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<TaskListBean>>>
+
+    //签到
+    @POST("api-task/taskmanager/buyScroll")
+    fun buyTask(@Body body : RequestBody):Observable<HttpResult<String>>
+
+    //我的任务卷轴
+    @GET("api-task/taskorder/getTaskRiceGrains")
+    fun getTaskRiceGrains(@Query("userId")userId:String):Observable<HttpResult<TaskRiceBean>>
+
+    //市场列表
+    @GET("api-rich/rich")
+    fun getMarketList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketListBean>>>
+
+    //市场行情
+    @GET("api-rich/rich-quotes")
+    fun getMarketQuotes(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketQuotesBean>>>
+
+    //市场行情
+    @GET("api-rich/rich/{id}")
+    fun getMarketDetails(@Path("id")id:String):Observable<HttpResult<MarketListBean>>
+
+    //市场列表
+    @GET("api-user/rich-detail/getRichDetail")
+    fun getRiceRecordList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<RiceRecordListBean>>>
+
+    //商城分类
+    @GET("api-mall/category/findAllFirstAndSecond")
+    fun getStoreCategory(@Query("pid")pid:String):Observable<HttpResult<List<StoreCategoryBean>>>
+
+    //文件上传
+    @POST("api-file/files-anon")
+    fun uploadFile(@Body body: RequestBody): Call<HttpResult<UploadImageBean>>
+
+
+    @GET("api-rich/rich-order")
+    fun getMyMarketOrderList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketTransactionListBean>>>
 }

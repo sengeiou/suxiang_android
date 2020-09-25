@@ -31,7 +31,7 @@
                     app:indicator_height="@dimen/dimen_8"
                     app:indicator_drawable_selected="@drawable/bg_indicator_circle_selected"
                     app:indicator_drawable_unselected="@drawable/bg_indicator_circle_normal"
-                    app:banner_default_image="@mipmap/ic_default_logo"/>
+                    app:banner_default_image="@mipmap/ic_title_logo"/>
 
             </com.sx.enjoy.view.ControlsRatio>
 

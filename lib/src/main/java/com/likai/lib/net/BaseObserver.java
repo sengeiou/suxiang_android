@@ -90,8 +90,8 @@ public abstract class BaseObserver<T> implements Observer<HttpResult<T>> {
                 onFailure(e, false);
             }
         } catch (Exception e1) {
-            e1.printStackTrace();  
-        }  
+            e1.printStackTrace();
+        }
     }  
   
     @Override

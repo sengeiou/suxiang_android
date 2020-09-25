@@ -80,7 +80,7 @@
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:srlPrimaryColor="@color/white"
             app:srlAccentColor="@color/color_3A3A3A"
             app:srlEnablePreviewInEditMode="true">

@@ -10,6 +10,7 @@ import com.sx.enjoy.adapter.MineMoreAdapter
 import com.sx.enjoy.bean.MineMoreBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.FirstInitUserEvent
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
@@ -17,6 +18,7 @@ import com.sx.enjoy.utils.GlideImageLoader
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.NoScrollGridManager
 import kotlinx.android.synthetic.main.fragment_mine.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.litepal.LitePal
@@ -63,6 +65,8 @@ class MineFragment : BaseFragment(),SXContract.View{
         moreAdapter.setNewData(moreList)
 
         initEvent()
+        EventBus.getDefault().post(FirstInitUserEvent(true))
+
 
 
 
@@ -79,12 +83,7 @@ class MineFragment : BaseFragment(),SXContract.View{
         ban_mine_list.start()
     }
 
-    override fun onResume() {
-        super.onResume()
-        initUser()
-    }
-
-    private fun initUser(){
+    fun initUser(){
         if(C.USER_ID.isEmpty()){
             ll_sub_data.visibility = View.GONE
             tv_user_name.text = "登录/注册"
@@ -96,25 +95,20 @@ class MineFragment : BaseFragment(),SXContract.View{
             tv_balance_money.text = "0.00"
         }else{
             val user = LitePal.findLast(UserBean::class.java)
-            showUserInfo(user)
-            present.getUserInfo(C.USER_ID)
+            ll_sub_data.visibility = View.VISIBLE
+            tv_user_name.text = if(user.userName.isEmpty()) user.userPhone else user.userName
+            ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
+            tv_user_contribution.text = user.userContrib.toString()
+            tv_user_activity.text = user.userActivity.toString()
+            ll_member_level.visibility = View.VISIBLE
+            if(user.membershipLevel.isEmpty()){
+                tv_member_level.text = "开通会员"
+            }else{
+                tv_member_level.text = user.membershipLevel+"级"
+            }
+            tv_rice_count.text = user.riceGrains.toString()
+            tv_balance_money.text = "0.00"
         }
-    }
-
-    private fun showUserInfo(user:UserBean){
-        ll_sub_data.visibility = View.VISIBLE
-        tv_user_name.text = if(user.userName.isEmpty()) user.userPhone else user.userName
-        ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
-        tv_user_contribution.text = user.userContrib.toString()
-        tv_user_activity.text = user.userActivity.toString()
-        ll_member_level.visibility = View.VISIBLE
-        if(user.membershipLevel.isEmpty()){
-            tv_member_level.text = "开通会员"
-        }else{
-            tv_member_level.text = user.membershipLevel+"级"
-        }
-        tv_rice_count.text = user.riceGrains.toString()
-        tv_balance_money.text = "0.00"
     }
 
     private fun initEvent(){
@@ -153,17 +147,19 @@ class MineFragment : BaseFragment(),SXContract.View{
             activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_RECEIVE_OVER))
         }
 
-        moreAdapter.setOnItemClickListener { adapter, view, position ->
+        moreAdapter.setOnItemClickListener { _, _, position ->
             when(position){
-                0 -> {
-
+                0 -> activity?.startActivity<TransactionActivity>(Pair("type",1))
+                1 -> activity?.startActivity<TransactionActivity>(Pair("type",0))
+                2 -> {
+                    activity?.toast("暂未开通,敬请关注")
+                    //activity?.startActivity<FinanceActivity>()
                 }
-                1 -> {
-
-                }
-                2 -> activity?.startActivity<FinanceActivity>()
                 3 -> activity?.startActivity<SmartEarnActivity>()
-                4 -> activity?.startActivity<LubricateActivity>()
+                4 -> {
+                    activity?.toast("暂未开通,敬请关注")
+                    //activity?.startActivity<LubricateActivity>()
+                }
                 5 -> activity?.startActivity<RecommendTeamActivity>()
                 6 -> activity?.startActivity<MyTaskActivity>()
             }
@@ -178,14 +174,7 @@ class MineFragment : BaseFragment(),SXContract.View{
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
-                SXContract.GETUSERINFO -> {
-                    data?.let {
-                        data as UserBean
-                        data.userId = data.id.toString()
-                        data.updateAll("userId = ?", data.userId)
-                        showUserInfo(data)
-                    }
-                }
+
                 else -> {
 
                 }

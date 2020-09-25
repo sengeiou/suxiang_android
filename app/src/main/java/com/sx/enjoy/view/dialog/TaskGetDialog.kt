@@ -18,6 +18,11 @@ class TaskGetDialog : Dialog {
         initEvent()
     }
 
+    fun showTaskGet(riceCount:String){
+        show()
+        tv_rice_sub.text = "-$riceCount"
+        tv_rice_notice.text = "你将消耗${riceCount}米粒 是否兑换？"
+    }
 
     private fun initEvent(){
         iv_close.setOnClickListener {
@@ -25,6 +30,10 @@ class TaskGetDialog : Dialog {
         }
         tv_close.setOnClickListener {
             dismiss()
+        }
+        tv_confirm.setOnClickListener {
+            dismiss()
+            mOnNoticeConfirmListener?.onConfirm()
         }
     }
 

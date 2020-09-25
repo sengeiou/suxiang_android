@@ -34,6 +34,10 @@ class NoticeDialog : Dialog {
             4 -> {
                 tv_notice_text.text = "修改成功"
             }
+            5 -> {
+                iv_notice_view.setImageResource(R.mipmap.ic_task_success)
+                tv_notice_text.text = "兑换成功!,获取1活跃值"
+            }
         }
     }
 

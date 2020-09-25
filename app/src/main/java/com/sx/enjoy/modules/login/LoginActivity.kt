@@ -2,18 +2,17 @@ package com.sx.enjoy.modules.login
 
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
-import com.sx.enjoy.event.SwitchPagerEvent
+import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.utils.RegularUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.et_user_phone
-import kotlinx.android.synthetic.main.activity_register.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -69,7 +68,7 @@ class LoginActivity : BaseActivity() ,SXContract.View{
                 toast("请输入密码")
                 return@setOnClickListener
             }
-            present.login(et_user_phone.text.toString(),et_password.text.toString())
+            present.login(et_user_phone.text.toString(),EncryptionUtil.MD5(et_password.text.toString()))
         }
     }
 
@@ -82,7 +81,7 @@ class LoginActivity : BaseActivity() ,SXContract.View{
                         data.userId = data.id.toString()
                         C.USER_ID = data.userId
                         data.save()
-                        EventBus.getDefault().post(SwitchPagerEvent(4,false))
+                        EventBus.getDefault().post(UserStateChangeEvent(1))
                         finish()
                     }
                 }

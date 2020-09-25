@@ -4,6 +4,10 @@ object C {
     var USER_ID = ""
     var IS_SIGN_REQUEST = false
 
+    const val SIGN_SECRET_KEY = "suxiang998866"
+
+    const val PUBLIC_PAGER_NUMBER = "10"
+
     const val HX_HOST_TYPE = 1
     const val HX_BASE_ADDRESS = "http://192.168.1.240:9900/"
 

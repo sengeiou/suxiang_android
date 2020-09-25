@@ -16,6 +16,7 @@ class UserBean: LitePalSupport(){
     var riceGrains: Int = 0
     var userActivity: Int = 0
     var userContrib: Int = 0
+    var isPayPwd:Int = 0
     var membershipLevel: String = ""
     var pushId: String = ""
     var isReai: String = ""

@@ -28,6 +28,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/iv_notice_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_notice_success"/>

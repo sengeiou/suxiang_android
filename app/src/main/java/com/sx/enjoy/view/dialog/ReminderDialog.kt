@@ -25,6 +25,9 @@ class ReminderDialog : Dialog {
             1 -> {
                 tv_reminder_text.text = "是否退出登录？"
             }
+            2 -> {
+                tv_reminder_text.text = "您未设置交易密码，请点击确定设置交易密码后再进行兑换！"
+            }
         }
     }
 

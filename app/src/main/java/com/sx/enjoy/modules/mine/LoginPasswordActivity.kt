@@ -5,6 +5,7 @@ import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_login_password.*
 import kotlinx.android.synthetic.main.activity_login_password.et_new_password_1
@@ -55,7 +56,8 @@ class LoginPasswordActivity : BaseActivity() ,SXContract.View{
                 toast("新密码不可与旧密码一致")
                 return@setOnClickListener
             }
-            present.updateLoginPassword(C.USER_ID,et_old_password.text.toString(),et_new_password_1.text.toString(),et_new_password_2.text.toString())
+            present.updateLoginPassword(C.USER_ID,
+                EncryptionUtil.MD5(et_old_password.text.toString()),EncryptionUtil.MD5(et_new_password_1.text.toString()),EncryptionUtil.MD5(et_new_password_2.text.toString()))
         }
     }
 
@@ -63,7 +65,7 @@ class LoginPasswordActivity : BaseActivity() ,SXContract.View{
         flag?.let {
             when (flag) {
                 SXContract.UPDATELOGINPASSWORD -> {
-                    noticeDialog.showNotice(4)
+                    noticeDialog.showNotice(2)
                 }
                 else -> {
 

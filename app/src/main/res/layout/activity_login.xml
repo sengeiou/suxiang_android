@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_60"
-        android:src="@mipmap/ic_default_logo"/>
+        android:src="@mipmap/ic_title_logo"/>
 
     <EditText
         android:id="@+id/et_user_phone"
