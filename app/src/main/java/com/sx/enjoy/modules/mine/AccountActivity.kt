@@ -1,16 +1,20 @@
 package com.sx.enjoy.modules.mine
 
 import android.content.Intent
+import android.content.SharedPreferences
 import com.likai.lib.commonutils.LoadingDialog
+import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
+import com.sx.enjoy.App
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.UpLoadImageData
 import com.sx.enjoy.bean.UpLoadImageList
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.FirstInitUserEvent
 import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
@@ -119,6 +123,8 @@ class AccountActivity : BaseActivity() ,SXContract.View{
             override fun onConfirm() {
                 C.USER_ID = ""
                 C.IS_SIGN_REQUEST = false
+                C.USER_STEP = 0
+                SharedPreferencesUtil.putCommonInt(App.instance,"step",0)
                 LitePal.deleteAll(UserBean::class.java)
                 EventBus.getDefault().post(UserStateChangeEvent(0))
                 finish()
@@ -182,7 +188,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                 SXContract.UPDATEUSERINFO -> {
                     noticeDialog.showNotice(4)
                     user.updateAll("userId = ?", user.userId)
-                    EventBus.getDefault().post(UserStateChangeEvent(1))
+                    EventBus.getDefault().post(FirstInitUserEvent(false))
                 }
                 else -> {
 

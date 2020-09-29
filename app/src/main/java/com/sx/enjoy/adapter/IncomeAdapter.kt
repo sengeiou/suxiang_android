@@ -3,9 +3,12 @@ package com.sx.enjoy.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.sx.enjoy.R
+import com.sx.enjoy.bean.RiceRecordListBean
 
-class IncomeAdapter: BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_income_list){
-    override fun convert(helper: BaseViewHolder?, item: String?) {
-
+class IncomeAdapter: BaseQuickAdapter<RiceRecordListBean, BaseViewHolder>(R.layout.item_income_list){
+    override fun convert(helper: BaseViewHolder?, item: RiceRecordListBean) {
+        helper?.setText(R.id.tv_rice_type,item.typeStr)
+        helper?.setText(R.id.tv_rice_time,item.createTime)
+        helper?.setText(R.id.tv_rice_income,if(item.isIncome == 1) "+${item.rich}" else "-${item.rich}")
     }
 }

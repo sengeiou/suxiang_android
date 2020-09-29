@@ -3,6 +3,7 @@ package com.sx.enjoy.constans
 object C {
     var USER_ID = ""
     var IS_SIGN_REQUEST = false
+    var USER_STEP = 0
 
     const val SIGN_SECRET_KEY = "suxiang998866"
 
@@ -28,5 +29,8 @@ object C {
     const val ORDER_NO_SEND = 2
     const val ORDER_NO_RECEIVE = 3
     const val ORDER_RECEIVE_OVER = 4
+
+    const val MARKET_ORDER_STATUS_BUY = 0
+    const val MARKET_ORDER_STATUS_SELL = 1
 
 }

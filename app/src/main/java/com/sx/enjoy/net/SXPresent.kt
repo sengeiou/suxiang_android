@@ -375,4 +375,84 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
             })
     }
+
+    override fun getRiceFromStep(userId: String, deviceId: String, latitude: String, longitude: String, minStep: String, rotateMinStep: String) {
+        model.getRiceFromStep(userId,deviceId,latitude,longitude,minStep,rotateMinStep)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<StepRiceBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<StepRiceBean>?) {
+                    view.onSuccess(SXContract.GETRICEFROMSTEP,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<StepRiceBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun publishMarketInfo(userId: String, type: String, amount: String, richNum: String, alipayNumber: String) {
+        model.publishMarketInfo(userId,type,amount,richNum,alipayNumber)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.PUBLISHMARKETINFO,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun createMarketOrder(userId: String, type: String, amount: String, buyNum: String, alipayNumber: String, orderNo: String) {
+        model.createMarketOrder(userId,type,amount,buyNum,alipayNumber,orderNo)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.CREATEMARKETORDER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTransactionOrderDetails(id: String) {
+        model.getTransactionOrderDetails(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<TransactionOrderBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<TransactionOrderBean>?) {
+                    view.onSuccess(SXContract.GETTRANSACTIONORDERDETAILS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<TransactionOrderBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun payMarketOrder(orderNo: String, transaction: String) {
+        model.payMarketOrder(orderNo,transaction)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.PAYMARKETORDER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
 }

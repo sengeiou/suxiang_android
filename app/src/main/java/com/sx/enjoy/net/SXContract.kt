@@ -37,6 +37,11 @@ interface SXContract {
         var GETRICERECORDLIST = "getRiceRecordList"
         var GETSTORECATEGORY = "getStoreCategory"
         var GETMYMARKETORDERLIST = "getMyMarketOrderList"
+        var GETRICEFROMSTEP = "getRiceFromStep"
+        var PUBLISHMARKETINFO = "publishMarketInfo"
+        var CREATEMARKETORDER = "createMarketOrder"
+        var GETTRANSACTIONORDERDETAILS = "getTransactionOrderDetails"
+        var PAYMARKETORDER = "payMarketOrder"
     }
 
     interface View: BaseView
@@ -65,6 +70,11 @@ interface SXContract {
         fun getStoreCategory(pid:String):Observable<HttpResult<List<StoreCategoryBean>>>
         fun uploadFile(imageFile: File): Call<HttpResult<UploadImageBean>>
         fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String):Observable<HttpResult<List<MarketTransactionListBean>>>
+        fun getRiceFromStep(userId:String,deviceId:String,latitude:String,longitude:String,minStep:String,rotateMinStep:String):Observable<HttpResult<StepRiceBean>>
+        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,alipayNumber:String):Observable<HttpResult<String>>
+        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String):Observable<HttpResult<String>>
+        fun getTransactionOrderDetails(id:String):Observable<HttpResult<TransactionOrderBean>>
+        fun payMarketOrder(orderNo:String,transaction:String):Observable<HttpResult<String>>
     }
 
     interface Present{
@@ -91,6 +101,11 @@ interface SXContract {
         fun getStoreCategory(pid:String)
         fun uploadFile(imageFile:File):HttpResult<UploadImageBean>?
         fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String)
+        fun getRiceFromStep(userId:String,deviceId:String,latitude:String,longitude:String,minStep:String,rotateMinStep:String)
+        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,alipayNumber:String)
+        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String)
+        fun getTransactionOrderDetails(id:String)
+        fun payMarketOrder(orderNo:String,transaction:String)
     }
 
 }

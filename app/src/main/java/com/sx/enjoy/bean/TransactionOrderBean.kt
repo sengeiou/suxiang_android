@@ -1,0 +1,29 @@
+package com.sx.enjoy.bean
+
+import com.google.gson.annotations.SerializedName
+import java.io.Serializable
+
+class TransactionOrderBean(
+    @SerializedName("id")val id:String,
+    @SerializedName("type")val type:Int,
+    @SerializedName("orderType")val orderType:Int,
+    @SerializedName("createTime")val createTime:String,
+    @SerializedName("userId")val userId:String,
+    @SerializedName("userName")val userName:String,
+    @SerializedName("orderNo")val orderNo:String,
+    @SerializedName("richOrderNo")val richOrderNo:String,
+    @SerializedName("headImage")val headImage:String,
+    @SerializedName("userPhone")val userPhone:String,
+    @SerializedName("amount")val amount:String,
+    @SerializedName("buyNum")val buyNum:String,
+    @SerializedName("buyAmountSum")val buyAmountSum:String,
+    @SerializedName("transaction")val transaction:String,
+    @SerializedName("payNumber")val payNumber:String,
+    @SerializedName("payMethod")val payMethod:String,
+    @SerializedName("status")val status:Int,
+    @SerializedName("respTime")val respTime:String,
+    @SerializedName("payTime")val payTime:String,
+    @SerializedName("sellUserName")val sellUserName:String,
+    @SerializedName("sellUserImg")val sellUserImg:String,
+    @SerializedName("sellUserPhone")val sellUserPhone:String
+): Serializable

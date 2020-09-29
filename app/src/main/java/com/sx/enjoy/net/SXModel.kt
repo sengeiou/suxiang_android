@@ -241,4 +241,79 @@ class SXModel  : SXContract.Model{
         keyMap["limit"] = limit
         return Api.getDefault().getMyMarketOrderList(keyMap)
     }
+
+    override fun getRiceFromStep(userId: String, deviceId: String, latitude: String, longitude: String, minStep: String, rotateMinStep: String): Observable<HttpResult<StepRiceBean>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("deviceId", deviceId)
+            jsonObject.put("latitude", latitude)
+            jsonObject.put("longitude", longitude)
+            jsonObject.put("minStep", minStep)
+            jsonObject.put("rotateMinStep", rotateMinStep)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().getRiceFromStep(body)
+    }
+
+    override fun publishMarketInfo(userId: String, type: String, amount: String, richNum: String, alipayNumber: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("type", type)
+            jsonObject.put("amount", amount)
+            jsonObject.put("richNum", richNum)
+            if(alipayNumber.isNotEmpty()){
+                jsonObject.put("alipayNumber", alipayNumber)
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().publishMarketInfo(body)
+    }
+
+    override fun createMarketOrder(userId: String, type: String, amount: String, buyNum: String, alipayNumber: String, orderNo: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("type", type)
+            jsonObject.put("amount", amount)
+            jsonObject.put("buyNum", buyNum)
+            jsonObject.put("orderNo", orderNo)
+            if(alipayNumber.isNotEmpty()){
+                jsonObject.put("alipayNumber", alipayNumber)
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().createMarketOrder(body)
+    }
+
+    override fun getTransactionOrderDetails(id: String): Observable<HttpResult<TransactionOrderBean>> {
+        return Api.getDefault().getTransactionOrderDetails(id)
+    }
+
+    override fun payMarketOrder(orderNo: String, transaction: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("orderNo", orderNo)
+            jsonObject.put("transaction", transaction)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().payMarketOrder(body)
+    }
 }

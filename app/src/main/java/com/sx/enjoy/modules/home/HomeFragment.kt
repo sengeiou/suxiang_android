@@ -10,12 +10,14 @@ import com.likai.lib.base.BaseFragment
 import com.likai.lib.commonutils.DensityUtils
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.HomeListAdapter
+import com.sx.enjoy.bean.StepRiceBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.GlideImageLoader
+import com.sx.enjoy.utils.ShakeDetector
 import com.sx.enjoy.view.dialog.SignDialog
 import com.sx.enjoy.view.dialog.SignOverDialog
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -90,6 +92,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
 
         initData()
         initEvent()
+
     }
 
 
@@ -110,6 +113,17 @@ class HomeFragment : BaseFragment(),SXContract.View{
             headView.tv_user_activity.text = "0"
             headView.tv_user_contribution.text = "0"
             headView.tv_user_rice.text = "0"
+        }
+    }
+
+    fun initStep(){
+        headView.tv_distances.text = C.USER_STEP.toString()
+    }
+    fun initDayRice(data:StepRiceBean?){
+        if(data==null){
+            headView.tv_rice.text = "0"
+        }else{
+            headView.tv_rice.text = if(titleType == 0) data.walkRiceGrains else data.drivingRiceGrains
         }
     }
 
@@ -183,7 +197,6 @@ class HomeFragment : BaseFragment(),SXContract.View{
             }
         })
     }
-
 
     override fun onResume() {
         super.onResume()

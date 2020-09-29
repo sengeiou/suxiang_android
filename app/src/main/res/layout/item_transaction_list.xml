@@ -46,7 +46,7 @@
 
                     <TextView
                         android:id="@+id/tv_rice_count"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/dimen_120"
                         android:layout_height="19dp"
                         android:text="数量 20"
                         android:textColor="@color/title_main_color"
@@ -56,7 +56,6 @@
                         android:id="@+id/tv_rice_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_50"
                         android:textSize="@dimen/text_16"
                         android:textColor="@color/title_main_color"
                         android:text="¥ 32.00"/>

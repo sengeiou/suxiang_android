@@ -30,7 +30,15 @@
         android:resizeableActivity="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".modules.mine.TransactionActivity"></activity>
+        <activity android:name=".modules.mine.TransactionDetailsActivity"></activity>
+        <activity android:name=".modules.market.SellRiceActivity" />
+
+        <service
+            android:name=".service.StepCalculationService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".modules.mine.TransactionActivity" />
         <activity android:name=".modules.mine.OrderDetailsActivity" />
         <activity android:name=".modules.mine.OrderListActivity" />
         <activity android:name=".modules.store.OrderPayActivity" />

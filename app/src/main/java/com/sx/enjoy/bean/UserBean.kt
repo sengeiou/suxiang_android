@@ -5,7 +5,6 @@ import org.litepal.crud.LitePalSupport
 class UserBean: LitePalSupport(){
     var id: Long = 0
     var userId: String = ""
-    var isDel: Int = 0
     var userName: String = ""
     var userPhone: String = ""
     var userImg: String = ""

@@ -149,8 +149,8 @@ class MineFragment : BaseFragment(),SXContract.View{
 
         moreAdapter.setOnItemClickListener { _, _, position ->
             when(position){
-                0 -> activity?.startActivity<TransactionActivity>(Pair("type",1))
-                1 -> activity?.startActivity<TransactionActivity>(Pair("type",0))
+                0 -> activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_BUY))
+                1 -> activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_SELL))
                 2 -> {
                     activity?.toast("暂未开通,敬请关注")
                     //activity?.startActivity<FinanceActivity>()

@@ -47,9 +47,22 @@ public class SharedPreferencesUtil {
         ed.commit();
     }
 
+
     public static boolean getCommonBoolean(Context mContext,String key){
         SharedPreferences sp = mContext.getSharedPreferences(SP_COMMON_NAME,Context.MODE_PRIVATE);
         return sp.getBoolean(key,false);
+    }
+
+    public static void putCommonInt(Context mContext,String key,int value){
+        SharedPreferences sp = mContext.getSharedPreferences(SP_COMMON_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+        ed.putInt(key,value);
+        ed.commit();
+    }
+
+    public static int getCommonInt(Context mContext,String key){
+        SharedPreferences sp = mContext.getSharedPreferences(SP_COMMON_NAME,Context.MODE_PRIVATE);
+        return sp.getInt(key,0);
     }
 
 }

@@ -1,8 +1,11 @@
 package com.sx.enjoy.modules.market
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
@@ -20,6 +23,7 @@ import com.sx.enjoy.bean.MarketQuotesBean
 import com.sx.enjoy.bean.TaskListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.TaskBuySuccessEvent
+import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.fragment_market.*
@@ -83,7 +87,11 @@ class MarketFragment : BaseFragment(), SXContract.View{
 
     private fun initEvent(){
         tv_market_income.setOnClickListener {
-            activity?.startActivity<IncomeActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<IncomeActivity>()
+            }
         }
         swipe_refresh_layout.setOnRefreshListener {
             getMarketList(true)
@@ -92,10 +100,20 @@ class MarketFragment : BaseFragment(), SXContract.View{
             getMarketList(false)
         }
         headView.tv_buy_in.setOnClickListener {
-            activity?.startActivity<BuyInActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                val intent = Intent(activity,BuyInActivity::class.java)
+                startActivityForResult(intent,3001)
+            }
         }
         headView.tv_sell_out.setOnClickListener {
-            activity?.startActivity<SellOutActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                val intent = Intent(activity,SellOutActivity::class.java)
+                startActivityForResult(intent,3002)
+            }
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
             activity?.startActivity<MarkDetailActivity>(Pair("marketId",mAdapter.data[position].id), Pair("type",mAdapter.data[position].type))
@@ -137,6 +155,16 @@ class MarketFragment : BaseFragment(), SXContract.View{
         val description = Description()
         description.isEnabled = false
         headView.lc_market_quotations.description = description
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode == RESULT_OK){
+            pager = 1
+            mAdapter.loadMoreComplete()
+            mAdapter.setEnableLoadMore(false)
+            present.getMarketQuotes("1","7")
+            present.getMarketList(pager.toString(), C.PUBLIC_PAGER_NUMBER)
+        }
     }
 
 

@@ -74,19 +74,7 @@ interface ApiService {
     @GET("api-task/taskorder/getTaskRiceGrains")
     fun getTaskRiceGrains(@Query("userId")userId:String):Observable<HttpResult<TaskRiceBean>>
 
-    //市场列表
-    @GET("api-rich/rich")
-    fun getMarketList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketListBean>>>
-
-    //市场行情
-    @GET("api-rich/rich-quotes")
-    fun getMarketQuotes(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketQuotesBean>>>
-
-    //市场行情
-    @GET("api-rich/rich/{id}")
-    fun getMarketDetails(@Path("id")id:String):Observable<HttpResult<MarketListBean>>
-
-    //市场列表
+    //米粒明细
     @GET("api-user/rich-detail/getRichDetail")
     fun getRiceRecordList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<RiceRecordListBean>>>
 
@@ -98,7 +86,40 @@ interface ApiService {
     @POST("api-file/files-anon")
     fun uploadFile(@Body body: RequestBody): Call<HttpResult<UploadImageBean>>
 
-
+    //我购买的/我售卖的
     @GET("api-rich/rich-order")
     fun getMyMarketOrderList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketTransactionListBean>>>
+
+    //步行模式计算距离
+    @POST("api-home/travelmode/walkCompute")
+    fun getRiceFromStep(@Body body: RequestBody):Observable<HttpResult<StepRiceBean>>
+
+    //发布买入/卖出
+    @POST("api-rich/rich")
+    fun publishMarketInfo(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //市场列表
+    @GET("api-rich/rich")
+    fun getMarketList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketListBean>>>
+
+    //市场行情
+    @GET("api-rich/rich-quotes")
+    fun getMarketQuotes(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketQuotesBean>>>
+
+    //买入/卖出详情
+    @GET("api-rich/rich/id")
+    fun getMarketDetails(@Query("id")id:String):Observable<HttpResult<MarketListBean>>
+
+    //米粒订单创建
+    @POST("api-rich/rich-order")
+    fun createMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //买入/卖出订单详情
+    @GET("api-rich/rich-order/id")
+    fun getTransactionOrderDetails(@Query("id")id:String):Observable<HttpResult<TransactionOrderBean>>
+
+    //米粒订单支付
+    @POST("api-rich/rich-order/pay")
+    fun payMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
+
 }
