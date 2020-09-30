@@ -8,10 +8,13 @@ import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MarketBuySuccessEvent
 import com.sx.enjoy.event.UserStateChangeEvent
+import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
+import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_market_detail.*
+import kotlinx.android.synthetic.main.activity_sell_rice.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -19,6 +22,8 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class MarkDetailActivity : BaseActivity() ,SXContract.View{
+
+    private lateinit var noticeDialog: NoticeDialog
 
     private lateinit var present: SXPresent
 
@@ -38,6 +43,8 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
     override fun initView() {
         EventBus.getDefault().register(this)
 
+        noticeDialog = NoticeDialog(this)
+
         type = intent.getIntExtra("type",0)
 
         marketId = intent.getStringExtra("marketId")
@@ -54,9 +61,14 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                 if(type == 0){
                     startActivity<SellRiceActivity>(Pair("amount",it.amount), Pair("buyNum",it.richNum), Pair("orderNo",it.orderNo))
                 }else{
-
+                    present.createMarketOrder(C.USER_ID,"1",it.amount,it.richNum,et_ali_number.text.toString(),it.orderNo)
                 }
             }
+        }
+
+        noticeDialog.setOnDismissListener {
+            finish()
+            startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",0))
         }
     }
 
@@ -81,6 +93,12 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                         tv_zfb_account.text = data.alipayNumber
                         tv_confirm.visibility = View.VISIBLE
                         tv_confirm.text = if(data.type == 0) "卖出" else "买入"
+                    }
+                }
+                SXContract.CREATEMARKETORDER -> {
+                    data?.let {
+                        noticeDialog.showNotice(8)
+                        EventBus.getDefault().post(MarketBuySuccessEvent(1))
                     }
                 }
                 else -> {

@@ -4,6 +4,7 @@ import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MarketBuySuccessEvent
+import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.NoticeDialog
@@ -11,6 +12,7 @@ import kotlinx.android.synthetic.main.activity_sell_rice.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class SellRiceActivity : BaseActivity() ,SXContract.View{
@@ -30,6 +32,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
     override fun initView() {
         noticeDialog = NoticeDialog(this)
 
+        val marketId = intent.getStringExtra("marketId")
         val amount = intent.getStringExtra("amount")
         val buyNum = intent.getStringExtra("buyNum")
         val orderNo = intent.getStringExtra("orderNo")
@@ -43,6 +46,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
         }
 
         noticeDialog.setOnDismissListener {
+            startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",1))
             finish()
         }
     }

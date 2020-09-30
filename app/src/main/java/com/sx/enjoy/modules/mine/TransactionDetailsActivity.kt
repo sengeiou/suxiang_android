@@ -17,9 +17,7 @@ import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.utils.UpLoadImageUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
-import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.activity_transaction_details.*
-import kotlinx.android.synthetic.main.activity_transaction_details.iv_user_head
 import org.jetbrains.anko.toast
 
 class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
@@ -54,14 +52,6 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
         uploadTask = UpLoadImageUtil(this,present)
 
-        if(type == C.MARKET_ORDER_STATUS_BUY){
-            iv_transaction_status_1.setImageResource(R.mipmap.ic_market_un_graphed)
-            tv_transaction_status_1.text = "已拍下"
-        }else{
-            iv_transaction_status_1.setImageResource(R.mipmap.ic_market_un_pay)
-            tv_transaction_status_1.text = "已付款"
-        }
-
         present.getTransactionOrderDetails(marketId)
 
         initEvent()
@@ -69,7 +59,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
     private fun initEvent(){
         iv_upload_documents.setOnClickListener {
-            if(transaction?.type == C.MARKET_ORDER_STATUS_BUY&&transaction?.status == 1){
+            if(transaction?.orderType == C.MARKET_ORDER_STATUS_BUY&&transaction?.status == 1){
                 PictureSelector.create(this)
                     .openGallery(PictureMimeType.ofImage())
                     .imageSpanCount(3)
@@ -85,19 +75,27 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
         }
 
         tv_submit.setOnClickListener {
-            if(transaction == null){
-                return@setOnClickListener
-            }
-            if(photo.isEmpty()){
-                toast("请上传支付凭证")
+            if(transaction?.orderType == C.MARKET_ORDER_STATUS_BUY){
+                if(transaction?.status == 1){
+                    if(transaction == null){
+                        return@setOnClickListener
+                    }
+                    if(photo.isEmpty()){
+                        toast("请上传支付凭证")
+                    }else{
+                        val imageList = arrayListOf<UpLoadImageData>()
+                        val logoImage = arrayListOf<UpLoadImageList>()
+                        logoImage.add(UpLoadImageList(photo))
+                        imageList.add(UpLoadImageData(logoImage,1,"支付凭证"))
+                        uploadTask?.addImagesToSources(imageList)
+                        uploadTask?.start()
+                        loadingDialog.showLoading("上传中...")
+                    }
+                }
             }else{
-                val imageList = arrayListOf<UpLoadImageData>()
-                val logoImage = arrayListOf<UpLoadImageList>()
-                logoImage.add(UpLoadImageList(photo))
-                imageList.add(UpLoadImageData(logoImage,1,"支付凭证"))
-                uploadTask?.addImagesToSources(imageList)
-                uploadTask?.start()
-                loadingDialog.showLoading("上传中...")
+                if(transaction?.status == 2){
+                    //present.confirmMarketOrder(C.USER_ID,)
+                }
             }
         }
 
@@ -130,15 +128,11 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                     data?.let {
                         data as TransactionOrderBean
                         transaction = data
-                        ImageLoaderUtil().displayHeadImage(this,data.headImage,iv_user_head)
-                        tv_user_name.text = data.userName
-                        tv_market_time.text = data.createTime
                         tv_market_price.text = "¥${data.amount}"
                         tv_market_count.text = data.buyNum
+                        tv_total_money.text = "¥${data.buyAmountSum}"
 
                         if(data.orderType == C.MARKET_ORDER_STATUS_BUY){
-                            ll_ali_number.visibility = View.GONE
-
                             when(data.status){
                                 0 -> {
                                     iv_transaction_status_1.setImageResource(R.mipmap.ic_market_un_graphed)
@@ -146,8 +140,13 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_transaction_status_1.setTextColor(resources.getColor(R.color.color_666666))
                                     tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
                                     v_transaction_status.setBackgroundColor(resources.getColor(R.color.color_666666))
+                                    ll_sell_info.visibility = View.GONE
+                                    ll_zfb_number.visibility = View.GONE
+                                    ll_sell_phone.visibility = View.GONE
+                                    ll_ali_upload.visibility = View.GONE
                                     ll_order_time.visibility = View.GONE
-                                    ll_sell_user.visibility = View.GONE
+                                    ll_photo_upload.visibility = View.GONE
+                                    ll_buy_user.visibility = View.GONE
                                     ll_upload_documents.visibility = View.GONE
                                     tv_submit.visibility = View.GONE
                                 }
@@ -157,13 +156,20 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_transaction_status_1.setTextColor(resources.getColor(R.color.main_color))
                                     tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
                                     v_transaction_status.setBackgroundColor(resources.getColor(R.color.main_color))
-                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_sell_head)
-                                    tv_sell_name.text = data.sellUserName
+                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_user_head)
+                                    tv_user_name.text = data.sellUserName
+                                    tv_market_time.text = data.createTime
+                                    tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
-                                    tv_sell_account.text = data.payNumber
                                     tv_submit.text = "提交"
+
+                                    ll_sell_info.visibility = View.VISIBLE
+                                    ll_zfb_number.visibility = View.VISIBLE
+                                    ll_sell_phone.visibility = View.VISIBLE
+                                    ll_ali_upload.visibility = View.GONE
                                     ll_order_time.visibility = View.GONE
-                                    ll_sell_user.visibility = View.VISIBLE
+                                    ll_photo_upload.visibility = View.GONE
+                                    ll_buy_user.visibility = View.GONE
                                     ll_upload_documents.visibility = View.VISIBLE
                                     tv_submit.visibility = View.VISIBLE
                                 }
@@ -173,15 +179,92 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_transaction_status_1.setTextColor(resources.getColor(R.color.main_color))
                                     tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
                                     v_transaction_status.setBackgroundColor(resources.getColor(R.color.main_color))
-                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_sell_head)
-                                    ImageLoaderUtil().displayHeadImage(this,data.transaction,iv_upload_documents)
-                                    tv_sell_name.text = data.sellUserName
+                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_user_head)
+                                    ImageLoaderUtil().displayImage(this,data.transaction,iv_upload_documents)
+                                    tv_user_name.text = data.sellUserName
+                                    tv_market_time.text = data.createTime
+                                    tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
-                                    tv_sell_account.text = data.payNumber
+
+                                    ll_sell_info.visibility = View.VISIBLE
+                                    ll_zfb_number.visibility = View.VISIBLE
+                                    ll_sell_phone.visibility = View.VISIBLE
+                                    ll_ali_upload.visibility = View.GONE
                                     ll_order_time.visibility = View.GONE
-                                    ll_sell_user.visibility = View.VISIBLE
+                                    ll_photo_upload.visibility = View.GONE
+                                    ll_buy_user.visibility = View.GONE
                                     ll_upload_documents.visibility = View.VISIBLE
                                     tv_submit.visibility = View.GONE
+                                }
+                            }
+                        }else{
+                            when(data.status){
+                                0 -> {
+                                    iv_transaction_status_1.setImageResource(R.mipmap.ic_market_un_graphed)
+                                    iv_transaction_status_2.setImageResource(R.mipmap.ic_market_un_complete)
+                                    tv_transaction_status_1.setTextColor(resources.getColor(R.color.color_666666))
+                                    tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
+                                    v_transaction_status.setBackgroundColor(resources.getColor(R.color.color_666666))
+                                    tv_zfb_number.text = data.payNumber
+
+                                    ll_sell_info.visibility = View.GONE
+                                    ll_zfb_number.visibility = View.VISIBLE
+                                    ll_sell_phone.visibility = View.GONE
+                                    ll_order_time.visibility = View.GONE
+                                    ll_ali_upload.visibility = View.GONE
+                                    ll_photo_upload.visibility = View.GONE
+                                    ll_buy_user.visibility = View.GONE
+                                    ll_upload_documents.visibility = View.GONE
+                                    tv_submit.visibility = View.GONE
+
+                                }
+                                1 -> {
+                                    iv_transaction_status_1.setImageResource(R.mipmap.ic_market_graphed)
+                                    iv_transaction_status_2.setImageResource(R.mipmap.ic_market_un_complete)
+                                    tv_transaction_status_1.setTextColor(resources.getColor(R.color.main_color))
+                                    tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
+                                    v_transaction_status.setBackgroundColor(resources.getColor(R.color.main_color))
+                                    tv_zfb_number.text = data.payNumber
+                                    tv_order_time.text = data.createTime
+                                    tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
+                                    tv_photo_upload.text = data.payTime
+                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_other_head)
+                                    tv_user_name.text = data.sellUserName
+
+                                    ll_sell_info.visibility = View.GONE
+                                    ll_zfb_number.visibility = View.VISIBLE
+                                    ll_sell_phone.visibility = View.GONE
+                                    ll_order_time.visibility = View.VISIBLE
+                                    ll_ali_upload.visibility = View.VISIBLE
+                                    ll_photo_upload.visibility = View.GONE
+                                    ll_buy_user.visibility = View.VISIBLE
+                                    ll_upload_documents.visibility = View.GONE
+                                    tv_submit.visibility = View.GONE
+                                }
+                                2 -> {
+                                    iv_transaction_status_1.setImageResource(R.mipmap.ic_market_graphed)
+                                    iv_transaction_status_2.setImageResource(R.mipmap.ic_market_un_complete)
+                                    tv_transaction_status_1.setTextColor(resources.getColor(R.color.main_color))
+                                    tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
+                                    v_transaction_status.setBackgroundColor(resources.getColor(R.color.main_color))
+                                    ImageLoaderUtil().displayHeadImage(this,data.sellUserImg,iv_other_head)
+                                    ImageLoaderUtil().displayImage(this,data.transaction,iv_upload_documents)
+                                    tv_zfb_number.text = data.payNumber
+                                    tv_order_time.text = data.createTime
+                                    tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
+                                    tv_photo_upload.text = data.payTime
+                                    tv_user_name.text = data.sellUserName
+                                    tv_submit.text = "确认完成"
+
+                                    ll_sell_info.visibility = View.GONE
+                                    ll_zfb_number.visibility = View.VISIBLE
+                                    ll_sell_phone.visibility = View.GONE
+                                    ll_order_time.visibility = View.VISIBLE
+                                    ll_ali_upload.visibility = View.VISIBLE
+                                    ll_photo_upload.visibility = View.VISIBLE
+                                    ll_buy_user.visibility = View.VISIBLE
+                                    ll_upload_documents.visibility = View.VISIBLE
+                                    tv_submit.visibility = View.VISIBLE
                                 }
                             }
                         }

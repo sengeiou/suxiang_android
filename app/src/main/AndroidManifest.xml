@@ -30,14 +30,34 @@
         android:resizeableActivity="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".modules.mine.TransactionDetailsActivity"></activity>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".modules.market.IncomeActivity" />
+        <activity android:name=".modules.login.LoginActivity" />
+        <activity android:name=".modules.market.BuyInActivity" />
+        <activity android:name=".modules.login.PasswordForgetActivity" />
+        <activity android:name=".modules.login.RegisterActivity" />
+        <activity android:name=".modules.mine.AccountActivity" />
+        <activity android:name=".modules.market.MarkDetailActivity" />
+        <activity android:name=".modules.market.SellOutActivity" />
+        <activity android:name=".modules.mine.TransactionDetailsActivity"/>
         <activity android:name=".modules.market.SellRiceActivity" />
-
-        <service
-            android:name=".service.StepCalculationService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".modules.mine.TransactionActivity" />
         <activity android:name=".modules.mine.OrderDetailsActivity" />
         <activity android:name=".modules.mine.OrderListActivity" />
@@ -65,31 +85,11 @@
         <activity android:name=".modules.mine.PayPasswordActivity" />
         <activity android:name=".modules.mine.LoginPasswordActivity" />
 
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
-        <meta-data
-            android:name="android.notch_support"
-            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
-        <meta-data
-            android:name="notch.config"
-            android:value="portrait|landscape" />
+        <service
+            android:name=".service.StepCalculationService"
+            android:enabled="true"
+            android:exported="true" />
 
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".modules.market.IncomeActivity" />
-        <activity android:name=".modules.login.LoginActivity" />
-        <activity android:name=".modules.market.BuyInActivity" />
-        <activity android:name=".modules.login.PasswordForgetActivity" />
-        <activity android:name=".modules.login.RegisterActivity" />
-        <activity android:name=".modules.mine.AccountActivity" />
-        <activity android:name=".modules.market.MarkDetailActivity" />
-        <activity android:name=".modules.market.SellOutActivity" />
     </application>
 
 </manifest>

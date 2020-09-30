@@ -455,4 +455,36 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
             })
     }
+
+    override fun getUserTeamList(id: String, limit: String, page: String) {
+        model.getUserTeamList(id,limit,page)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<TeamListBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<TeamListBean>>?) {
+                    view.onSuccess(SXContract.GETUSERTEAMLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<TeamListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun confirmMarketOrder(userId: String, richUserId: String, buyNum: String, orderNo: String, type: String) {
+        model.confirmMarketOrder(userId,richUserId,buyNum,orderNo,type)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.CONFIRMMARKETORDER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
 }

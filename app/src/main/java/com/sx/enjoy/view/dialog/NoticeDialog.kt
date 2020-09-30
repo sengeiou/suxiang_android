@@ -44,6 +44,12 @@ class NoticeDialog : Dialog {
             7 -> {
                 tv_notice_text.text = "提交成功"
             }
+            8 -> {
+                tv_notice_text.text = "买入成功"
+            }
+            9 -> {
+                tv_notice_text.text = "操作成功"
+            }
         }
     }
 

@@ -42,6 +42,8 @@ interface SXContract {
         var CREATEMARKETORDER = "createMarketOrder"
         var GETTRANSACTIONORDERDETAILS = "getTransactionOrderDetails"
         var PAYMARKETORDER = "payMarketOrder"
+        var CONFIRMMARKETORDER = "confirmMarketOrder"
+        var GETUSERTEAMLIST = "getUserTeamList"
     }
 
     interface View: BaseView
@@ -75,6 +77,8 @@ interface SXContract {
         fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String):Observable<HttpResult<String>>
         fun getTransactionOrderDetails(id:String):Observable<HttpResult<TransactionOrderBean>>
         fun payMarketOrder(orderNo:String,transaction:String):Observable<HttpResult<String>>
+        fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String):Observable<HttpResult<String>>
+        fun getUserTeamList(id:String,limit:String,page:String):Observable<HttpResult<List<TeamListBean>>>
     }
 
     interface Present{
@@ -106,6 +110,8 @@ interface SXContract {
         fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String)
         fun getTransactionOrderDetails(id:String)
         fun payMarketOrder(orderNo:String,transaction:String)
+        fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String)
+        fun getUserTeamList(id:String,limit:String,page:String)
     }
 
 }

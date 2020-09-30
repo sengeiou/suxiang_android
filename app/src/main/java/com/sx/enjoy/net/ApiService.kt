@@ -122,4 +122,13 @@ interface ApiService {
     @POST("api-rich/rich-order/pay")
     fun payMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
 
+    //米粒订单确认
+    @POST("api-rich/rich-order/confirm")
+    fun confirmMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //推荐团队
+    @GET("api-user/user/getUserTeam")
+    fun getUserTeamList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<TeamListBean>>>
+
+
 }

@@ -316,4 +316,30 @@ class SXModel  : SXContract.Model{
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return Api.getDefault().payMarketOrder(body)
     }
+
+    override fun confirmMarketOrder(userId: String, richUserId: String, buyNum: String, orderNo: String,  type: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("richUserId", richUserId)
+            jsonObject.put("buyNum", buyNum)
+            jsonObject.put("orderNo", orderNo)
+            jsonObject.put("type", type)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().payMarketOrder(body)
+    }
+
+    override fun getUserTeamList(id: String, limit: String, page: String): Observable<HttpResult<List<TeamListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["id"] = id
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getUserTeamList(keyMap)
+    }
+
 }
