@@ -4,10 +4,12 @@ import android.app.Activity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.MarketSellSuccessEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_buy_in.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.toast
 
 class BuyInActivity : BaseActivity() ,SXContract.View{
@@ -42,7 +44,6 @@ class BuyInActivity : BaseActivity() ,SXContract.View{
         }
 
         noticeDialog.setOnDismissListener {
-            setResult(RESULT_OK)
             finish()
         }
 
@@ -53,6 +54,7 @@ class BuyInActivity : BaseActivity() ,SXContract.View{
             when (flag) {
                 SXContract.PUBLISHMARKETINFO -> {
                     noticeDialog.showNotice(3)
+                    EventBus.getDefault().post(MarketSellSuccessEvent(0))
                 }
                 else -> {
 

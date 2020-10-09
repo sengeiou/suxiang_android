@@ -85,7 +85,6 @@ public class ImageLoaderUtil {
     }
 
     public void displayCommodityInfoImage(Context context, Object path, ImageView imageView) {
-        //Glide 加载图片简单用法
         Glide.with(context).load(path)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)
                         .placeholder(R.mipmap.ic_default_logo)

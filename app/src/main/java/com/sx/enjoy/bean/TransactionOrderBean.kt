@@ -8,12 +8,8 @@ class TransactionOrderBean(
     @SerializedName("type")val type:Int,
     @SerializedName("orderType")val orderType:Int,
     @SerializedName("createTime")val createTime:String,
-    @SerializedName("userId")val userId:String,
-    @SerializedName("userName")val userName:String,
     @SerializedName("orderNo")val orderNo:String,
     @SerializedName("richOrderNo")val richOrderNo:String,
-    @SerializedName("headImage")val headImage:String,
-    @SerializedName("userPhone")val userPhone:String,
     @SerializedName("amount")val amount:String,
     @SerializedName("buyNum")val buyNum:String,
     @SerializedName("buyAmountSum")val buyAmountSum:String,
@@ -23,7 +19,12 @@ class TransactionOrderBean(
     @SerializedName("status")val status:Int,
     @SerializedName("respTime")val respTime:String,
     @SerializedName("payTime")val payTime:String,
+    @SerializedName("richUserId")val richUserId:String,
     @SerializedName("sellUserName")val sellUserName:String,
     @SerializedName("sellUserImg")val sellUserImg:String,
-    @SerializedName("sellUserPhone")val sellUserPhone:String
+    @SerializedName("sellUserPhone")val sellUserPhone:String,
+    @SerializedName("userId")val userId:String,
+    @SerializedName("userName")val userName:String,
+    @SerializedName("headImage")val headImage:String,
+    @SerializedName("userPhone")val userPhone:String
 ): Serializable

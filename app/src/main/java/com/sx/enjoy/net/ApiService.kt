@@ -130,5 +130,71 @@ interface ApiService {
     @GET("api-user/user/getUserTeam")
     fun getUserTeamList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<TeamListBean>>>
 
+    //历史步数
+    @GET("api-home/travelmode/findHistoryByModel")
+    fun getWalkHistory(@QueryMap map:Map<String,String>):Observable<HttpResult<List<WalkHistoryBean>>>
 
+    //Banner
+    @GET("api-system/sxbanner/getBanner")
+    fun getHomeBanner():Observable<HttpResult<BannerListBean>>
+
+    //通知
+    @GET("api-system/sxnotice/getAll")
+    fun getHomeNotice():Observable<HttpResult<List<NoticeListBean>>>
+
+    //新闻列表
+    @GET("api-system/sxcontentmanager")
+    fun getHomeNews(@QueryMap map:Map<String,String>):Observable<HttpResult<List<NewsListBean>>>
+
+    //商品列表
+    @GET("api-mall/commodity/findGoodsByCondition")
+    fun getCommodityList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<CommodityListBean>>>
+
+    //商品详情
+    @GET("api-mall/commodity/{id}")
+    fun getCommodityDetails(@Path("id")id:String):Observable<HttpResult<CommodityDetailsBean>>
+
+    //猜你喜欢
+    @GET("api-mall/commodity/getGuessYouLike")
+    fun getCommodityLikeList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<CommodityListBean>>>
+
+    //购物车数量
+    @GET("api-mall/shoppingcar/getShoppingCarCount")
+    fun getShopCartCount(@Query("userId")userId:String):Observable<HttpResult<String>>
+
+    //加入购物车
+    @POST("api-mall/shoppingcar/addShoppingCar")
+    fun addShopCart(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //创建订单
+    @POST("api-mall/mallorder/generateOrder")
+    fun createOrder(@Body body: RequestBody):Observable<HttpResult<NewOrderBean>>
+
+    //获取第一个收货地址
+    @GET("api-mall/receiveraddress/findAddressFirst")
+    fun getFirstAddress(@Query("userId")userId:String):Observable<HttpResult<AddressBean>>
+
+    //保存收货地址
+    @POST("api-mall/receiveraddress")
+    fun saveAddress(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //收货地址
+    @GET("api-mall/receiveraddress/findAddressByUserId")
+    fun getMyAddressList(@Query("userId")userId:String):Observable<HttpResult<List<AddressBean>>>
+
+    //购物车
+    @GET("api-mall/shoppingcar/getShoppingCar")
+    fun getMyShopCart(@Query("userId")userId:String):Observable<HttpResult<List<ShopCartBean>>>
+
+    //添加购物商品数量
+    @POST("api-mall/shoppingcar/addGoodsNumber")
+    fun addCommodityNumber(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //添加购物商品数量
+    @POST("api-mall/shoppingcar/deleteByIds")
+    fun deleteCommodityFromShopCart(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //获取订单状态数量
+    @GET("api-mall/mallorder/findOrderStatus")
+    fun getMyOrderStatusCount(@Query("userId")userId:String):Observable<HttpResult<OrderStatusCountBean>>
 }

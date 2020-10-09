@@ -3,10 +3,12 @@ package com.sx.enjoy.modules.market
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.MarketSellSuccessEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_sell_out.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.toast
 
 class SellOutActivity : BaseActivity() , SXContract.View{
@@ -42,10 +44,9 @@ class SellOutActivity : BaseActivity() , SXContract.View{
                 toast("请输入支付宝账号")
                 return@setOnClickListener
             }
-            present.publishMarketInfo(C.USER_ID,"1",et_sell_count.text.toString(),et_sell_price.text.toString(),et_zfb_number.text.toString())
+            present.publishMarketInfo(C.USER_ID,C.MARKET_ORDER_STATUS_SELL.toString(),et_sell_price.text.toString(),et_sell_count.text.toString(),et_zfb_number.text.toString())
         }
         noticeDialog.setOnDismissListener {
-            setResult(RESULT_OK)
             finish()
         }
     }
@@ -55,6 +56,7 @@ class SellOutActivity : BaseActivity() , SXContract.View{
             when (flag) {
                 SXContract.PUBLISHMARKETINFO -> {
                     noticeDialog.showNotice(3)
+                    EventBus.getDefault().post(MarketSellSuccessEvent(1))
                 }
                 else -> {
 

@@ -21,6 +21,7 @@
             android:layout_marginRight="@dimen/dimen_15">
 
             <TextView
+                android:id="@+id/tv_new_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
@@ -30,6 +31,7 @@
                 android:text="好友累计阶段你需要知道的"/>
 
             <TextView
+                android:id="@+id/tv_news_summery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_15"
@@ -42,6 +44,7 @@
         </LinearLayout>
 
         <com.sx.enjoy.view.RoundImageView
+            android:id="@+id/iv_news_img"
             android:layout_width="@dimen/dimen_110"
             android:layout_height="@dimen/dimen_90"
             android:src="@mipmap/ic_title_logo"/>

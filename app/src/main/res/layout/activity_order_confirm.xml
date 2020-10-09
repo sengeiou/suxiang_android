@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
-    android:descendantFocusability="blocksDescendants"
+    android:descendantFocusability="beforeDescendants"
     tools:context=".modules.store.OrderConfirmActivity">
 
     <include layout="@layout/title_public_view"/>
@@ -54,7 +53,7 @@
                     android:layout_marginLeft="@dimen/dimen_25"
                     android:textSize="@dimen/text_16"
                     android:textColor="@color/color_F02134"
-                    android:text="¥3333.33"/>
+                    android:text="¥0.00"/>
 
             </LinearLayout>
 

@@ -6,8 +6,8 @@ import java.io.Serializable
 class TeamListBean(
     @SerializedName("id")val id:String,
     @SerializedName("createTime")val createTime:String,
-    @SerializedName("userActivity")val type:String,
-    @SerializedName("userContrib")val userId:String,
+    @SerializedName("userActivity")val userActivity:String,
+    @SerializedName("userContrib")val userContrib:String,
     @SerializedName("userImg")val userImg:String,
     @SerializedName("userName")val userName:String
 ): Serializable

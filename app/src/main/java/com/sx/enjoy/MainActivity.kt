@@ -4,13 +4,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
 import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
 import com.likai.lib.base.BaseFragment
 import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.base.BaseActivity
@@ -18,7 +14,7 @@ import com.sx.enjoy.bean.StepRiceBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.FirstInitUserEvent
-import com.sx.enjoy.event.MarketBuySuccessEvent
+import com.sx.enjoy.event.MarketSellSuccessEvent
 import com.sx.enjoy.event.TaskBuySuccessEvent
 import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.modules.home.HomeFragment
@@ -184,14 +180,6 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
         }
     }
 
-    private val stepCounterListener = object :SensorEventListener{
-        override fun onSensorChanged(event: SensorEvent) {
-            Log.e("Detector-SensorChanged","步数--->"+event.values[0].toInt())
-        }
-        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-    }
-
-
     override fun onShake() {
         if(C.USER_ID.isNotEmpty()){
             C.USER_STEP++
@@ -237,11 +225,14 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public fun marketRiceChange(event: MarketBuySuccessEvent){
-        if(C.USER_ID.isEmpty()){
-            changeUserInfo()
-        }else{
-            present.getUserInfo(C.USER_ID)
+    public fun marketRiceChange(event: MarketSellSuccessEvent){
+        (fragments[2] as MarketFragment).getMarketList(true)
+        if(event.state == 1){
+            if(C.USER_ID.isEmpty()){
+                changeUserInfo()
+            }else{
+                present.getUserInfo(C.USER_ID)
+            }
         }
     }
 

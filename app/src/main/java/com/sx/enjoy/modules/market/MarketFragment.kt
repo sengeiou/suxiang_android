@@ -72,7 +72,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
         present.getMarketList(pager.toString(), C.PUBLIC_PAGER_NUMBER)
     }
 
-    private fun getMarketList(isRefresh: Boolean){
+    fun getMarketList(isRefresh: Boolean){
         if(isRefresh){
             pager = 1
             mAdapter.loadMoreComplete()
@@ -104,7 +104,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 activity?.startActivity<LoginActivity>()
             }else{
                 val intent = Intent(activity,BuyInActivity::class.java)
-                startActivityForResult(intent,3001)
+                startActivity(intent)
             }
         }
         headView.tv_sell_out.setOnClickListener {
@@ -112,11 +112,14 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 activity?.startActivity<LoginActivity>()
             }else{
                 val intent = Intent(activity,SellOutActivity::class.java)
-                startActivityForResult(intent,3002)
+                startActivity(intent)
             }
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
-            activity?.startActivity<MarkDetailActivity>(Pair("marketId",mAdapter.data[position].id), Pair("type",mAdapter.data[position].type))
+            val intent = Intent(activity,MarkDetailActivity::class.java)
+            intent.putExtra("marketId",mAdapter.data[position].id)
+            intent.putExtra("type",mAdapter.data[position].type)
+            startActivity(intent)
         }
     }
 
@@ -156,17 +159,6 @@ class MarketFragment : BaseFragment(), SXContract.View{
         description.isEnabled = false
         headView.lc_market_quotations.description = description
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(resultCode == RESULT_OK){
-            pager = 1
-            mAdapter.loadMoreComplete()
-            mAdapter.setEnableLoadMore(false)
-            present.getMarketQuotes("1","7")
-            present.getMarketList(pager.toString(), C.PUBLIC_PAGER_NUMBER)
-        }
-    }
-
 
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {

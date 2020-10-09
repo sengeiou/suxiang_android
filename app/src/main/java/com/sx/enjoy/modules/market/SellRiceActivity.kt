@@ -3,15 +3,13 @@ package com.sx.enjoy.modules.market
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
-import com.sx.enjoy.event.MarketBuySuccessEvent
+import com.sx.enjoy.event.MarketSellSuccessEvent
 import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_sell_rice.*
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -32,6 +30,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
     override fun initView() {
         noticeDialog = NoticeDialog(this)
 
+        val type = intent.getIntExtra("type",C.MARKET_ORDER_STATUS_BUY)
         val marketId = intent.getStringExtra("marketId")
         val amount = intent.getStringExtra("amount")
         val buyNum = intent.getStringExtra("buyNum")
@@ -42,7 +41,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
                 toast("请输入支付宝账号")
                 return@setOnClickListener
             }
-            present.createMarketOrder(C.USER_ID,"0",amount,buyNum,et_ali_number.text.toString(),orderNo)
+            present.createMarketOrder(C.USER_ID,type.toString(),amount,buyNum,et_ali_number.text.toString(),orderNo)
         }
 
         noticeDialog.setOnDismissListener {
@@ -56,7 +55,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
             when (flag) {
                 SXContract.CREATEMARKETORDER -> {
                     noticeDialog.showNotice(6)
-                    EventBus.getDefault().post(MarketBuySuccessEvent(1))
+                    EventBus.getDefault().post(MarketSellSuccessEvent(1))
                 }
                 else -> {
 

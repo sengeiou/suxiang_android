@@ -16,6 +16,6 @@ class TaskListBean  (
     @SerializedName("taskRich")val taskRich:String,
     @SerializedName("exist")val exist:String,
     @SerializedName("orderNo")val orderNo:String,
-    @SerializedName("status")val status:String,
+    @SerializedName("status")val status:Int,
     @SerializedName("surplus")val surplus:String
 ): Serializable

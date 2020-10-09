@@ -10,8 +10,7 @@ import com.likai.lib.base.BaseFragment
 import com.likai.lib.commonutils.DensityUtils
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.HomeListAdapter
-import com.sx.enjoy.bean.StepRiceBean
-import com.sx.enjoy.bean.UserBean
+import com.sx.enjoy.bean.*
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
@@ -38,6 +37,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
     private lateinit var mAdapter:HomeListAdapter
 
 
+    private var pager = 1
     private var titleType = 0
 
     override fun getLayoutResource() = R.layout.fragment_home
@@ -60,39 +60,13 @@ class HomeFragment : BaseFragment(),SXContract.View{
         mAdapter.addHeaderView(headView)
 
 
+        present.getHomeBanner()
+        present.getHomeNotice()
+        getNewsList(true)
 
-
-        val noticeList = arrayListOf<String>()
-        noticeList.add("学好Java、Android、C#、C、ios、html+css+js")
-        noticeList.add("走遍天下都不怕！！！！！")
-        noticeList.add("不是我吹，就怕你做不到，哈哈")
-        noticeList.add("你是最棒的，奔跑吧孩子！")
-        headView.tb_home_notice.setDatas(noticeList)
-
-        val bannerList = arrayListOf<String>()
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        headView.ban_top_list.setImageLoader(GlideImageLoader())
-        headView.ban_top_list.setImages(bannerList)
-        headView.ban_top_list.start()
-
-        headView.ban_bottom_list.setImageLoader(GlideImageLoader())
-        headView.ban_bottom_list.setImages(bannerList)
-        headView.ban_bottom_list.start()
-
-        val mList = arrayListOf<String>()
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mList.add("")
-        mAdapter.setNewData(mList)
 
         initData()
         initEvent()
-
     }
 
 
@@ -136,7 +110,11 @@ class HomeFragment : BaseFragment(),SXContract.View{
             }
         }
         tv_note_list.setOnClickListener {
-            activity?.startActivity<WalkHistoryActivity>(Pair("titleType",titleType))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<WalkHistoryActivity>(Pair("titleType",titleType))
+            }
         }
         hst_title.setOnSortSelectListener {
             titleType = it
@@ -166,7 +144,13 @@ class HomeFragment : BaseFragment(),SXContract.View{
         })
 
         swipe_refresh_layout.setOnRefreshListener {
-            Log.e("Test","刷新------------>")
+            present.getHomeBanner()
+            present.getHomeNotice()
+            getNewsList(true)
+        }
+
+        mAdapter.setOnLoadMoreListener {
+            getNewsList(false)
         }
 
         rcy_home_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -196,6 +180,18 @@ class HomeFragment : BaseFragment(),SXContract.View{
                 }
             }
         })
+    }
+
+    private fun getNewsList(isRefreshList: Boolean){
+        if(isRefreshList){
+            pager = 1
+            mAdapter.loadMoreComplete()
+            mAdapter.setEnableLoadMore(false)
+        }else{
+            pager++
+            swipe_refresh_layout.finishRefresh()
+        }
+        present.getHomeNews(C.PUBLIC_PAGER_NUMBER,pager.toString())
     }
 
     override fun onResume() {
@@ -237,6 +233,69 @@ class HomeFragment : BaseFragment(),SXContract.View{
                         }
                     }
                 }
+                SXContract.GETHOMEBANNER -> {
+                    data?.let {
+                        data as BannerListBean
+                        if(data.shuffList.isNotEmpty()){
+                            headView.ban_top_list.visibility = View.VISIBLE
+                            val bannerList = arrayListOf<String>()
+                            data.shuffList.forEach {
+                                bannerList.add(it.bannerImg)
+                            }
+                            headView.ban_top_list.setImageLoader(GlideImageLoader())
+                            headView.ban_top_list.setImages(bannerList)
+                            headView.ban_top_list.start()
+                        }else{
+                            headView.ban_top_list.visibility = View.GONE
+                        }
+                        if(data.advertList.isNotEmpty()){
+                            headView.ban_bottom_list.visibility = View.VISIBLE
+                            val advertList = arrayListOf<String>()
+                            data.advertList.forEach {
+                                advertList.add(it.bannerImg)
+                            }
+                            headView.ban_bottom_list.setImageLoader(GlideImageLoader())
+                            headView.ban_bottom_list.setImages(advertList)
+                            headView.ban_bottom_list.start()
+                        }else{
+                            headView.ban_bottom_list.visibility = View.GONE
+                        }
+                    }
+                }
+                SXContract.GETHOMENOTICE -> {
+                    data?.let {
+                        swipe_refresh_layout.finishRefresh()
+                        data as List<NoticeListBean>
+                        if(data.isNotEmpty()){
+                            headView.ll_home_notice.visibility = View.VISIBLE
+                            val noticeList = arrayListOf<String>()
+                            data.forEach {
+                                noticeList.add(it.title)
+                            }
+                            headView.tb_home_notice.setDatas(noticeList)
+                        }else{
+                            headView.ll_home_notice.visibility = View.GONE
+                        }
+
+                    }
+                }
+                SXContract.GETHOMENEWS -> {
+                    data?.let {
+                        data as List<NewsListBean>
+                        if(pager<=1){
+                            swipe_refresh_layout.finishRefresh()
+                            mAdapter.setEnableLoadMore(true)
+                            mAdapter.setNewData(data)
+                        }else{
+                            if(data.isEmpty()){
+                                mAdapter.loadMoreEnd()
+                            }else{
+                                mAdapter.addData(data)
+                                mAdapter.loadMoreComplete()
+                            }
+                        }
+                    }
+                }
                 else -> {
 
                 }
@@ -247,10 +306,26 @@ class HomeFragment : BaseFragment(),SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         activity?.toast(string!!)
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }
     }
 
-    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {}
-
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        if(isRefreshList){
+            if(pager<=1){
+                swipe_refresh_layout.finishRefresh()
+                mAdapter.setEnableLoadMore(true)
+            }else{
+                mAdapter.loadMoreFail()
+            }
+        }
+    }
 
 
     companion object {

@@ -44,6 +44,23 @@ interface SXContract {
         var PAYMARKETORDER = "payMarketOrder"
         var CONFIRMMARKETORDER = "confirmMarketOrder"
         var GETUSERTEAMLIST = "getUserTeamList"
+        var GETWALKHISTORY = "getWalkHistory"
+        var GETHOMEBANNER = "getHomeBanner"
+        var GETHOMENOTICE = "getHomeNotice"
+        var GETHOMENEWS = "getHomeNews"
+        var GETCOMMODITYLIST = "getCommodityList"
+        var GETCOMMODITYDETAILS = "getCommodityDetails"
+        var GETCOMMODITYLIKELIST = "getCommodityLikeList"
+        var GETSHOPCARTCOUNT = "getShopCartCount"
+        var ADDSHOPCART = "addShopCart"
+        var CREATEORDER = "createOrder"
+        var GETFIRSTADDRESS = "getFirstAddress"
+        var SAVEADDRESS = "saveAddress"
+        var GETMYADDRESSLIST = "getMyAddressList"
+        var GETMYSHOPCART = "getMyShopCart"
+        var ADDCOMMODITYNUMBER = "addCommodityNumber"
+        var DELETECOMMODITYFROMSHOPCART = "deleteCommodityFromShopCart"
+        var GETMYORDERSTATUSCOUNT = "getMyOrderStatusCount"
     }
 
     interface View: BaseView
@@ -79,6 +96,23 @@ interface SXContract {
         fun payMarketOrder(orderNo:String,transaction:String):Observable<HttpResult<String>>
         fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String):Observable<HttpResult<String>>
         fun getUserTeamList(id:String,limit:String,page:String):Observable<HttpResult<List<TeamListBean>>>
+        fun getWalkHistory(userId:String,model:String,limit:String,page:String):Observable<HttpResult<List<WalkHistoryBean>>>
+        fun getHomeBanner():Observable<HttpResult<BannerListBean>>
+        fun getHomeNotice():Observable<HttpResult<List<NoticeListBean>>>
+        fun getHomeNews(limit:String,page:String):Observable<HttpResult<List<NewsListBean>>>
+        fun getCommodityList(goodsCateId:String,goodsName:String,sale:String,amount:String,limit:String,page:String):Observable<HttpResult<List<CommodityListBean>>>
+        fun getCommodityDetails(id:String):Observable<HttpResult<CommodityDetailsBean>>
+        fun getCommodityLikeList(categoryId:String,goodsId:String):Observable<HttpResult<List<CommodityListBean>>>
+        fun getShopCartCount(userId:String):Observable<HttpResult<String>>
+        fun addShopCart(userId:String,goodsId:String,constituteId:String,goodsNumber:String):Observable<HttpResult<String>>
+        fun createOrder(userId:String,addressId:String,remark:String,ordersDtoList:List<OrderSendBean>):Observable<HttpResult<NewOrderBean>>
+        fun getFirstAddress(userId:String):Observable<HttpResult<AddressBean>>
+        fun saveAddress(userId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String):Observable<HttpResult<String>>
+        fun getMyAddressList(userId:String):Observable<HttpResult<List<AddressBean>>>
+        fun getMyShopCart(userId:String):Observable<HttpResult<List<ShopCartBean>>>
+        fun addCommodityNumber(id:String,goodsNumber:String):Observable<HttpResult<String>>
+        fun deleteCommodityFromShopCart(ids:List<String>):Observable<HttpResult<String>>
+        fun getMyOrderStatusCount(userId:String):Observable<HttpResult<OrderStatusCountBean>>
     }
 
     interface Present{
@@ -112,6 +146,23 @@ interface SXContract {
         fun payMarketOrder(orderNo:String,transaction:String)
         fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String)
         fun getUserTeamList(id:String,limit:String,page:String)
+        fun getWalkHistory(userId:String,model:String,limit:String,page:String)
+        fun getHomeBanner()
+        fun getHomeNotice()
+        fun getHomeNews(limit:String,page:String)
+        fun getCommodityList(goodsCateId:String,goodsName:String,sale:String,amount:String,limit:String,page:String)
+        fun getCommodityDetails(id:String)
+        fun getCommodityLikeList(categoryId:String,goodsId:String)
+        fun getShopCartCount(userId:String)
+        fun addShopCart(userId:String,goodsId:String,constituteId:String,goodsNumber:String)
+        fun createOrder(userId:String,addressId:String,remark:String,ordersDtoList:List<OrderSendBean>)
+        fun getFirstAddress(userId:String)
+        fun saveAddress(userId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String)
+        fun getMyAddressList(userId:String)
+        fun getMyShopCart(userId:String)
+        fun addCommodityNumber(id:String,goodsNumber:String,position:Int,type:Int)
+        fun deleteCommodityFromShopCart(ids:List<String>)
+        fun getMyOrderStatusCount(userId:String)
     }
 
 }

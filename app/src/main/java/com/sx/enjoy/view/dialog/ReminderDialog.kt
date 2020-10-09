@@ -28,6 +28,9 @@ class ReminderDialog : Dialog {
             2 -> {
                 tv_reminder_text.text = "您未设置交易密码，请点击确定设置交易密码后再进行兑换！"
             }
+            3 -> {
+                tv_reminder_text.text = "是否从购物车移除？"
+            }
         }
     }
 

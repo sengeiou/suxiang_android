@@ -40,7 +40,7 @@
                         android:id="@+id/iv_transaction_status_1"
                         android:layout_width="@dimen/dimen_30"
                         android:layout_height="@dimen/dimen_30"
-                        android:src="@mipmap/ic_market_graphed"/>
+                        android:src="@mipmap/ic_market_un_graphed"/>
 
                     <TextView
                         android:id="@+id/tv_transaction_status_1"

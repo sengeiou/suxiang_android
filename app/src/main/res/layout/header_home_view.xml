@@ -295,12 +295,14 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/ll_home_notice"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_35"
             android:layout_marginLeft="@dimen/dimen_15"
             android:layout_marginTop="@dimen/dimen_15"
             android:layout_marginRight="@dimen/dimen_15"
             android:gravity="center_vertical"
+            android:visibility="gone"
             android:background="@color/background">
 
             <ImageView
@@ -326,6 +328,7 @@
         <com.youth.banner.Banner
             android:id="@+id/ban_top_list"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="@dimen/dimen_110"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dimen_15"
@@ -340,6 +343,7 @@
         <com.youth.banner.Banner
             android:id="@+id/ban_bottom_list"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="@dimen/dimen_80"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dimen_15"

@@ -11,6 +11,7 @@
         android:background="@color/white">
 
         <TextView
+            android:id="@+id/tv_time"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -20,6 +21,7 @@
             android:text="2010年09月14日"/>
 
         <TextView
+            android:id="@+id/tv_walk_step"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -29,6 +31,7 @@
             android:text="33333"/>
 
         <TextView
+            android:id="@+id/tv_rice_count"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"

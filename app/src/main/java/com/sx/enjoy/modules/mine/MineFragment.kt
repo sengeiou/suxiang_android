@@ -7,7 +7,9 @@ import android.view.View
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.MineMoreAdapter
+import com.sx.enjoy.bean.BannerListBean
 import com.sx.enjoy.bean.MineMoreBean
+import com.sx.enjoy.bean.OrderStatusCountBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.FirstInitUserEvent
@@ -65,22 +67,10 @@ class MineFragment : BaseFragment(),SXContract.View{
         moreAdapter.setNewData(moreList)
 
         initEvent()
+
         EventBus.getDefault().post(FirstInitUserEvent(true))
 
-
-
-
-
-        qbv1?.badgeNumber = 12
-        qbv2?.badgeNumber = 5
-
-        val bannerList = arrayListOf<String>()
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        bannerList.add("http://www.suxiang986.com/ziliao/20200814104903695.jpg")
-        ban_mine_list.setImageLoader(GlideImageLoader())
-        ban_mine_list.setImages(bannerList)
-        ban_mine_list.start()
+        present.getHomeBanner()
     }
 
     fun initUser(){
@@ -93,6 +83,10 @@ class MineFragment : BaseFragment(),SXContract.View{
             ll_member_level.visibility = View.GONE
             tv_rice_count.text = "0"
             tv_balance_money.text = "0.00"
+            qbv1?.badgeNumber = 0
+            qbv2?.badgeNumber = 0
+            qbv3?.badgeNumber = 0
+            qbv4?.badgeNumber = 0
         }else{
             val user = LitePal.findLast(UserBean::class.java)
             ll_sub_data.visibility = View.VISIBLE
@@ -108,6 +102,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             }
             tv_rice_count.text = user.riceGrains.toString()
             tv_balance_money.text = "0.00"
+            present.getMyOrderStatusCount(C.USER_ID)
         }
     }
 
@@ -174,7 +169,32 @@ class MineFragment : BaseFragment(),SXContract.View{
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
-
+                SXContract.GETHOMEBANNER -> {
+                    data.let {
+                        data as BannerListBean
+                        if(data.advertList.isNotEmpty()){
+                            ban_mine_list.visibility = View.VISIBLE
+                            val advertList = arrayListOf<String>()
+                            data.advertList.forEach {
+                                advertList.add(it.bannerImg)
+                            }
+                            ban_mine_list.setImageLoader(GlideImageLoader())
+                            ban_mine_list.setImages(advertList)
+                            ban_mine_list.start()
+                        }else{
+                            ban_mine_list.visibility = View.GONE
+                        }
+                    }
+                }
+                SXContract.GETMYORDERSTATUSCOUNT -> {
+                    data.let {
+                        data as OrderStatusCountBean
+                        qbv1?.badgeNumber = data.notPayNum
+                        qbv2?.badgeNumber = data.waitSendGoodsNum
+                        qbv3?.badgeNumber = data.waitGoodsNum
+                        qbv4?.badgeNumber = data.haveGoodsNum
+                    }
+                }
                 else -> {
 
                 }

@@ -63,7 +63,19 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     }
 
     override fun initData(){
-        pager = 1
+        getMyTaskList(true)
+    }
+
+    private fun getMyTaskList(isRefreshList: Boolean){
+        if(isRefreshList){
+            pager = 1
+            mAdapter.loadMoreComplete()
+            mAdapter.setEnableLoadMore(false)
+            mOnRiceRefreshListener?.onRiceFresh()
+        }else{
+            pager++
+            swipe_refresh_layout.finishRefresh()
+        }
         when(type){
             0 -> present.getTaskList()
             1 -> {
@@ -89,17 +101,11 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
 
     private fun initEvent(){
         swipe_refresh_layout.setOnRefreshListener {
-            pager = 1
-            mAdapter.loadMoreComplete()
-            mAdapter.setEnableLoadMore(false)
-            mOnRiceRefreshListener?.onRiceFresh()
-            initData()
+            getMyTaskList(true)
         }
         if(type!=0){
             mAdapter.setOnLoadMoreListener {
-                pager++
-                swipe_refresh_layout.finishRefresh()
-                initData()
+                getMyTaskList(false)
             }
         }
         mAdapter.setOnItemChildClickListener { _, view, position ->

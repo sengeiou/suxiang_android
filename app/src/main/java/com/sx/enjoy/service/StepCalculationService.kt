@@ -58,7 +58,7 @@ class StepCalculationService : Service() ,SXContract.View {
     }
 
     private fun uploadStepAndLocation(){
-        present.getRiceFromStep(C.USER_ID,"","0","0",C.USER_STEP.toString(),"0")
+        present.getRiceFromStep(C.USER_ID,"123","0","0",C.USER_STEP.toString(),"0")
     }
 
     override fun onSuccess(flag: String?, data: Any?) {

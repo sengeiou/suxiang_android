@@ -472,6 +472,7 @@
                 <com.youth.banner.Banner
                     android:id="@+id/ban_mine_list"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="@dimen/dimen_80"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/dimen_15"

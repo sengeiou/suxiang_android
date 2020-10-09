@@ -6,6 +6,7 @@ import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -169,9 +170,11 @@ class SXModel  : SXContract.Model{
     override fun getMyTaskList(userId: String, status: String,page:String,limit:String): Observable<HttpResult<List<TaskListBean>>> {
         val keyMap = HashMap<String,String>()
         keyMap["userId"] = userId
-        keyMap["status"] = status
         keyMap["page"] = page
         keyMap["limit"] = limit
+        if(status.isNotEmpty()){
+            keyMap["status"] = status
+        }
         return Api.getDefault().getMyTaskList(keyMap)
     }
 
@@ -331,7 +334,7 @@ class SXModel  : SXContract.Model{
 
         val json = jsonObject.toString()
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
-        return Api.getDefault().payMarketOrder(body)
+        return Api.getDefault().confirmMarketOrder(body)
     }
 
     override fun getUserTeamList(id: String, limit: String, page: String): Observable<HttpResult<List<TeamListBean>>> {
@@ -342,4 +345,179 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().getUserTeamList(keyMap)
     }
 
+    override fun getWalkHistory(userId: String, model: String, limit: String, page: String): Observable<HttpResult<List<WalkHistoryBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["model"] = model
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getWalkHistory(keyMap)
+    }
+
+    override fun getHomeBanner(): Observable<HttpResult<BannerListBean>> {
+        return Api.getDefault().getHomeBanner()
+    }
+
+    override fun getHomeNotice(): Observable<HttpResult<List<NoticeListBean>>> {
+        return Api.getDefault().getHomeNotice()
+    }
+
+    override fun getHomeNews(limit: String, page: String): Observable<HttpResult<List<NewsListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getHomeNews(keyMap)
+    }
+
+    override fun getCommodityList(goodsCateId: String, goodsName: String, sale: String, amount: String, limit: String, page: String): Observable<HttpResult<List<CommodityListBean>>> {
+        val keyMap = HashMap<String,String>()
+        if(goodsCateId.isNotEmpty()){
+            keyMap["goodsCateId"] = goodsCateId
+        }
+        if(goodsName.isNotEmpty()){
+            keyMap["goodsName"] = goodsName
+        }
+        if(sale != "-1"){
+            keyMap["sale"] = sale
+        }
+        if(amount != "-1"){
+            keyMap["amount"] = amount
+        }
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getCommodityList(keyMap)
+    }
+
+    override fun getCommodityDetails(id: String): Observable<HttpResult<CommodityDetailsBean>> {
+        return Api.getDefault().getCommodityDetails(id)
+    }
+
+    override fun getCommodityLikeList(categoryId: String, goodsId: String): Observable<HttpResult<List<CommodityListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["categoryId"] = categoryId
+        keyMap["goodsId"] = goodsId
+        return Api.getDefault().getCommodityLikeList(keyMap)
+    }
+
+    override fun getShopCartCount(userId: String): Observable<HttpResult<String>> {
+        return Api.getDefault().getShopCartCount(userId)
+    }
+
+    override fun addShopCart(userId: String, goodsId: String, constituteId: String, goodsNumber: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("goodsId", goodsId)
+            jsonObject.put("conId", constituteId)
+            jsonObject.put("goodsNumber", goodsNumber)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().addShopCart(body)
+    }
+
+    override fun createOrder(userId:String,addressId: String, remark: String, ordersDtoList: List<OrderSendBean>): Observable<HttpResult<NewOrderBean>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("addressId", addressId)
+            if(remark.isNotEmpty()){
+                jsonObject.put("remark", remark)
+            }
+            val jsonArray = JSONArray()
+            ordersDtoList.forEach {
+                val obj = JSONObject()
+                if(it.conId.isNotEmpty()){
+                    obj.put("constituteId",it.conId)
+                }
+                if(it.goodsId.isNotEmpty()){
+                    obj.put("goodsId",it.goodsId)
+                }
+                if(it.number.isNotEmpty()){
+                    obj.put("number",it.number)
+                }
+                if(it.shoppingCarId.isNotEmpty()){
+                    obj.put("shoppingCarId",it.shoppingCarId)
+                }
+                jsonArray.put(obj)
+            }
+            jsonObject.put("ordersDtoList",jsonArray)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().createOrder(body)
+    }
+
+    override fun getFirstAddress(userId: String): Observable<HttpResult<AddressBean>> {
+        return Api.getDefault().getFirstAddress(userId)
+    }
+
+    override fun saveAddress(userId: String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("receiverAddress", receiverAddress)
+            jsonObject.put("receiverName", receiverName)
+            jsonObject.put("receiverPhone", receiverPhone)
+            jsonObject.put("province", province)
+            jsonObject.put("city", city)
+            jsonObject.put("area", area)
+            jsonObject.put("isDefault", isDefault)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().saveAddress(body)
+    }
+
+    override fun getMyAddressList(userId: String): Observable<HttpResult<List<AddressBean>>> {
+        return Api.getDefault().getMyAddressList(userId)
+    }
+
+    override fun getMyShopCart(userId: String): Observable<HttpResult<List<ShopCartBean>>> {
+        return Api.getDefault().getMyShopCart(userId)
+    }
+
+    override fun addCommodityNumber(id: String, goodsNumber: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("id", id)
+            jsonObject.put("goodsNumber", goodsNumber)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().addCommodityNumber(body)
+    }
+
+    override fun deleteCommodityFromShopCart(ids: List<String>): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            val jsonArray = JSONArray()
+            ids.forEach {
+                jsonArray.put(it)
+            }
+            jsonObject.put("ids",jsonArray)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().deleteCommodityFromShopCart(body)
+    }
+
+    override fun getMyOrderStatusCount(userId: String): Observable<HttpResult<OrderStatusCountBean>> {
+        return Api.getDefault().getMyOrderStatusCount(userId)
+    }
 }

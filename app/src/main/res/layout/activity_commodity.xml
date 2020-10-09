@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:background="@color/background"
     tools:context=".modules.store.CommodityActivity">
 
@@ -27,6 +28,7 @@
                     android:id="@+id/ban_commodity_info"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     app:indicator_width="@dimen/dimen_8"
                     app:indicator_height="@dimen/dimen_8"
                     app:indicator_drawable_selected="@drawable/bg_indicator_circle_selected"
@@ -39,6 +41,7 @@
                 android:id="@+id/ll_sale_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:paddingLeft="@dimen/dimen_15"
                 android:paddingTop="@dimen/dimen_15"
                 android:background="@color/white">
@@ -52,53 +55,61 @@
                     android:text="¥"/>
 
                 <TextView
+                    android:id="@+id/tv_commodity_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_3"
                     android:textStyle="bold"
                     android:textSize="@dimen/text_20"
                     android:textColor="@color/color_F02134"
-                    android:text="333.33"/>
+                    android:text=""/>
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_commodity_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:paddingLeft="@dimen/dimen_15"
                 android:paddingRight="@dimen/dimen_15"
                 android:paddingTop="@dimen/dimen_15"
                 android:background="@color/white"
                 android:textColor="@color/title_main_color"
                 android:textSize="@dimen/text_15"
-                android:text="舞蹈防晒衣男2020男女情路防晒衣新款上市限时特惠"/>
+                android:text=""/>
 
             <LinearLayout
+                android:id="@+id/ll_commodity_translate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:padding="@dimen/dimen_15"
                 android:background="@color/white">
 
                 <TextView
+                    android:id="@+id/tv_create_address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/color_666666"
                     android:textSize="@dimen/text_12"
-                    android:text="产地 徐州"/>
+                    android:text="产地"/>
 
                 <TextView
+                    android:id="@+id/tv_sale_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_666666"
                     android:textSize="@dimen/text_12"
-                    android:text="销量 33333"/>
+                    android:text="销量"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_spec_select"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/dimen_48"
                 android:layout_marginTop="@dimen/dimen_15"
                 android:background="@color/white"
@@ -114,6 +125,7 @@
                     android:textSize="@dimen/text_13" />
 
                 <TextView
+                    android:id="@+id/tv_spec_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_13"
@@ -130,6 +142,7 @@
             <RelativeLayout
                 android:id="@+id/rl_details_title"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/dimen_60"
                 android:layout_marginTop="@dimen/dimen_10"
                 android:background="@color/white">
@@ -153,14 +166,15 @@
 
             </RelativeLayout>
 
-            <View
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcy_commodity_info"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_300"
-                android:background="@color/white"/>
+                android:layout_height="wrap_content"/>
 
             <RelativeLayout
                 android:id="@+id/rl_recommend_title"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="@dimen/dimen_60"
                 android:background="@color/white">
 
@@ -257,6 +271,11 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dimen_12"
                     android:src="@mipmap/ic_back_circle"/>
+
+                <View
+                    android:id="@+id/v_back"
+                    android:layout_width="@dimen/dimen_48"
+                    android:layout_height="match_parent"/>
 
             </RelativeLayout>
 
@@ -392,23 +411,10 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dimen_10"
-                            android:layout_marginLeft="@dimen/dimen_15"
-                            android:text="颜色"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_15" />
-
-                        <com.zhy.view.flowlayout.TagFlowLayout
-                            android:id="@+id/tf_space_list"
-                            android:layout_marginTop="@dimen/dimen_16"
-                            android:layout_marginLeft="@dimen/dimen_15"
-                            android:layout_marginRight="@dimen/dimen_15"
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rcy_spec_list"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:max_select="1"/>
+                            android:layout_height="wrap_content"/>
 
                         <View
                             android:layout_width="match_parent"
@@ -436,6 +442,7 @@
                                 android:textSize="@dimen/text_15" />
 
                             <LinearLayout
+                                android:id="@+id/ll_spec_sub"
                                 android:layout_width="@dimen/dimen_25"
                                 android:layout_height="@dimen/dimen_25"
                                 android:padding="@dimen/dimen_5"
@@ -449,6 +456,7 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/tv_spec_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/dimen_25"
                                 android:paddingLeft="@dimen/dimen_18"
@@ -462,6 +470,7 @@
                                 android:text="1"/>
 
                             <LinearLayout
+                                android:id="@+id/ll_spec_add"
                                 android:layout_width="@dimen/dimen_25"
                                 android:layout_height="@dimen/dimen_25"
                                 android:padding="@dimen/dimen_5"
@@ -504,6 +513,7 @@
                         android:layout_height="match_parent">
 
                         <TextView
+                            android:id="@+id/tv_add_shop"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -514,6 +524,7 @@
                             android:text="加入购物车"/>
 
                         <TextView
+                            android:id="@+id/tv_buy_shop"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -536,9 +547,9 @@
                 android:paddingRight="@dimen/dimen_15">
 
                 <ImageView
+                    android:id="@+id/iv_spec_head"
                     android:layout_width="@dimen/dimen_90"
-                    android:layout_height="@dimen/dimen_90"
-                    android:src="@mipmap/ic_logo"/>
+                    android:layout_height="@dimen/dimen_90"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -568,13 +579,14 @@
                                 android:text="¥"/>
 
                             <TextView
+                                android:id="@+id/tv_spec_price"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dimen_3"
                                 android:textStyle="bold"
                                 android:textSize="@dimen/text_18"
                                 android:textColor="@color/color_F02134"
-                                android:text="333.33"/>
+                                android:text=""/>
 
                         </LinearLayout>
 
@@ -587,11 +599,12 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tv_spec_stock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_666666"
                         android:textSize="@dimen/text_12"
-                        android:text="库存 33333"/>
+                        android:text="库存"/>
 
                 </LinearLayout>
 

@@ -64,7 +64,10 @@ class StoreFragment : BaseFragment(),SXContract.View{
             contentAdapter.setNewData(menuAdapter.data[position].categoryVoList)
         }
         contentAdapter.setOnItemClickListener { adapter, view, position ->
-            activity?.startActivity<CommodityListActivity>()
+            activity?.startActivity<CommodityListActivity>(Pair("cartId",contentAdapter.data[position].id))
+        }
+        tv_commodity_search.setOnClickListener {
+            activity?.startActivity<CommodityListActivity>(Pair("key",et_commodity_search.text.toString()))
         }
     }
 
