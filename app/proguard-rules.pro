@@ -136,3 +136,66 @@
 #ImmersionBar
 -keep class com.gyf.immersionbar.* {*;}
 -dontwarn com.gyf.immersionbar.**
+
+#支付宝
+-keep class com.alipay.android.app.IAlixPay{*;}
+-keep class com.alipay.android.app.IAlixPay$Stub{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback{*;}
+-keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
+-keep class com.alipay.sdk.app.PayTask{ public *;}
+-keep class com.alipay.sdk.app.AuthTask{ public *;}
+-keep class com.alipay.sdk.app.H5PayCallback {
+    <fields>;
+    <methods>;
+}
+-keep class com.alipay.android.phone.mrpc.core.** { *; }
+-keep class com.alipay.apmobilesecuritysdk.** { *; }
+-keep class com.alipay.mobile.framework.service.annotation.** { *; }
+-keep class com.alipay.mobilesecuritysdk.face.** { *; }
+-keep class com.alipay.tscenter.biz.rpc.** { *; }
+-keep class org.json.alipay.** { *; }
+-keep class com.alipay.tscenter.** { *; }
+-keep class com.ta.utdid2.** { *;}
+-keep class com.ut.device.** { *;}
+
+-dontwarn android.net.**
+-keep class android.net.SSLCertificateSocketFactory{*;}
+
+#腾讯X5
+-dontwarn dalvik.**
+-dontwarn com.tencent.smtt.**
+
+-keep class com.tencent.smtt.** {
+    *;
+}
+
+-keep class com.tencent.tbs.** {
+    *;
+}
+
+#友盟
+-keep class com.umeng.** {*;}
+-keep class com.uc.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keep class com.zui.** {*;}
+-keep class com.miui.** {*;}
+-keep class com.heytap.** {*;}
+-keep class a.** {*;}
+-keep class com.vivo.** {*;}
+
+#极光
+-dontoptimize
+-dontpreverify
+
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+-keep class * extends cn.jpush.android.helpers.JPushMessageReceiver { *; }
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }

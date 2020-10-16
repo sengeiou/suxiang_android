@@ -35,7 +35,7 @@
                 android:layout_height="@dimen/dimen_44"
                 android:gravity="center"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_18"
+                android:textSize="@dimen/text_15"
                 android:text="第一题"/>
 
             <View
@@ -51,7 +51,7 @@
                 android:layout_below="@+id/tv_question_number"
                 android:layout_margin="@dimen/dimen_15"
                 android:textColor="@android:color/black"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_13"
                 android:text=""/>
 
             <TextView
@@ -62,6 +62,8 @@
                 android:layout_marginLeft="@dimen/dimen_20"
                 android:layout_marginTop="@dimen/dimen_5"
                 android:layout_marginRight="@dimen/dimen_15"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/text_12"
                 android:text="" />
 
             <View
@@ -85,16 +87,16 @@
             <TextView
                 android:id="@+id/tv_submit_button"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_50"
+                android:layout_height="@dimen/dimen_40"
                 android:layout_below="@+id/rcy_answer_list"
                 android:layout_marginLeft="@dimen/dimen_45"
-                android:layout_marginTop="@dimen/dimen_20"
+                android:layout_marginTop="@dimen/dimen_10"
                 android:layout_marginRight="@dimen/dimen_45"
-                android:layout_marginBottom="@dimen/dimen_20"
+                android:layout_marginBottom="@dimen/dimen_10"
                 android:background="@drawable/bg_purple_full_25"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_15"
                 android:text="提交"/>
 
         </RelativeLayout>

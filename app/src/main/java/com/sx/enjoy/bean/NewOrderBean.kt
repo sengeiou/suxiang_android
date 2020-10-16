@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
 class NewOrderBean(
-    @SerializedName("orderNo")val id:String,
+    @SerializedName("orderNo")val orderNo:String,
     @SerializedName("payPrice")val payPrice:String
 ): Serializable

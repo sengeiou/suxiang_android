@@ -1,6 +1,7 @@
 package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
+import com.sx.enjoy.WebDataBean
 import com.sx.enjoy.bean.*
 import io.reactivex.Observable
 import okhttp3.MediaType
@@ -519,5 +520,126 @@ class SXModel  : SXContract.Model{
 
     override fun getMyOrderStatusCount(userId: String): Observable<HttpResult<OrderStatusCountBean>> {
         return Api.getDefault().getMyOrderStatusCount(userId)
+    }
+
+    override fun getOrderList(userId: String, status: String, page: String, limit: String): Observable<HttpResult<List<OrderListBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["page"] = page
+        keyMap["limit"] = limit
+        if(status != "-1"){
+            keyMap["status"] = status
+        }
+        return Api.getDefault().getOrderList(keyMap)
+    }
+
+    override fun cancelOrder(orderId: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("orderId", orderId)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().cancelOrder(body)
+    }
+
+    override fun getOrderDetails(orderNo: String): Observable<HttpResult<OrderDetailsBean>> {
+        return Api.getDefault().getOrderDetails(orderNo)
+    }
+
+    override fun deleteOrder(orderId: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("orderId", orderId)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().deleteOrder(body)
+    }
+
+    override fun authUser(userId: String, idNumber: String, name: String, phone: String,payMethod:String): Observable<HttpResult<PayResultBean>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("idNumber", idNumber)
+            jsonObject.put("name", name)
+            jsonObject.put("phone", phone)
+            jsonObject.put("payMethod", payMethod)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().authUser(body)
+    }
+
+    override fun getAuthUser(userId: String): Observable<HttpResult<AuthUserBean>> {
+        return Api.getDefault().getAuthUser(userId)
+    }
+
+    override fun orderPay(orderNo: String, payMethod: String, payType: String): Observable<HttpResult<PayResultBean>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("orderNo", orderNo)
+            jsonObject.put("payMethod", payMethod)
+            jsonObject.put("payType", payType)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().orderPay(body)
+    }
+
+    override fun getNoticeDetails(id: String): Observable<HttpResult<NoticeDetailsBean>> {
+        return Api.getDefault().getNoticeDetails(id)
+    }
+
+    override fun userFeedback(advice: String, images: String, type: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("advice", advice)
+            //jsonObject.put("images", images)
+            jsonObject.put("type", type)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().userFeedback(body)
+    }
+
+    override fun getWebData(type:String): Observable<HttpResult<WebDataBean>> {
+        return Api.getDefault().getWebData(type)
+    }
+
+    override fun memberUp(userId: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().memberUp(body)
+    }
+
+    override fun getMemberInfo(userId: String): Observable<HttpResult<MemberUpBean>> {
+        return Api.getDefault().getMemberInfo(userId)
+    }
+
+    override fun getNewsDetails(id: String): Observable<HttpResult<NewsDetailsBean>> {
+        return Api.getDefault().getNewsDetails(id)
     }
 }

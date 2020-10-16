@@ -21,7 +21,7 @@ class AnswerRightDialog : Dialog {
 
 
     private fun initEvent(){
-        tv_close.setOnClickListener {
+        ll_back_home.setOnClickListener {
             dismiss()
             mOnNoticeConfirmListener?.onConfirm()
         }

@@ -30,6 +30,7 @@
                 android:text="任务"/>
 
             <TextView
+                android:id="@+id/tv_task_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@mipmap/ic_level_notes"
@@ -39,7 +40,7 @@
                 android:layout_marginRight="@dimen/dimen_15"
                 android:textSize="@dimen/text_13"
                 android:textColor="@color/title_second_color"
-                android:text="等级说明"/>
+                android:text="卷轴说明"/>
             
         </RelativeLayout>
 
@@ -68,15 +69,15 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_110"
+                    android:layout_height="@dimen/dimen_100"
                     android:background="@color/white">
                     
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/dimen_15"
-                        android:layout_marginRight="@dimen/dimen_15"
-                        android:layout_marginTop="@dimen/dimen_15"
+                        android:layout_marginLeft="@dimen/dimen_10"
+                        android:layout_marginRight="@dimen/dimen_10"
+                        android:layout_marginTop="@dimen/dimen_10"
                         android:scaleType="fitXY"
                         android:src="@mipmap/bg_task_head" />
 
@@ -165,7 +166,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_48">
+                    android:layout_height="@dimen/dimen_40">
 
                     <RelativeLayout
                         android:id="@+id/rl_task_all"

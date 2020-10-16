@@ -98,7 +98,7 @@
             android:id="@+id/tv_shop_confirm"
             android:layout_width="@dimen/dimen_120"
             android:layout_height="match_parent"
-            android:background="@color/main_color"
+            android:background="@color/main_color_1"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_16"

@@ -35,8 +35,7 @@ class NoticeDialog : Dialog {
                 tv_notice_text.text = "修改成功"
             }
             5 -> {
-                iv_notice_view.setImageResource(R.mipmap.ic_task_success)
-                tv_notice_text.text = "兑换成功!,获取1活跃值"
+
             }
             6 -> {
                 tv_notice_text.text = "卖出成功"
@@ -49,6 +48,22 @@ class NoticeDialog : Dialog {
             }
             9 -> {
                 tv_notice_text.text = "操作成功"
+            }
+            10 -> {
+                tv_notice_text.text = "反馈成功"
+            }
+            11 -> {
+                tv_notice_text.text = "实名信息上传成功"
+            }
+        }
+    }
+
+    fun showNotice(index:Int,text:String){
+        show()
+        when(index){
+            1 -> {
+                iv_notice_view.setImageResource(R.mipmap.ic_task_success)
+                tv_notice_text.text = text
             }
         }
     }

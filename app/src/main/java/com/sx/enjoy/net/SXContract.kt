@@ -1,6 +1,7 @@
 package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
+import com.sx.enjoy.WebDataBean
 import com.sx.enjoy.base.BaseView
 import com.sx.enjoy.bean.*
 import io.reactivex.Observable
@@ -61,6 +62,19 @@ interface SXContract {
         var ADDCOMMODITYNUMBER = "addCommodityNumber"
         var DELETECOMMODITYFROMSHOPCART = "deleteCommodityFromShopCart"
         var GETMYORDERSTATUSCOUNT = "getMyOrderStatusCount"
+        var GETORDERLIST = "getOrderList"
+        var CANCELORDER = "cancelOrder"
+        var GETORDERDETAILS = "getOrderDetails"
+        var DELETEORDER = "deleteOrder"
+        var AUTHUSER = "authUser"
+        var GETAUTHUSER = "getAuthUser"
+        var ORDERPAY = "orderPay"
+        var GETNOTICEDETAILS = "getNoticeDetails"
+        var USERFEEDBACK = "userFeedback"
+        var GETWEBDATA = "getWebData"
+        var MEMBERUP = "memberUp"
+        var GETMEMBERINFO = "getMemberInfo"
+        var GETNEWSDETAILS = "getNewsDetails"
     }
 
     interface View: BaseView
@@ -113,6 +127,19 @@ interface SXContract {
         fun addCommodityNumber(id:String,goodsNumber:String):Observable<HttpResult<String>>
         fun deleteCommodityFromShopCart(ids:List<String>):Observable<HttpResult<String>>
         fun getMyOrderStatusCount(userId:String):Observable<HttpResult<OrderStatusCountBean>>
+        fun getOrderList(userId:String,status:String,page:String,limit:String):Observable<HttpResult<List<OrderListBean>>>
+        fun cancelOrder(orderId:String):Observable<HttpResult<String>>
+        fun getOrderDetails(orderNo:String):Observable<HttpResult<OrderDetailsBean>>
+        fun deleteOrder(orderId:String):Observable<HttpResult<String>>
+        fun authUser(userId:String,idNumber:String,name:String,phone:String,payMethod:String):Observable<HttpResult<PayResultBean>>
+        fun getAuthUser(userId:String):Observable<HttpResult<AuthUserBean>>
+        fun orderPay(orderNo:String,payMethod:String,payType:String):Observable<HttpResult<PayResultBean>>
+        fun getNoticeDetails(id:String):Observable<HttpResult<NoticeDetailsBean>>
+        fun userFeedback(advice:String,images:String,type:String):Observable<HttpResult<String>>
+        fun getWebData(type:String):Observable<HttpResult<WebDataBean>>
+        fun memberUp(userId:String):Observable<HttpResult<String>>
+        fun getMemberInfo(userId:String):Observable<HttpResult<MemberUpBean>>
+        fun getNewsDetails(id:String):Observable<HttpResult<NewsDetailsBean>>
     }
 
     interface Present{
@@ -163,6 +190,19 @@ interface SXContract {
         fun addCommodityNumber(id:String,goodsNumber:String,position:Int,type:Int)
         fun deleteCommodityFromShopCart(ids:List<String>)
         fun getMyOrderStatusCount(userId:String)
+        fun getOrderList(userId:String,status:String,page:String,limit:String,isShow:Boolean)
+        fun cancelOrder(orderId:String)
+        fun getOrderDetails(orderNo:String)
+        fun deleteOrder(orderId:String)
+        fun authUser(userId:String,idNumber:String,name:String,phone:String,payMethod:String)
+        fun getAuthUser(userId:String)
+        fun orderPay(orderNo:String,payMethod:String,payType:String)
+        fun getNoticeDetails(id:String)
+        fun userFeedback(advice:String,images:String,type:String)
+        fun getWebData(type:String)
+        fun memberUp(userId:String)
+        fun getMemberInfo(userId:String)
+        fun getNewsDetails(id:String)
     }
 
 }

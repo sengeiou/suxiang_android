@@ -11,9 +11,9 @@
         android:padding="@dimen/dimen_15">
 
         <ImageView
+            android:id="@+id/iv_commodity_image"
             android:layout_width="@dimen/dimen_90"
-            android:layout_height="@dimen/dimen_90"
-            android:src="@mipmap/ic_logo"/>
+            android:layout_height="@dimen/dimen_90"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,6 +27,7 @@
                 android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/tv_commodity_name"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -37,12 +38,13 @@
                     android:text="舞新防晒衣男2020夏季男女情侣放杀意沙滩速干"/>
 
                 <TextView
+                    android:id="@+id/tv_commodity_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_40"
                     android:textSize="@dimen/text_16"
                     android:textColor="@color/color_F02134"
-                    android:text="¥333.33"/>
+                    android:text=""/>
 
             </LinearLayout>
 
@@ -52,6 +54,7 @@
                 android:gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/tv_spec_name"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -60,6 +63,7 @@
                     android:textSize="@dimen/text_15" />
 
                 <TextView
+                    android:id="@+id/tv_commodity_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="x1"

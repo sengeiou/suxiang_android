@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/color_898989"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:text="步行"/>
 
         <View
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/color_898989"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:text="车行"/>
 
         <View

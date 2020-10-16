@@ -35,7 +35,7 @@ class TransactionFragment : BaseFragment(), SXContract.View{
         status = arguments!!.getInt("status",0)
 
 
-        mAdapter = TransactionListAdapter()
+        mAdapter = TransactionListAdapter(type)
         rcy_public_list.layoutManager = LinearLayoutManager(activity)
         rcy_public_list.adapter = mAdapter
 

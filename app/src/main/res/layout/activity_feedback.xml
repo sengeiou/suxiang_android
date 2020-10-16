@@ -20,6 +20,7 @@
         android:text="选择反馈问题的类型"/>
 
     <LinearLayout
+        android:id="@+id/ll_question_1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_47"
         android:background="@color/white"
@@ -37,6 +38,7 @@
             android:text="软件使用问题   (功能异常等)"/>
 
         <ToggleButton
+            android:id="@+id/tb_question_1"
             android:layout_width="@dimen/dimen_16"
             android:layout_height="@dimen/dimen_16"
             android:clickable="false"
@@ -48,6 +50,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_question_2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_47"
         android:background="@color/white"
@@ -66,6 +69,7 @@
             android:text="其他问题   (功能建议提交)"/>
 
         <ToggleButton
+            android:id="@+id/tb_question_2"
             android:layout_width="@dimen/dimen_16"
             android:layout_height="@dimen/dimen_16"
             android:clickable="false"
@@ -86,6 +90,7 @@
         android:text="问题和意见"/>
 
     <EditText
+        android:id="@+id/et_feedback_reason"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/dimen_100"
@@ -97,6 +102,7 @@
         android:textSize="@dimen/text_15"/>
 
     <TextView
+        android:id="@+id/tv_submit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_45"
         android:background="@drawable/bg_main_full_2"

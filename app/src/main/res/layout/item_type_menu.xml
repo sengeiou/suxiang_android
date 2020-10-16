@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_48">
+        android:layout_height="@dimen/dimen_40">
 
         <View
             android:id="@+id/v_menu_left"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dimen_15"
-            android:textSize="@dimen/text_16"
+            android:textSize="@dimen/text_15"
             android:textColor="@color/title_main_color"
             android:text="裤子专区"/>
 

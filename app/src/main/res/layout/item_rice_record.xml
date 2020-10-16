@@ -22,7 +22,7 @@
                 android:id="@+id/tv_rice_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_13"
                 android:textColor="@color/title_main_color"
                 android:text="每日签到"/>
 
@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_8"
-                android:textSize="@dimen/text_13"
+                android:textSize="@dimen/text_12"
                 android:textColor="@color/title_second_color"
                 android:text="2020-09-11 14:19:59"/>
 
@@ -44,7 +44,7 @@
             android:drawableRight="@mipmap/ic_rice_circle"
             android:drawablePadding="@dimen/dimen_8"
             android:textColor="@color/title_main_color"
-            android:textSize="@dimen/text_16"
+            android:textSize="@dimen/text_13"
             android:text="+30"/>
 
     </LinearLayout>

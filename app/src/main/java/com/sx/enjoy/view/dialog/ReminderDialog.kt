@@ -31,6 +31,12 @@ class ReminderDialog : Dialog {
             3 -> {
                 tv_reminder_text.text = "是否从购物车移除？"
             }
+            4 -> {
+                tv_reminder_text.text = "是否取消订单？"
+            }
+            5 -> {
+                tv_reminder_text.text = "是否删除订单？"
+            }
         }
     }
 
@@ -53,5 +59,6 @@ class ReminderDialog : Dialog {
     fun setOnNoticeConfirmListener(mOnNoticeConfirmListener : OnNoticeConfirmListener){
         this.mOnNoticeConfirmListener = mOnNoticeConfirmListener
     }
+
 
 }

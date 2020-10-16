@@ -1,26 +1,31 @@
 package com.sx.enjoy.modules.home
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
+import com.bumptech.glide.Glide
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.likai.lib.commonutils.DensityUtils
+import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.HomeListAdapter
 import com.sx.enjoy.bean.*
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.RiceRefreshEvent
+import com.sx.enjoy.event.StepRefreshEvent
 import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.modules.mine.WebUrlActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.GlideImageLoader
-import com.sx.enjoy.utils.ShakeDetector
 import com.sx.enjoy.view.dialog.SignDialog
 import com.sx.enjoy.view.dialog.SignOverDialog
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.header_home_view.view.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.litepal.LitePal
@@ -28,7 +33,6 @@ import org.litepal.LitePal
 
 class HomeFragment : BaseFragment(),SXContract.View{
 
-    private lateinit var signDialog: SignDialog
     private lateinit var signOverDialog: SignOverDialog
 
     private lateinit var present: SXPresent
@@ -36,9 +40,12 @@ class HomeFragment : BaseFragment(),SXContract.View{
     private lateinit var headView:View
     private lateinit var mAdapter:HomeListAdapter
 
+    private var noticeList = arrayListOf<NoticeListBean>()
 
     private var pager = 1
     private var titleType = 0
+    private var targetWalk = 0
+
 
     override fun getLayoutResource() = R.layout.fragment_home
 
@@ -49,7 +56,6 @@ class HomeFragment : BaseFragment(),SXContract.View{
     override fun initView() {
         ImmersionBar.with(activity!!).statusBarDarkFont(true).titleBar(tb_home_title).init()
 
-        signDialog = SignDialog(activity!!)
         signOverDialog = SignOverDialog(activity!!)
 
         mAdapter = HomeListAdapter()
@@ -64,25 +70,24 @@ class HomeFragment : BaseFragment(),SXContract.View{
         present.getHomeNotice()
         getNewsList(true)
 
+        iv_home_head.setImageResource(R.mipmap.ic_home_bg_walk)
+        Glide.with(activity!!).load(R.mipmap.ic_step_run).into(iv_note_type)
 
-        initData()
+        val step = SharedPreferencesUtil.getCommonInt(activity,"step")
+        val minStep = SharedPreferencesUtil.getCommonInt(activity,"minStep")
+
+        headView.tv_today_step.text = (step+minStep).toString()
+
         initEvent()
     }
 
 
-    override fun initData() {
-        if(!C.IS_SIGN_REQUEST&&C.USER_ID.isNotEmpty()){
-            C.IS_SIGN_REQUEST = true
-            present.getSignResult(C.USER_ID,false)
-        }
-    }
-
     fun initUser(){
         val user = LitePal.findLast(UserBean::class.java)
         if(user!=null){
-            headView.tv_user_activity.text = user.userActivity.toString()
-            headView.tv_user_contribution.text = user.userContrib.toString()
-            headView.tv_user_rice.text = user.riceGrains.toString()
+            headView.tv_user_activity.text = String.format("%.2f", user.userActivity)
+            headView.tv_user_contribution.text = String.format("%.2f", user.userContrib)
+            headView.tv_user_rice.text = String.format("%.2f", user.riceGrains)
         }else{
             headView.tv_user_activity.text = "0"
             headView.tv_user_contribution.text = "0"
@@ -90,14 +95,41 @@ class HomeFragment : BaseFragment(),SXContract.View{
         }
     }
 
-    fun initStep(){
-        headView.tv_distances.text = C.USER_STEP.toString()
+    fun initStepAndDayRice(){
+        initStep(0)
+        initDayRice(null)
+        getStepAndDayRice()
     }
-    fun initDayRice(data:StepRiceBean?){
-        if(data==null){
-            headView.tv_rice.text = "0"
+
+    fun getStepAndDayRice(){
+        if(C.USER_ID.isNotEmpty()){
+            present.getRiceFromStep(C.USER_ID,"123","0","0","0","0")
+        }
+    }
+
+    fun initStep(step:Int){
+        headView.tv_today_step.text = step.toString()
+        if(targetWalk != 0){
+            headView.cp_walk_progress.value = ((step)/targetWalk.toFloat())*100
+        }
+    }
+
+    fun initDayRice(rice:RiceRefreshEvent?){
+        if(rice == null){
+            headView.tv_step_rice.text = "0.00"
+            headView.tv_car_rice.text = "0.00"
+            headView.tv_distances.text = "0"
+            headView.tv_target_step.text = "今日目标0步"
+            headView.cp_walk_progress.value = 0f
         }else{
-            headView.tv_rice.text = if(titleType == 0) data.walkRiceGrains else data.drivingRiceGrains
+            targetWalk = rice.targetWalk
+            headView.tv_distances.text = rice.mileage
+            headView.tv_step_rice.text = rice.walkRiceGrains
+            headView.tv_car_rice.text = rice.drivingRiceGrains
+            headView.tv_target_step.text = "今日目标${rice.targetWalk}步"
+            if(rice.targetWalk>0){
+                headView.cp_walk_progress.value = ((rice.rotateMinStep+rice.minStep)/rice.targetWalk.toFloat())*100
+            }
         }
     }
 
@@ -120,28 +152,25 @@ class HomeFragment : BaseFragment(),SXContract.View{
             titleType = it
             when(it){
                 0 -> {
+                    headView.rl_step_count.visibility = View.VISIBLE
+                    headView.ll_step_count.visibility = View.GONE
+                    headView.ll_step_rice.visibility = View.VISIBLE
+                    headView.ll_car_rice.visibility = View.GONE
                     tv_note_list.text = "历史步数"
                     iv_home_head.setImageResource(R.mipmap.ic_home_bg_walk)
-                    iv_note_type.setImageResource(R.mipmap.ic_people)
-                    headView.tv_distances.text = "0"
-                    headView.tv_distances_unit.text = "步"
-                    headView.tv_distances_today.text = "当日步数"
+                    Glide.with(activity!!).load(R.mipmap.ic_step_run).into(iv_note_type)
                 }
                 1 -> {
+                    headView.rl_step_count.visibility = View.GONE
+                    headView.ll_step_count.visibility = View.VISIBLE
+                    headView.ll_step_rice.visibility = View.GONE
+                    headView.ll_car_rice.visibility = View.VISIBLE
                     tv_note_list.text = "车行记录"
                     iv_home_head.setImageResource(R.mipmap.ic_home_bg_car)
-                    iv_note_type.setImageResource(R.mipmap.ic_car)
-                    headView.tv_distances.text = "0"
-                    headView.tv_distances_unit.text = "km"
-                    headView.tv_distances_today.text = "当日车行公里数"
+                    Glide.with(activity!!).load(R.mipmap.ic_car).into(iv_note_type)
                 }
             }
         }
-        signDialog.setOnNoticeConfirmListener(object :SignDialog.OnNoticeConfirmListener{
-            override fun onConfirm() {
-                activity?.startActivity<SignAnswerActivity>()
-            }
-        })
 
         swipe_refresh_layout.setOnRefreshListener {
             present.getHomeBanner()
@@ -180,6 +209,17 @@ class HomeFragment : BaseFragment(),SXContract.View{
                 }
             }
         })
+        headView.tb_home_notice.setItemOnClickListener { data, position ->
+            activity?.startActivity<NoticeDetailsActivity>(Pair("nid",noticeList[position].id))
+        }
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            activity?.startActivity<NewsDetailsActivity>(Pair("nid",mAdapter.data[position].id))
+        }
+
+        headView.ban_top_list.setOnBannerListener {
+
+        }
+
     }
 
     private fun getNewsList(isRefreshList: Boolean){
@@ -215,15 +255,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
-                SXContract.GETSIGNRESULT+"0" -> {
-                    data?.let {
-                        data as Boolean
-                        if(!data){
-                            signDialog.show()
-                        }
-                    }
-                }
-                SXContract.GETSIGNRESULT+"1" -> {
+                SXContract.GETSIGNRESULT -> {
                     data?.let {
                         data as Boolean
                         if(data){
@@ -245,6 +277,9 @@ class HomeFragment : BaseFragment(),SXContract.View{
                             headView.ban_top_list.setImageLoader(GlideImageLoader())
                             headView.ban_top_list.setImages(bannerList)
                             headView.ban_top_list.start()
+                            headView.ban_top_list.setOnBannerListener {
+                                activity?.startActivity<WebUrlActivity>(Pair("title",data.shuffList[it].title),Pair("url",data.shuffList[it].url))
+                            }
                         }else{
                             headView.ban_top_list.visibility = View.GONE
                         }
@@ -257,6 +292,9 @@ class HomeFragment : BaseFragment(),SXContract.View{
                             headView.ban_bottom_list.setImageLoader(GlideImageLoader())
                             headView.ban_bottom_list.setImages(advertList)
                             headView.ban_bottom_list.start()
+                            headView.ban_bottom_list.setOnBannerListener {
+                                activity?.startActivity<WebUrlActivity>(Pair("title",data.advertList[it].title),Pair("url",data.advertList[it].url))
+                            }
                         }else{
                             headView.ban_bottom_list.visibility = View.GONE
                         }
@@ -266,7 +304,9 @@ class HomeFragment : BaseFragment(),SXContract.View{
                     data?.let {
                         swipe_refresh_layout.finishRefresh()
                         data as List<NoticeListBean>
+                        noticeList.clear()
                         if(data.isNotEmpty()){
+                            noticeList.addAll(data)
                             headView.ll_home_notice.visibility = View.VISIBLE
                             val noticeList = arrayListOf<String>()
                             data.forEach {
@@ -296,6 +336,37 @@ class HomeFragment : BaseFragment(),SXContract.View{
                         }
                     }
                 }
+                SXContract.GETRICEFROMSTEP -> {
+                    data?.let {
+                        data as StepRiceBean
+                        if(C.USER_ID.isNotEmpty()){
+                            targetWalk = data.targetWalk
+                            val sdf = activity!!.getSharedPreferences(SharedPreferencesUtil.SP_COMMON_NAME,
+                                Context.MODE_PRIVATE)
+                            val editor = sdf.edit()
+                            var step = sdf.getInt("step",0)
+                            var minStep = sdf.getInt("minStep",0)
+                            if(data.rotateMinStep>step){
+                                step = data.rotateMinStep
+                                editor.putInt("step",data.rotateMinStep)
+                            }
+                            if(data.minStep>minStep){
+                                minStep = data.minStep
+                                editor.putInt("minStep",data.minStep)
+                            }
+                            editor.apply()
+
+                            headView.tv_distances.text = data.mileage
+                            headView.tv_step_rice.text = data.walkRiceGrains
+                            headView.tv_car_rice.text = data.drivingRiceGrains
+                            headView.tv_target_step.text = "今日目标${data.targetWalk}步"
+                            if(data.targetWalk>0){
+                                headView.cp_walk_progress.value = ((step+minStep)/data.targetWalk.toFloat())*100
+                            }
+                            initStep(step+minStep)
+                        }
+                    }
+                }
                 else -> {
 
                 }
@@ -317,6 +388,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        activity?.toast("请检查网络连接")
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()

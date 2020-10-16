@@ -73,7 +73,9 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun marketRiceChange(event: MarketSellSuccessEvent){
-        finish()
+        if(event.state == 1){
+            finish()
+        }
     }
 
     override fun onSuccess(flag: String?, data: Any?) {

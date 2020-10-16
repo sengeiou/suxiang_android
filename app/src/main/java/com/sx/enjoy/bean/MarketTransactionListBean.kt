@@ -16,5 +16,10 @@ class MarketTransactionListBean(
     @SerializedName("payMethod")val payMethod:Int,
     @SerializedName("payNumber")val payNumber:String,
     @SerializedName("status")val status:Int,
-    @SerializedName("aliNumber")val aliNumber:String
+    @SerializedName("sellUserName")val sellUserName:String,
+    @SerializedName("sellUserImg")val sellUserImg:String,
+    @SerializedName("aliNumber")val aliNumber:String,
+    @SerializedName("releaseUserName")val releaseUserName:String,
+    @SerializedName("releaseUserImg")val releaseUserImg:String,
+    @SerializedName("releaseUserPhone")val releaseUserPhone:String
 ): Serializable

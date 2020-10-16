@@ -14,6 +14,7 @@ class AdvertListBean(
     @SerializedName("type")val type:Int,
     @SerializedName("url")val url:String,
     @SerializedName("heigth")val heigth:String,
+    @SerializedName("title")val title:String,
     @SerializedName("width")val width:String
 )
 
@@ -22,6 +23,7 @@ class ShuffListBean(
     @SerializedName("bannerImg")val bannerImg:String,
     @SerializedName("type")val type:Int,
     @SerializedName("url")val url:String,
+    @SerializedName("title")val title:String,
     @SerializedName("heigth")val heigth:String,
     @SerializedName("width")val width:String
 )

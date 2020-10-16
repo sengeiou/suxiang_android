@@ -10,8 +10,12 @@
 
     <include layout="@layout/title_public_view"/>
 
-    <View
+    <TextView
+        android:id="@+id/tv_member_up"
         android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"
+        android:layout_marginTop="@dimen/dimen_10"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 

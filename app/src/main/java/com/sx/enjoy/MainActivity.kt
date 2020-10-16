@@ -1,23 +1,18 @@
 package com.sx.enjoy
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.IBinder
+import android.os.Build
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentPagerAdapter
+import android.util.Log
 import com.likai.lib.base.BaseFragment
-import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.StepRiceBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
-import com.sx.enjoy.event.FirstInitUserEvent
-import com.sx.enjoy.event.MarketSellSuccessEvent
-import com.sx.enjoy.event.TaskBuySuccessEvent
-import com.sx.enjoy.event.UserStateChangeEvent
+import com.sx.enjoy.event.*
 import com.sx.enjoy.modules.home.HomeFragment
+import com.sx.enjoy.modules.home.SignAnswerActivity
 import com.sx.enjoy.modules.market.MarketFragment
 import com.sx.enjoy.modules.mine.MineFragment
 import com.sx.enjoy.modules.store.StoreFragment
@@ -25,27 +20,27 @@ import com.sx.enjoy.modules.task.TaskFragment
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.service.StepCalculationService
-import com.sx.enjoy.utils.ShakeDetector
+import com.sx.enjoy.utils.EncryptionUtil
+import com.sx.enjoy.view.dialog.SignDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_bottom_tab_button.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startService
 import org.jetbrains.anko.toast
 
 
-class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListener ,
-    StepCalculationService.OnUploadStepSuccessListener {
-
-    private var mBinder : StepCalculationService.MyBinder ? = null
+class MainActivity :BaseActivity() ,SXContract.View {
 
     private lateinit var present:SXPresent
 
-    private lateinit var mShakeDetector :ShakeDetector
+    private lateinit var signDialog: SignDialog
 
     private var fragments = arrayListOf<BaseFragment>()
 
-    private var saveSecond = 0L
+    private var isFirstInitUser = false
 
     override fun getTitleType() = PublicTitleData(C.TITLE_CUSTOM)
 
@@ -58,25 +53,22 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
     override fun initView() {
         EventBus.getDefault().register(this)
 
-        val bindIntent = Intent(this, StepCalculationService::class.java)
-        bindService(bindIntent, mConnection, Context.BIND_AUTO_CREATE)
+        val intent = Intent(this,StepCalculationService::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent)
+        } else {
+            startService(intent)
+        }
 
-        mShakeDetector = ShakeDetector(this)
-        mShakeDetector.registerOnShakeListener(this)
-        mShakeDetector.start()
+        signDialog = SignDialog(this)
+        signDialog.setOnNoticeConfirmListener(object :SignDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                startActivity<SignAnswerActivity>()
+            }
+        })
 
         initFragment()
     }
-
-    private val mConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName, service: IBinder) {
-            mBinder = service as StepCalculationService.MyBinder
-            mBinder?.startStepTask()
-            mBinder?.setOnUploadStepSuccessListener(this@MainActivity)
-        }
-        override fun onServiceDisconnected(name: ComponentName) {}
-    }
-
 
     private fun initFragment(){
         fragments.clear()
@@ -124,6 +116,7 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
                 tv_shop.isSelected = false
                 tv_mine.isSelected = false
                 vp_home.setCurrentItem(0, false)
+                present.getSignResult(C.USER_ID,false)
             }
             1 -> {
                 img_home.isSelected = false
@@ -180,30 +173,19 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
         }
     }
 
-    override fun onShake() {
-        if(C.USER_ID.isNotEmpty()){
-            C.USER_STEP++
-            (fragments[0] as HomeFragment).initStep()
-            if(System.currentTimeMillis() - saveSecond>1000){
-                saveSecond = System.currentTimeMillis()
-                SharedPreferencesUtil.putCommonInt(this,"step",C.USER_STEP)
-            }
-        }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun shakeRiceRefresh(event: RiceRefreshEvent){
+        (fragments[0] as HomeFragment).initDayRice(event)
     }
 
-    override fun onUploadSuccess(data: StepRiceBean) {
-        if(C.USER_STEP == 0){
-            C.USER_STEP = data.rotateMinStep
-            SharedPreferencesUtil.putCommonInt(this,"step",C.USER_STEP)
-            (fragments[0] as HomeFragment).initStep()
-        }
-        (fragments[0] as HomeFragment).initDayRice(data)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun shakeStepRefresh(event: StepRefreshEvent){
+        (fragments[0] as HomeFragment).initStep(event.step)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun userStateChange(event: UserStateChangeEvent){
-        (fragments[0] as HomeFragment).initStep()
-        (fragments[0] as HomeFragment).initDayRice(null)
+        (fragments[0] as HomeFragment).initStepAndDayRice()
         (fragments[4] as MineFragment).backToHead()
         (fragments[1] as TaskFragment).onBuyTaskSuccess()
         (fragments[1] as TaskFragment).initTaskTitle(0)
@@ -211,12 +193,12 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
             changeUserInfo()
         }else{
             present.getUserInfo(C.USER_ID)
-            mBinder?.upload()
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun taskRiceChange(event: TaskBuySuccessEvent){
+        (fragments[0] as HomeFragment).getStepAndDayRice()
         if(C.USER_ID.isEmpty()){
             changeUserInfo()
         }else{
@@ -238,10 +220,49 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun initUser(event: FirstInitUserEvent){
+        isFirstInitUser = true
         if(C.USER_ID.isEmpty()){
             changeUserInfo()
         }else{
             present.getUserInfo(C.USER_ID)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun authSuccess(event: UserAuthSuccessEvent){
+        (fragments[1] as TaskFragment).onBuyTaskSuccess()
+        if(C.USER_ID.isEmpty()){
+            changeUserInfo()
+        }else{
+            present.getUserInfo(C.USER_ID)
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun memberUpSuccess(event: MemberUpSuccessEvent){
+        (fragments[1] as TaskFragment).onBuyTaskSuccess()
+        if(C.USER_ID.isEmpty()){
+            changeUserInfo()
+        }else{
+            present.getUserInfo(C.USER_ID)
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        if(intent?.extras != null){
+            val position = intent.getIntExtra("position",0)
+            vp_home.currentItem = position
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(isFirstInitUser){
+            if(C.USER_ID.isEmpty()){
+                changeUserInfo()
+            }else{
+                present.getUserInfo(C.USER_ID)
+            }
         }
     }
 
@@ -254,6 +275,14 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
+                SXContract.GETSIGNRESULT -> {
+                    data?.let {
+                        data as Boolean
+                        if(!data){
+                            signDialog.show()
+                        }
+                    }
+                }
                 SXContract.GETUSERINFO -> {
                     data?.let {
                         data as UserBean
@@ -279,8 +308,6 @@ class MainActivity :BaseActivity() ,SXContract.View , ShakeDetector.OnShakeListe
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-        unbindService(mConnection)
-        mShakeDetector.stop()
     }
 
 }

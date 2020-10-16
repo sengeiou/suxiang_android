@@ -36,7 +36,7 @@
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:ellipsize="end"
-                    android:textSize="@dimen/text_15"
+                    android:textSize="@dimen/text_13"
                     android:textColor="@color/title_main_color"
                     android:text="人生如梦"/>
 
@@ -50,13 +50,13 @@
                         android:layout_height="19dp"
                         android:text="数量 20"
                         android:textColor="@color/title_main_color"
-                        android:textSize="@dimen/text_13" />
+                        android:textSize="@dimen/text_12" />
 
                     <TextView
                         android:id="@+id/tv_rice_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_16"
+                        android:textSize="@dimen/text_15"
                         android:textColor="@color/title_main_color"
                         android:text="¥ 32.00"/>
 

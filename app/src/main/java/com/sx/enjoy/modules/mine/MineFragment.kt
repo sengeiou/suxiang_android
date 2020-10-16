@@ -2,7 +2,6 @@ package com.sx.enjoy.modules.mine
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -64,6 +63,7 @@ class MineFragment : BaseFragment(),SXContract.View{
         moreList.add(MineMoreBean(R.mipmap.ic_mine_task,"我的任务"))
         moreList.add(MineMoreBean(R.mipmap.ic_mine_about,"关于我们"))
         moreList.add(MineMoreBean(R.mipmap.ic_mine_process,"交易流程"))
+        moreList.add(MineMoreBean(R.mipmap.ic_user_auth,"实名认证"))
         moreAdapter.setNewData(moreList)
 
         initEvent()
@@ -92,15 +92,11 @@ class MineFragment : BaseFragment(),SXContract.View{
             ll_sub_data.visibility = View.VISIBLE
             tv_user_name.text = if(user.userName.isEmpty()) user.userPhone else user.userName
             ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
-            tv_user_contribution.text = user.userContrib.toString()
-            tv_user_activity.text = user.userActivity.toString()
+            tv_user_contribution.text = String.format("%.2f", user.userContrib)
+            tv_user_activity.text = String.format("%.2f", user.userActivity)
             ll_member_level.visibility = View.VISIBLE
-            if(user.membershipLevel.isEmpty()){
-                tv_member_level.text = "开通会员"
-            }else{
-                tv_member_level.text = user.membershipLevel+"级"
-            }
-            tv_rice_count.text = user.riceGrains.toString()
+            tv_member_level.text = user.membershipLevel.toString()+"级"
+            tv_rice_count.text = String.format("%.2f", user.riceGrains)
             tv_balance_money.text = "0.00"
             present.getMyOrderStatusCount(C.USER_ID)
         }
@@ -110,56 +106,143 @@ class MineFragment : BaseFragment(),SXContract.View{
         ll_user_info.setOnClickListener {
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
+            }
+        }
+        ll_mine_setting.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
             }else{
                 activity?.startActivity<AccountActivity>()
             }
         }
         ll_mine_feedback.setOnClickListener {
-            activity?.startActivity<FeedbackActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<FeedbackActivity>()
+            }
         }
         ll_member_level.setOnClickListener {
-            activity?.startActivity<MemberUpActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<MemberUpActivity>()
+            }
         }
         ll_withdraw_money.setOnClickListener {
-            activity?.startActivity<BalanceActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<BalanceActivity>()
+            }
         }
         ll_rice_record.setOnClickListener {
-            activity?.startActivity<RiceRecordActivity>()
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<RiceRecordActivity>()
+            }
         }
         tv_order_all.setOnClickListener {
-            activity?.startActivity<OrderListActivity>(Pair("type", C.ORDER_ALL))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<OrderListActivity>(Pair("type", C.ORDER_ALL))
+            }
         }
         ll_order_no_pay.setOnClickListener {
-            activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_PAY))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_PAY))
+            }
         }
         ll_order_no_send.setOnClickListener {
-            activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_SEND))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_SEND))
+            }
         }
         ll_order_no_receive.setOnClickListener {
-            activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_RECEIVE))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_NO_RECEIVE))
+            }
         }
         ll_order_receive_over.setOnClickListener {
-            activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_RECEIVE_OVER))
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_RECEIVE_OVER))
+            }
         }
 
         moreAdapter.setOnItemClickListener { _, _, position ->
             when(position){
-                0 -> activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_BUY))
-                1 -> activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_SELL))
+                0 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_BUY))
+                    }
+                }
+                1 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<TransactionActivity>(Pair("type",C.MARKET_ORDER_STATUS_SELL))
+                    }
+                }
                 2 -> {
                     activity?.toast("暂未开通,敬请关注")
                     //activity?.startActivity<FinanceActivity>()
                 }
-                3 -> activity?.startActivity<SmartEarnActivity>()
+                3 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<SmartEarnActivity>()
+                    }
+                }
                 4 -> {
                     activity?.toast("暂未开通,敬请关注")
                     //activity?.startActivity<LubricateActivity>()
                 }
-                5 -> activity?.startActivity<RecommendTeamActivity>()
-                6 -> activity?.startActivity<MyTaskActivity>()
+                5 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<RecommendTeamActivity>()
+                    }
+                }
+                6 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<MyTaskActivity>()
+                    }
+                }
+                7 -> activity?.startActivity<AboutUsActivity>()
+                8 -> activity?.startActivity<WebContentActivity>(Pair("type",1),Pair("title","交易流程"))
+                9 -> {
+                    if(C.USER_ID.isEmpty()){
+                        activity?.startActivity<LoginActivity>()
+                    }else{
+                        activity?.startActivity<AuthenticationActivity>()
+                    }
+                }
             }
         }
-
+        swipe_refresh_layout.setOnRefreshListener {
+            if(C.USER_ID.isEmpty()){
+                swipe_refresh_layout.finishRefresh()
+                return@setOnRefreshListener
+            }
+            present.getHomeBanner()
+            EventBus.getDefault().post(FirstInitUserEvent(false))
+        }
     }
 
     fun backToHead(){
@@ -181,6 +264,9 @@ class MineFragment : BaseFragment(),SXContract.View{
                             ban_mine_list.setImageLoader(GlideImageLoader())
                             ban_mine_list.setImages(advertList)
                             ban_mine_list.start()
+                            ban_mine_list.setOnBannerListener {
+                                activity?.startActivity<WebUrlActivity>(Pair("title",data.advertList[it].title),Pair("url",data.advertList[it].url))
+                            }
                         }else{
                             ban_mine_list.visibility = View.GONE
                         }
@@ -189,6 +275,7 @@ class MineFragment : BaseFragment(),SXContract.View{
                 SXContract.GETMYORDERSTATUSCOUNT -> {
                     data.let {
                         data as OrderStatusCountBean
+                        swipe_refresh_layout.finishRefresh()
                         qbv1?.badgeNumber = data.notPayNum
                         qbv2?.badgeNumber = data.waitSendGoodsNum
                         qbv3?.badgeNumber = data.waitGoodsNum
@@ -204,13 +291,13 @@ class MineFragment : BaseFragment(),SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
+        swipe_refresh_layout.finishRefresh()
         activity?.toast(string!!)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        if(boolean){
-            activity?.toast("请检查网络连接")
-        }
+        swipe_refresh_layout.finishRefresh()
+        activity?.toast("请检查网络连接")
     }
 
 

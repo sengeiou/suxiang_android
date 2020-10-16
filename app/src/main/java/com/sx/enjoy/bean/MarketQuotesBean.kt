@@ -5,5 +5,5 @@ import java.io.Serializable
 
 class MarketQuotesBean (
     @SerializedName("amount")val amount:String,
-    @SerializedName("createTime")val createTime:String
+    @SerializedName("createTimeStr")val createTimeStr:String
 ): Serializable

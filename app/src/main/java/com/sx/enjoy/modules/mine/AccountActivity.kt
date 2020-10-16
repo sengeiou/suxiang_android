@@ -10,11 +10,13 @@ import com.luck.picture.lib.config.PictureMimeType
 import com.sx.enjoy.App
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.AuthUserBean
 import com.sx.enjoy.bean.UpLoadImageData
 import com.sx.enjoy.bean.UpLoadImageList
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.FirstInitUserEvent
+import com.sx.enjoy.event.UserAuthSuccessEvent
 import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
@@ -23,9 +25,12 @@ import com.sx.enjoy.utils.UpLoadImageUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.ReminderDialog
 import com.sx.enjoy.view.dialog.SexSelectDialog
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.main.activity_account.*
 import kotlinx.android.synthetic.main.title_public_view.*
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -57,6 +62,8 @@ class AccountActivity : BaseActivity() ,SXContract.View{
     }
 
     override fun initView() {
+        EventBus.getDefault().register(this)
+
         sexDialog = SexSelectDialog(this)
         reminderDialog = ReminderDialog(this)
         noticeDialog = NoticeDialog(this)
@@ -72,13 +79,13 @@ class AccountActivity : BaseActivity() ,SXContract.View{
         tv_user_phone.text = user.userPhone
         et_user_address.setText(user.address)
         tv_wx_number.text = user.wxNumber
-        tv_user_auth.text = if(user.isReai.isEmpty()||user.isReai == "0") "未认证" else "已认证"
         et_user_recommend.setText(user.referralCode)
         if(user.referralCode.isNotEmpty()){
             et_user_recommend.isEnabled = false
         }
 
         initEvent()
+        present.getAuthUser(C.USER_ID)
     }
 
     private fun initEvent(){
@@ -121,17 +128,21 @@ class AccountActivity : BaseActivity() ,SXContract.View{
         })
         reminderDialog.setOnNoticeConfirmListener(object :ReminderDialog.OnNoticeConfirmListener{
             override fun onConfirm() {
+                SharedPreferencesUtil.putCommonInt(this@AccountActivity,"step",0)
                 C.USER_ID = ""
                 C.IS_SIGN_REQUEST = false
-                C.USER_STEP = 0
-                SharedPreferencesUtil.putCommonInt(App.instance,"step",0)
                 LitePal.deleteAll(UserBean::class.java)
                 EventBus.getDefault().post(UserStateChangeEvent(0))
+                MobclickAgent.onProfileSignOff()
                 finish()
             }
         })
 
         ll_public_right.setOnClickListener {
+            if(et_user_name.text.toString().isEmpty()){
+                toast("用户名不能为空")
+                return@setOnClickListener
+            }
             if(photo.isEmpty()){
                 user.userName = et_user_name.text.toString()
                 user.sex = tv_user_sex.text.toString()
@@ -162,6 +173,11 @@ class AccountActivity : BaseActivity() ,SXContract.View{
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun authSuccess(event: UserAuthSuccessEvent){
+        present.getAuthUser(C.USER_ID)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -182,6 +198,11 @@ class AccountActivity : BaseActivity() ,SXContract.View{
     }
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
@@ -189,6 +210,17 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                     noticeDialog.showNotice(4)
                     user.updateAll("userId = ?", user.userId)
                     EventBus.getDefault().post(FirstInitUserEvent(false))
+                }
+                SXContract.GETAUTHUSER -> {
+                    data.let {
+                        data as AuthUserBean
+                        when(data.status){
+                            0 -> tv_user_auth.text = "未认证"
+                            1 -> tv_user_auth.text = "待审核"
+                            2 -> tv_user_auth.text = "已认证"
+                            3 -> tv_user_auth.text = "已拒绝"
+                        }
+                    }
                 }
                 else -> {
 

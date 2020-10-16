@@ -19,7 +19,7 @@ public class EncryptionUtil {
 
 
     public static String MD5(String param) {
-        param += C.SIGN_SECRET_KEY;
+        param = C.SIGN_SECRET_KEY+param;
         char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
         try {
             byte[] strTemp = param.getBytes();

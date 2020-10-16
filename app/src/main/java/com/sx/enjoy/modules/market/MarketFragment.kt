@@ -24,6 +24,7 @@ import com.sx.enjoy.bean.TaskListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.TaskBuySuccessEvent
 import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.modules.mine.WebContentActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.fragment_market.*
@@ -33,6 +34,7 @@ import kotlinx.android.synthetic.main.header_market_view.view.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import java.text.SimpleDateFormat
 
 
 class MarketFragment : BaseFragment(), SXContract.View{
@@ -92,6 +94,9 @@ class MarketFragment : BaseFragment(), SXContract.View{
             }else{
                 activity?.startActivity<IncomeActivity>()
             }
+        }
+        tv_transaction_content.setOnClickListener {
+            activity?.startActivity<WebContentActivity>(Pair("type",1),Pair("title","交易流程"))
         }
         swipe_refresh_layout.setOnRefreshListener {
             getMarketList(true)
@@ -185,7 +190,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
                         data as List<MarketQuotesBean>
                         val xAxis = headView.lc_market_quotations.xAxis
                         xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
-                            data[value.toInt()].createTime
+                            data[value.toInt()].createTimeStr
                         }
 
                         val entries = arrayListOf<Entry>()

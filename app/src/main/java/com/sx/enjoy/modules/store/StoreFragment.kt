@@ -111,6 +111,7 @@ class StoreFragment : BaseFragment(),SXContract.View{
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
+        activity?.toast("请检查网络连接")
     }
 
     companion object {

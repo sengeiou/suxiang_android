@@ -37,6 +37,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     private var type = 0
     private var pager = 1
     private var payTaskId = ""
+    private var activityCount = ""
 
     override fun getLayoutResource() = R.layout.fragment_task_child
 
@@ -116,6 +117,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
                         return@setOnItemChildClickListener
                     }
                     payTaskId = mAdapter.data[position].id
+                    activityCount = mAdapter.data[position].activeValue
                     taskDialog.showTaskGet(mAdapter.data[position].taskRich)
                 }
             }
@@ -165,7 +167,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 SXContract.BUYTASK -> {
-                    noticeDialog.showNotice(5)
+                    noticeDialog.showNotice(1,"兑换成功!,获取${activityCount}活跃值")
                     mOnRiceRefreshListener?.onBuyTaskSuccess()
                     EventBus.getDefault().post(TaskBuySuccessEvent(1))
                 }

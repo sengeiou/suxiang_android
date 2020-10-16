@@ -117,6 +117,9 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
 
         mAdapter.setOnItemChildClickListener { adapter, view, position ->
             when(view.id){
+                R.id.ll_shop_cart -> {
+                    startActivity<CommodityActivity>(Pair("commodityId",mAdapter.data[position].goodsId))
+                }
                 R.id.ll_shop_checked -> {
                     mAdapter.data[position].isSelected = !mAdapter.data[position].isSelected
                     for(i in mAdapter.data.indices){
@@ -139,6 +142,9 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                         toast("不能再减少了")
                     }
                 }
+                R.id.tv_cart_delete -> {
+                    present.deleteCommodityFromShopCart(arrayListOf(mAdapter.data[position].id))
+                }
             }
         }
         reminderDialog.setOnNoticeConfirmListener(object :ReminderDialog.OnNoticeConfirmListener{
@@ -160,12 +166,15 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
 
     private fun selectTotalPrice(){
         var totalPrice = 0.0
+        var isSelect = false
         mAdapter.data.forEach {
             if(it.isSelected){
                 totalPrice+=(it.goodsNumber*it.price)
+                isSelect = true
             }
         }
         tv_total_money.text = "合计：¥${String.format("%.2f", totalPrice)}"
+        tv_shop_confirm.setBackgroundColor(resources.getColor(if(isSelect) R.color.main_color else R.color.main_color_1))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -185,6 +194,7 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                         tv_total_money.text = "合计：¥0.00"
                         isAllChecked = false
                         tb_all_checked.isChecked = false
+                        tv_shop_confirm.setBackgroundColor(resources.getColor(R.color.main_color_1))
                     }
                 }
                 SXContract.DELETECOMMODITYFROMSHOPCART -> {

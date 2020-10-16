@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_13"
                 android:text="每日签到"/>
 
             <TextView
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:drawableRight="@mipmap/ic_rice_circle"
             android:drawablePadding="@dimen/dimen_10"
-            android:textSize="@dimen/text_16"
+            android:textSize="@dimen/text_13"
             android:textColor="@color/title_main_color"
             android:text="+30"/>
 
@@ -51,8 +51,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_1"
-        android:layout_marginLeft="@dimen/dimen_15"
-        android:layout_marginRight="@dimen/dimen_15"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginRight="@dimen/dimen_10"
         android:background="@color/background"/>
 
 </LinearLayout>

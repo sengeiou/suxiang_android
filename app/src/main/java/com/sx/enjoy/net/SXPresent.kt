@@ -5,6 +5,7 @@ import com.likai.lib.base.BasePresent
 import com.likai.lib.net.BaseObserver
 import com.likai.lib.net.HttpResult
 import com.likai.lib.rx.RxSchedulersHelper
+import com.sx.enjoy.WebDataBean
 import com.sx.enjoy.bean.*
 import org.jetbrains.anko.startActivity
 import java.io.File
@@ -169,7 +170,7 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<Boolean>(mContext,isShow){
                 override fun onSuccess(t: HttpResult<Boolean>?) {
-                    view.onSuccess(if(isShow)SXContract.GETSIGNRESULT+"1" else SXContract.GETSIGNRESULT+"0",t?.data)
+                    view.onSuccess(SXContract.GETSIGNRESULT,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<Boolean>) {
                     view.onFailed(t.message,false)
@@ -747,11 +748,219 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
     override fun getMyOrderStatusCount(userId: String) {
         model.getMyOrderStatusCount(userId)
             .compose(RxSchedulersHelper.io_main())
-            .subscribe(object : BaseObserver<OrderStatusCountBean>(mContext,true){
+            .subscribe(object : BaseObserver<OrderStatusCountBean>(mContext,false){
                 override fun onSuccess(t: HttpResult<OrderStatusCountBean>?) {
                     view.onSuccess(SXContract.GETMYORDERSTATUSCOUNT,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<OrderStatusCountBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getOrderList(userId: String, status: String, page: String, limit: String,isShow:Boolean) {
+        model.getOrderList(userId,status,page,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<OrderListBean>>(mContext,isShow){
+                override fun onSuccess(t: HttpResult<List<OrderListBean>>?) {
+                    view.onSuccess(SXContract.GETORDERLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<OrderListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun cancelOrder(orderId: String) {
+        model.cancelOrder(orderId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.CANCELORDER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getOrderDetails(orderNo: String) {
+        model.getOrderDetails(orderNo)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<OrderDetailsBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<OrderDetailsBean>?) {
+                    view.onSuccess(SXContract.GETORDERDETAILS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<OrderDetailsBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun deleteOrder(orderId: String) {
+        model.deleteOrder(orderId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.DELETEORDER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun authUser(userId: String, idNumber: String, name: String, phone: String,payMethod:String) {
+        model.authUser(userId,idNumber,name,phone,payMethod)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<PayResultBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<PayResultBean>?) {
+                    view.onSuccess(SXContract.AUTHUSER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<PayResultBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getAuthUser(userId: String) {
+        model.getAuthUser(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<AuthUserBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<AuthUserBean>?) {
+                    view.onSuccess(SXContract.GETAUTHUSER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<AuthUserBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun orderPay(orderNo: String, payMethod: String, payType: String) {
+        model.orderPay(orderNo,payMethod,payType)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<PayResultBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<PayResultBean>?) {
+                    view.onSuccess(SXContract.ORDERPAY,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<PayResultBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getNoticeDetails(id: String) {
+        model.getNoticeDetails(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<NoticeDetailsBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<NoticeDetailsBean>?) {
+                    view.onSuccess(SXContract.GETNOTICEDETAILS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<NoticeDetailsBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun userFeedback(advice: String, images: String, type: String) {
+        model.userFeedback(advice,images,type)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.USERFEEDBACK,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getWebData(type:String) {
+        model.getWebData(type)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<WebDataBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<WebDataBean>?) {
+                    view.onSuccess(SXContract.GETWEBDATA,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<WebDataBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun memberUp(userId: String) {
+        model.memberUp(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.MEMBERUP,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getMemberInfo(userId: String) {
+        model.getMemberInfo(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<MemberUpBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<MemberUpBean>?) {
+                    view.onSuccess(SXContract.GETMEMBERINFO,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<MemberUpBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getNewsDetails(id: String) {
+        model.getNewsDetails(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<NewsDetailsBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<NewsDetailsBean>?) {
+                    view.onSuccess(SXContract.GETNEWSDETAILS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<NewsDetailsBean>) {
                     view.onFailed(t.message,false)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {

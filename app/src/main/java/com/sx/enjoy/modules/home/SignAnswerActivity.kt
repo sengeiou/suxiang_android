@@ -62,7 +62,7 @@ class SignAnswerActivity : BaseActivity() ,SXContract.View{
                 toast("请选择答案")
                 return@setOnClickListener
             }
-            if(questList[questIndex].answer == mAdapter.getSelectItem()){
+            if(questList[questIndex].answer.toLowerCase() == mAdapter.getSelectItem().toLowerCase()){
                 questIndex++
                 initQuestion()
             }else{

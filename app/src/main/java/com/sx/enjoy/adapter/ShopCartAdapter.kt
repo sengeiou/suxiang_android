@@ -15,9 +15,11 @@ class ShopCartAdapter: BaseQuickAdapter<ShopCartBean, BaseViewHolder>(R.layout.i
         helper?.setText(R.id.tv_shop_count,item.goodsNumber.toString())
         helper?.setChecked(R.id.tb_shop_checked,item.isSelected)
 
+        helper?.addOnClickListener(R.id.ll_shop_cart)
         helper?.addOnClickListener(R.id.ll_shop_checked)
         helper?.addOnClickListener(R.id.iv_shop_add)
         helper?.addOnClickListener(R.id.iv_shop_sub)
+        helper?.addOnClickListener(R.id.tv_cart_delete)
     }
 
 }

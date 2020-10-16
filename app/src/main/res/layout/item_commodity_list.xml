@@ -28,11 +28,11 @@
             android:id="@+id/tv_commodity_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimen_15"
+            android:layout_margin="@dimen/dimen_10"
             android:maxLines="2"
             android:lines="2"
             android:ellipsize="end"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:textColor="@color/title_main_color"
             android:text="哈哈哈哈哈哈"/>
 
@@ -60,7 +60,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_F02134"
-                    android:textSize="@dimen/text_16"
+                    android:textSize="@dimen/text_15"
                     android:text="333.33"/>
 
             </LinearLayout>

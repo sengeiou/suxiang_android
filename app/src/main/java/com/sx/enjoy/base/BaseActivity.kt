@@ -6,6 +6,7 @@ import com.likai.lib.base.MyBaseActivity
 import com.likai.lib.manager.TokenLoseEfficacy
 import com.sx.enjoy.R
 import com.sx.enjoy.constans.C
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.main.title_public_view.*
 
 
@@ -69,6 +70,12 @@ abstract class BaseActivity : MyBaseActivity()  , TokenLoseEfficacy.OnTokenLoseE
     override fun onResume() {
         super.onResume()
         TokenLoseEfficacy.getInstance().setOnTokenLoseEfficacyListener(this)
+        MobclickAgent.onResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MobclickAgent.onPause(this)
     }
 
 

@@ -11,6 +11,7 @@ import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.utils.RegularUtil
+import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.et_user_phone
 import org.greenrobot.eventbus.EventBus
@@ -82,6 +83,7 @@ class LoginActivity : BaseActivity() ,SXContract.View{
                         C.USER_ID = data.userId
                         data.save()
                         EventBus.getDefault().post(UserStateChangeEvent(1))
+                        MobclickAgent.onProfileSignIn(data.userId)
                         finish()
                     }
                 }

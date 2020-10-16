@@ -83,7 +83,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
         tl_commodity_title.addTab(tl_commodity_title.newTab().setText("详情"))
         tl_commodity_title.addTab(tl_commodity_title.newTab().setText("推荐"))
 
-        qbv1 = QBadgeView(this).bindTarget(v_shop_cart).setBadgeTextSize(8f,false).setBadgeBackgroundColor(Color.RED)
+        qbv1 = QBadgeView(this).bindTarget(v_shop_cart).setBadgeBackgroundColor(Color.RED)
 
         initEvent()
 
@@ -379,7 +379,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             os.conId = cIds
             os.goodsId = commodityId
             os.name = commodity!!.goodsName
-            os.price = price
+            os.price = if(price.isEmpty()) commodity!!.amount else price
             os.number = selectNum.toString()
             os.image = image
             os.specName = sName

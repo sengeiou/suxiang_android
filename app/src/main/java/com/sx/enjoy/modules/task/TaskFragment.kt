@@ -13,6 +13,7 @@ import com.sx.enjoy.bean.TaskRiceBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.modules.mine.WebContentActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.fragment_task.*
@@ -72,6 +73,9 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     private fun initEvent(){
         rl_task_all.setOnClickListener {
             initTaskTitle(0)
+        }
+        tv_task_content.setOnClickListener {
+            activity?.startActivity<WebContentActivity>(Pair("type",3), Pair("title","卷轴说明"))
         }
         rl_task_mine.setOnClickListener {
             if(C.USER_ID.isEmpty()){
@@ -159,7 +163,9 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
         activity?.toast(string!!)
     }
 
-    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {}
+    override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        activity?.toast("请检查网络连接")
+    }
 
 
     companion object {

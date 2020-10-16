@@ -10,7 +10,7 @@ class RiceRecordAdapter: BaseQuickAdapter<RiceRecordListBean, BaseViewHolder>(R.
     override fun convert(helper: BaseViewHolder?, item: RiceRecordListBean) {
         helper?.setText(R.id.tv_rice_type,item.typeStr)
         helper?.setText(R.id.tv_rice_time,item.createTime)
-        helper?.setText(R.id.tv_rice_income,if(item.isIncome == 1) "+${item.rich}" else "-${item.rich}")
+        helper?.setText(R.id.tv_rice_income,if(item.isIncome == 0) "+${item.rich}" else "-${item.rich}")
     }
 
 }

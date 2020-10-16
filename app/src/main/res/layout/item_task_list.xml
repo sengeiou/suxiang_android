@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_200"
+    android:layout_height="@dimen/dimen_220"
     android:padding="@dimen/dimen_15">
 
     <ImageView
@@ -59,6 +59,14 @@
                     android:text="有效步数234"/>
 
                 <TextView
+                    android:id="@+id/tv_task_car"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12"
+                    android:text="有效公里数234"/>
+
+                <TextView
                     android:id="@+id/tv_day_rice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,8 +85,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:gravity="center">
 
@@ -104,16 +111,16 @@
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tv_rice_state"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_12"
-                        android:textColor="@color/white"
-                        android:text="兑换所需米粒数"/>
-
-
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_rice_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/text_12"
+                    android:textColor="@color/white"
+                    android:text="兑换所需米粒数"/>
 
                 <TextView
                     android:id="@+id/tv_activity_count"

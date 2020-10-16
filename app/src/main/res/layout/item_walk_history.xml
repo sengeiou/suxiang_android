@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_60"
+        android:layout_height="@dimen/dimen_48"
         android:layout_marginTop="@dimen/dimen_1"
         android:background="@color/white">
 
@@ -16,7 +16,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:textColor="@color/black"
             android:text="2010年09月14日"/>
 
@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:textColor="@color/black"
             android:text="33333"/>
 
@@ -36,7 +36,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="@dimen/text_15"
+            android:textSize="@dimen/text_13"
             android:textColor="@color/black"
             android:text="99"/>
 

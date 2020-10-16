@@ -1,6 +1,7 @@
 package com.sx.enjoy.net
 
 import com.likai.lib.net.HttpResult
+import com.sx.enjoy.WebDataBean
 import com.sx.enjoy.bean.*
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -197,4 +198,57 @@ interface ApiService {
     //获取订单状态数量
     @GET("api-mall/mallorder/findOrderStatus")
     fun getMyOrderStatusCount(@Query("userId")userId:String):Observable<HttpResult<OrderStatusCountBean>>
+
+    //订单列表
+    @GET("api-mall/mallorder/findMineOrder")
+    fun getOrderList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<OrderListBean>>>
+
+    //取消订单
+    @POST("api-mall/mallorder/cancelOrder")
+    fun cancelOrder(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //订单详情
+    @GET("api-mall/mallorder/findOrderDetail")
+    fun getOrderDetails(@Query("orderNo")orderNo:String):Observable<HttpResult<OrderDetailsBean>>
+
+    //删除订单
+    @POST("api-mall/mallorder/deleteOrder")
+    fun deleteOrder(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //实名认证
+    @POST("api-user/authrecord")
+    fun authUser(@Body body: RequestBody):Observable<HttpResult<PayResultBean>>
+
+    //实名认证查询
+    @GET("api-user/authrecord/getAuthByUserId")
+    fun getAuthUser(@Query("userId")userId:String):Observable<HttpResult<AuthUserBean>>
+
+    //实名认证查询
+    @POST("api-pay/order/pay")
+    fun orderPay(@Body body: RequestBody):Observable<HttpResult<PayResultBean>>
+
+    //获取通知详情
+    @GET("api-system/sxnotice/id")
+    fun getNoticeDetails(@Query("id")id:String):Observable<HttpResult<NoticeDetailsBean>>
+
+    //实名认证查询
+    @POST("api-system/sxfeedback")
+    fun userFeedback(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //获取文本信息
+    @GET("api-system/sxcontentmanager/getContentMangerByType")
+    fun getWebData(@Query("type")type:String):Observable<HttpResult<WebDataBean>>
+
+    //会员升级
+    @POST("api-system/vipconfig/vipUpgrade")
+    fun memberUp(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //用户等级信息
+    @GET("api-system/vipconfig/getFutureLevel")
+    fun getMemberInfo(@Query("userId")userId:String):Observable<HttpResult<MemberUpBean>>
+
+    //新闻详情
+    @GET("api-system/sxcontentmanager/id")
+    fun getNewsDetails(@Query("id")id:String):Observable<HttpResult<NewsDetailsBean>>
+
 }
