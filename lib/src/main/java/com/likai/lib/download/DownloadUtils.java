@@ -1,7 +1,7 @@
 package com.likai.lib.download;
 
-import android.support.annotation.NonNull;
 
+import androidx.annotation.NonNull;
 
 import com.likai.lib.rx.RxSchedulersHelper;
 

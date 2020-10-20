@@ -20,7 +20,7 @@
             app:srlAccentColor="@color/color_3A3A3A"
             app:srlPrimaryColor="@color/transparent"/>
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/nsv_mine"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -474,7 +474,7 @@
 
                         </LinearLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rcy_mine_more"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -502,6 +502,6 @@
 
             </RelativeLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </RelativeLayout>

@@ -1,7 +1,8 @@
 package com.sx.enjoy.modules.mine
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.OrderListAdapter
@@ -145,11 +146,11 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 SXContract.CANCELORDER -> {
-                    activity?.toast("订单已取消")
+                    activity?.toast("订单已取消")?.setGravity(Gravity.CENTER, 0, 0)
                     getOrderList(isRefresh = true, isShowProgress = true)
                 }
                 SXContract.DELETEORDER -> {
-                    activity?.toast("订单已删除")
+                    activity?.toast("订单已删除")?.setGravity(Gravity.CENTER, 0, 0)
                     getOrderList(isRefresh = true, isShowProgress = true)
                 }
                 else -> {
@@ -181,7 +182,7 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            activity?.toast("请检查网络连接")
+            activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

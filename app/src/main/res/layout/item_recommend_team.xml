@@ -12,8 +12,8 @@
         
         <com.sx.enjoy.view.CircleImageView
             android:id="@+id/iv_user_head"
-            android:layout_width="@dimen/dimen_60"
-            android:layout_height="@dimen/dimen_60"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
             android:src="@mipmap/ic_user_head"/>
 
         <LinearLayout
@@ -24,24 +24,37 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
 
                 <TextView
                     android:id="@+id/tv_team_name"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/title_main_color"
-                    android:textSize="@dimen/text_16"
+                    android:textSize="@dimen/text_15"
                     android:text="第七班"/>
 
                 <TextView
-                    android:id="@+id/tv_create_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/title_second_color"
-                    android:textSize="@dimen/text_13"
-                    android:text="2020-09-14 08:42:33"/>
+                    android:id="@+id/tv_member_name"
+                    android:layout_width="@dimen/dimen_40"
+                    android:layout_height="@dimen/dimen_16"
+                    android:layout_marginLeft="@dimen/dimen_8"
+                    android:gravity="center"
+                    android:background="@drawable/bg_red_full_8"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12"
+                    android:text="1级"/>
+
+                <TextView
+                    android:layout_width="@dimen/dimen_40"
+                    android:layout_height="@dimen/dimen_16"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/dimen_8"
+                    android:background="@drawable/bg_green_full_8"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_12"
+                    android:text="直推"/>
 
             </LinearLayout>
 
@@ -59,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_FA4611"
-                    android:textSize="@dimen/text_14"
+                    android:textSize="@dimen/text_13"
                     android:text="贡献度 333"/>
 
                 <TextView
@@ -68,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_25"
                     android:textColor="@color/color_7354F8"
-                    android:textSize="@dimen/text_14"
+                    android:textSize="@dimen/text_13"
                     android:text="活跃度 333"/>
 
             </LinearLayout>

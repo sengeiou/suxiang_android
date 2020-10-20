@@ -37,6 +37,9 @@ class ReminderDialog : Dialog {
             5 -> {
                 tv_reminder_text.text = "是否删除订单？"
             }
+            6 -> {
+                tv_reminder_text.text = "是否删除该地址？"
+            }
         }
     }
 

@@ -98,8 +98,8 @@
 
                 <com.sx.enjoy.view.CircleImageView
                     android:id="@+id/iv_user_head"
-                    android:layout_width="@dimen/dimen_60"
-                    android:layout_height="@dimen/dimen_60"
+                    android:layout_width="@dimen/dimen_50"
+                    android:layout_height="@dimen/dimen_50"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/ic_user_head"/>
 
@@ -163,7 +163,7 @@
                         android:id="@+id/tv_market_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_4DCB79"
+                        android:textColor="@color/main_color"
                         android:textSize="@dimen/text_15"
                         android:text=""/>
 
@@ -227,7 +227,7 @@
                         android:id="@+id/tv_total_money"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/color_3A3A3A"
+                        android:textColor="@color/main_color"
                         android:textSize="@dimen/text_15"
                         android:text=""/>
 
@@ -291,10 +291,16 @@
                         android:textSize="@dimen/text_13"
                         android:text="联系方式"/>
 
+                    <ImageView
+                        android:layout_width="@dimen/dimen_20"
+                        android:layout_height="@dimen/dimen_20"
+                        android:src="@mipmap/ic_call_user_phone"/>
+
                     <TextView
                         android:id="@+id/tv_sell_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_8"
                         android:textColor="@color/color_3A3A3A"
                         android:textSize="@dimen/text_13"
                         android:text=""/>
@@ -407,42 +413,89 @@
 
             <LinearLayout
                 android:id="@+id/ll_buy_user"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/dimen_15"
-                android:paddingRight="@dimen/dimen_15"
-                android:gravity="center_vertical"
+                android:visibility="gone"
                 android:background="@color/white"
-                android:paddingTop="@dimen/dimen_5"
-                android:paddingBottom="@dimen/dimen_5"
-                android:layout_marginTop="@dimen/dimen_10">
+                android:layout_marginTop="@dimen/dimen_10"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/title_main_color"
-                    android:textSize="@dimen/text_13"
-                    android:text="购买人"/>
+                    android:paddingLeft="@dimen/dimen_15"
+                    android:paddingRight="@dimen/dimen_15"
+                    android:gravity="center_vertical"
+                    android:paddingTop="@dimen/dimen_5"
+                    android:paddingBottom="@dimen/dimen_5">
 
-                <com.sx.enjoy.view.CircleImageView
-                    android:id="@+id/iv_other_head"
-                    android:layout_width="@dimen/dimen_60"
-                    android:layout_height="@dimen/dimen_60"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ic_user_head"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/title_main_color"
+                        android:textSize="@dimen/text_13"
+                        android:text="购买人"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_8"
-                    android:textColor="@color/color_3A3A3A"
-                    android:textSize="@dimen/text_13"
-                    android:text=""/>
+                    <com.sx.enjoy.view.CircleImageView
+                        android:id="@+id/iv_other_head"
+                        android:layout_width="@dimen/dimen_50"
+                        android:layout_height="@dimen/dimen_50"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/ic_user_head"/>
+
+                    <TextView
+                        android:id="@+id/tv_other_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_8"
+                        android:textColor="@color/color_3A3A3A"
+                        android:textSize="@dimen/text_13"
+                        android:text=""/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_1"
+                    android:background="@color/background"
+                    android:layout_marginLeft="@dimen/dimen_15"
+                    android:layout_marginRight="@dimen/dimen_15"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_other_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_40"
+                    android:paddingLeft="@dimen/dimen_15"
+                    android:paddingRight="@dimen/dimen_15"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/title_main_color"
+                        android:textSize="@dimen/text_13"
+                        android:text="联系方式"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_20"
+                        android:layout_height="@dimen/dimen_20"
+                        android:src="@mipmap/ic_call_user_phone"/>
+
+                    <TextView
+                        android:id="@+id/tv_other_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_8"
+                        android:textColor="@color/color_3A3A3A"
+                        android:textSize="@dimen/text_13"
+                        android:text=""/>
+
+                </LinearLayout>
 
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/ll_upload_documents"
                 android:layout_width="match_parent"

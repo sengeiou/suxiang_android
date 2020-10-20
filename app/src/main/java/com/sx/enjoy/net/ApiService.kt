@@ -251,4 +251,8 @@ interface ApiService {
     @GET("api-system/sxcontentmanager/id")
     fun getNewsDetails(@Query("id")id:String):Observable<HttpResult<NewsDetailsBean>>
 
+    //删除地址
+    @POST("api-mall/receiveraddress/batchdUpdate")
+    fun deleteAddress(@Body body: RequestBody):Observable<HttpResult<String>>
+
 }

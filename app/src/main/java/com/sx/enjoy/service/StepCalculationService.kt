@@ -25,7 +25,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import com.sx.enjoy.R
 import android.hardware.SensorManager
-import android.support.v4.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
@@ -182,7 +182,6 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
                                 editor.putInt("minStep",data.minStep)
                             }
                             editor.apply()
-                            Log.e("Test","shakeStepRefresh-------"+step+"------>"+minStep)
                             EventBus.getDefault().post(StepRefreshEvent(step+minStep))
                             EventBus.getDefault().post(RiceRefreshEvent(data.minStep,data.walkRiceGrains,data.drivingRiceGrains,data.rotateMinStep,data.calories,data.targetWalk,data.mileage))
                         }

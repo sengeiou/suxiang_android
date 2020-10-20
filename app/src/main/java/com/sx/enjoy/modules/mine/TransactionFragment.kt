@@ -1,7 +1,8 @@
 package com.sx.enjoy.modules.mine
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.TransactionListAdapter
@@ -100,7 +101,7 @@ class TransactionFragment : BaseFragment(), SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -120,7 +121,7 @@ class TransactionFragment : BaseFragment(), SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            activity?.toast("请检查网络连接")
+            activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

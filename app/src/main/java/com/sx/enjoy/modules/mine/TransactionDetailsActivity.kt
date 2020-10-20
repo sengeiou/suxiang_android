@@ -1,7 +1,11 @@
 package com.sx.enjoy.modules.mine
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
+import android.view.Gravity
 import android.view.View
 import com.likai.lib.commonutils.LoadingDialog
 import com.luck.picture.lib.PictureSelector
@@ -15,10 +19,12 @@ import com.sx.enjoy.bean.UpLoadImageList
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.GlideEngine
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.utils.UpLoadImageUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.SingleImageShowDialog
+import com.yanzhenjie.permission.AndPermission
 import kotlinx.android.synthetic.main.activity_transaction_details.*
 import org.jetbrains.anko.toast
 
@@ -73,10 +79,10 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                             .selectionMode(PictureConfig.MULTIPLE)
                             .maxSelectNum(1)
                             .isCamera(true)
-                            .cropWH(100,100)
+                            .loadImageEngine(GlideEngine.createGlideEngine())
                             .compress(true)
-                            .withAspectRatio(1,1)
-                            .hideBottomControls(false)
+                            .hideBottomControls(true)
+                            .minimumCompressSize(1024)
                             .forResult(1001)
                     }
                     2 ,3 -> {
@@ -97,7 +103,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                         return@setOnClickListener
                     }
                     if(photo.isEmpty()){
-                        toast("请上传支付凭证")
+                        toast("请上传支付凭证").setGravity(Gravity.CENTER, 0, 0)
                     }else{
                         val imageList = arrayListOf<UpLoadImageData>()
                         val logoImage = arrayListOf<UpLoadImageList>()
@@ -122,6 +128,30 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
             }
         }
 
+        ll_other_phone.setOnClickListener {
+            checkPermission(tv_other_phone.text.toString())
+        }
+
+        ll_sell_phone.setOnClickListener {
+            checkPermission(tv_sell_phone.text.toString())
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun checkPermission(tel:String){
+        AndPermission.with(this)
+            .runtime()
+            .permission(Manifest.permission.CALL_PHONE)
+            .onGranted { permissions ->
+                val intent = Intent(Intent.ACTION_CALL)
+                val data = Uri.parse("tel:$tel")
+                intent.data = data
+                startActivity(intent)
+            }
+            .onDenied { permissions ->
+
+            }
+            .start()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -177,12 +207,13 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
+                                    tv_zfb_upload.text = data.respTime
                                     tv_submit.text = "提交"
 
                                     ll_sell_info.visibility = View.VISIBLE
                                     ll_zfb_number.visibility = View.VISIBLE
                                     ll_sell_phone.visibility = View.VISIBLE
-                                    ll_ali_upload.visibility = View.GONE
+                                    ll_ali_upload.visibility = View.VISIBLE
                                     ll_order_time.visibility = View.GONE
                                     ll_photo_upload.visibility = View.GONE
                                     ll_buy_user.visibility = View.GONE
@@ -201,13 +232,15 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
+                                    tv_zfb_upload.text = data.respTime
+                                    tv_photo_upload.text = data.payTime
 
                                     ll_sell_info.visibility = View.VISIBLE
                                     ll_zfb_number.visibility = View.VISIBLE
                                     ll_sell_phone.visibility = View.VISIBLE
-                                    ll_ali_upload.visibility = View.GONE
+                                    ll_ali_upload.visibility = View.VISIBLE
                                     ll_order_time.visibility = View.GONE
-                                    ll_photo_upload.visibility = View.GONE
+                                    ll_photo_upload.visibility = View.VISIBLE
                                     ll_buy_user.visibility = View.GONE
                                     ll_upload_documents.visibility = View.VISIBLE
                                     tv_submit.visibility = View.GONE
@@ -224,13 +257,15 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
+                                    tv_zfb_upload.text = data.respTime
+                                    tv_photo_upload.text = data.payTime
 
                                     ll_sell_info.visibility = View.VISIBLE
                                     ll_zfb_number.visibility = View.VISIBLE
                                     ll_sell_phone.visibility = View.VISIBLE
-                                    ll_ali_upload.visibility = View.GONE
+                                    ll_ali_upload.visibility = View.VISIBLE
                                     ll_order_time.visibility = View.GONE
-                                    ll_photo_upload.visibility = View.GONE
+                                    ll_photo_upload.visibility = View.VISIBLE
                                     ll_buy_user.visibility = View.GONE
                                     ll_upload_documents.visibility = View.VISIBLE
                                     tv_submit.visibility = View.GONE
@@ -245,11 +280,13 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_transaction_status_2.setTextColor(resources.getColor(R.color.color_666666))
                                     v_transaction_status.setBackgroundColor(resources.getColor(R.color.color_666666))
                                     tv_zfb_number.text = data.payNumber
+                                    tv_order_time.text = data.createTime
+
 
                                     ll_sell_info.visibility = View.GONE
                                     ll_zfb_number.visibility = View.VISIBLE
                                     ll_sell_phone.visibility = View.GONE
-                                    ll_order_time.visibility = View.GONE
+                                    ll_order_time.visibility = View.VISIBLE
                                     ll_ali_upload.visibility = View.GONE
                                     ll_photo_upload.visibility = View.GONE
                                     ll_buy_user.visibility = View.GONE
@@ -267,7 +304,8 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
                                     ImageLoaderUtil().displayHeadImage(this,data.headImage,iv_other_head)
-                                    tv_user_name.text = data.userName
+                                    tv_other_name.text = data.userName
+                                    tv_other_phone.text = data.userPhone
 
                                     ll_sell_info.visibility = View.GONE
                                     ll_zfb_number.visibility = View.VISIBLE
@@ -291,7 +329,8 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_order_time.text = data.createTime
                                     tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
-                                    tv_user_name.text = data.userName
+                                    tv_other_name.text = data.userName
+                                    tv_other_phone.text = data.userPhone
                                     tv_submit.text = "确认完成"
 
                                     ll_sell_info.visibility = View.GONE
@@ -316,7 +355,8 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_order_time.text = data.createTime
                                     tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
-                                    tv_user_name.text = data.userName
+                                    tv_other_name.text = data.userName
+                                    tv_other_phone.text = data.userPhone
 
                                     ll_sell_info.visibility = View.GONE
                                     ll_zfb_number.visibility = View.VISIBLE
@@ -350,12 +390,12 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

@@ -1,8 +1,6 @@
 package com.sx.enjoy.modules.mine
 
 import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils

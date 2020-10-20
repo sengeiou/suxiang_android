@@ -459,7 +459,7 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().getFirstAddress(userId)
     }
 
-    override fun saveAddress(userId: String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String): Observable<HttpResult<String>> {
+    override fun saveAddress(userId: String, addressId:String,receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String): Observable<HttpResult<String>> {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("userId", userId)
@@ -470,6 +470,9 @@ class SXModel  : SXContract.Model{
             jsonObject.put("city", city)
             jsonObject.put("area", area)
             jsonObject.put("isDefault", isDefault)
+            if(addressId.isNotEmpty()){
+                jsonObject.put("id", addressId)
+            }
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -641,5 +644,20 @@ class SXModel  : SXContract.Model{
 
     override fun getNewsDetails(id: String): Observable<HttpResult<NewsDetailsBean>> {
         return Api.getDefault().getNewsDetails(id)
+    }
+
+    override fun deleteAddress(id: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            val jsonArray = JSONArray()
+            jsonArray.put(id)
+            jsonObject.put("ids", jsonArray)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().deleteAddress(body)
     }
 }

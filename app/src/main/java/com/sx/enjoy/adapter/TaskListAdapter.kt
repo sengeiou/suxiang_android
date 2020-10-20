@@ -44,7 +44,7 @@ class TaskListAdapter(var type:Int): BaseQuickAdapter<TaskListBean, BaseViewHold
                 helper?.setText(R.id.tv_activity_count,"")
                 helper?.getView<ImageView>(R.id.iv_task_get)?.visibility = View.GONE
                 helper?.getView<TextView>(R.id.tv_task_number)?.visibility = View.GONE
-                helper?.getView<TextView>(R.id.tv_activity_count)?.visibility = View.VISIBLE
+                helper?.getView<TextView>(R.id.tv_activity_count)?.visibility = View.GONE
             }
             2 -> {
                 helper?.setText(R.id.tv_task_name,item?.taskName)
@@ -52,17 +52,16 @@ class TaskListAdapter(var type:Int): BaseQuickAdapter<TaskListBean, BaseViewHold
                 helper?.setText(R.id.tv_task_walk,"有效步数${item?.effSteps}")
                 helper?.setText(R.id.tv_day_rice,"单日奖励${item?.dayRich}米粒")
                 helper?.setText(R.id.tv_day_count,"时效${item?.taskEffTime}天")
-                helper?.setVisible(R.id.tv_single_rice,false)
-                helper?.setText(R.id.tv_rice_count,item?.exist)
-                helper?.setVisible(R.id.tv_rice_count,false)
-                helper?.setText(R.id.tv_rice_state,"奖励")
-                helper?.setVisible(R.id.tv_rice_state,false)
-                helper?.setText(R.id.tv_activity_count,"")
-                helper?.setVisible(R.id.tv_single_rice,false)
+                helper?.setVisible(R.id.tv_single_rice,true)
+                helper?.setText(R.id.tv_rice_count,item?.taskRich)
+                helper?.setVisible(R.id.tv_rice_count,true)
+                helper?.setText(R.id.tv_rice_state,"兑换所需米粒数")
+                helper?.setVisible(R.id.tv_rice_state,true)
+                helper?.setText(R.id.tv_activity_count,"活跃度+${item?.activeValue}")
                 helper?.setText(R.id.tv_task_number,"任务编号 ${item?.orderNo}")
                 helper?.getView<ImageView>(R.id.iv_task_get)?.visibility = View.GONE
-                helper?.getView<TextView>(R.id.tv_task_number)?.visibility = View.VISIBLE
-                helper?.getView<TextView>(R.id.tv_activity_count)?.visibility = View.GONE
+                helper?.getView<TextView>(R.id.tv_task_number)?.visibility = View.GONE
+                helper?.getView<TextView>(R.id.tv_activity_count)?.visibility = View.VISIBLE
             }
             3 -> {
                 when(item?.status){
@@ -98,7 +97,7 @@ class TaskListAdapter(var type:Int): BaseQuickAdapter<TaskListBean, BaseViewHold
                         helper?.setVisible(R.id.tv_single_rice,false)
                         helper?.setText(R.id.tv_task_number,"任务编号 ${item.orderNo}")
                         helper?.getView<ImageView>(R.id.iv_task_get)?.visibility = View.GONE
-                        helper?.getView<TextView>(R.id.tv_task_number)?.visibility = View.VISIBLE
+                        helper?.getView<TextView>(R.id.tv_task_number)?.visibility = View.GONE
                         helper?.getView<TextView>(R.id.tv_activity_count)?.visibility = View.GONE
                     }
                 }

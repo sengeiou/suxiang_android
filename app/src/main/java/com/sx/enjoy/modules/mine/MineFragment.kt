@@ -2,6 +2,7 @@ package com.sx.enjoy.modules.mine
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -196,7 +197,7 @@ class MineFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 2 -> {
-                    activity?.toast("暂未开通,敬请关注")
+                    activity?.toast("暂未开通,敬请关注")?.setGravity(Gravity.CENTER, 0, 0)
                     //activity?.startActivity<FinanceActivity>()
                 }
                 3 -> {
@@ -207,7 +208,7 @@ class MineFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 4 -> {
-                    activity?.toast("暂未开通,敬请关注")
+                    activity?.toast("暂未开通,敬请关注")?.setGravity(Gravity.CENTER, 0, 0)
                     //activity?.startActivity<LubricateActivity>()
                 }
                 5 -> {
@@ -292,12 +293,12 @@ class MineFragment : BaseFragment(),SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast("请检查网络连接")
+        activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
     }
 
 

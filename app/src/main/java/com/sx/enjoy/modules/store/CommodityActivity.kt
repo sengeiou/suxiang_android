@@ -1,11 +1,12 @@
 package com.sx.enjoy.modules.store
 
 import android.graphics.Color
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.TabLayout
-import android.support.v4.widget.NestedScrollView
+import androidx.core.widget.NestedScrollView
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.tabs.TabLayout
 import com.gyf.immersionbar.ImmersionBar
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.CommodityInfoAdapter
@@ -162,7 +163,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
                 selectNum++
                 tv_spec_count.text = selectNum.toString()
             }else{
-                toast("库存不足")
+                toast("库存不足").setGravity(Gravity.CENTER, 0, 0)
             }
         }
 
@@ -350,6 +351,9 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
                     isChildSelect = true
                     selectSpec.append(it.specificationVoList[i].id+";")
                     specName.append(it.specificationVoList[i].paramName+"/")
+                    if(it.isImage){
+                        image = it.specificationVoList[i].image
+                    }
                     break
                 }
             }
@@ -357,16 +361,13 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
                 isSelectAll = false
                 return@forEach
             }
-            if(it.isImage&&isChildSelect){
-                image = it.image
-            }
         }
         if(!isSelectAll){
-            toast("请选择产品属性")
+            toast("请选择产品属性").setGravity(Gravity.CENTER, 0, 0)
             return
         }
         if(selectNum>selectStock){
-            toast("商品库存不足")
+            toast("商品库存不足").setGravity(Gravity.CENTER, 0, 0)
             return
         }
         val cIds = if(selectSpec.isEmpty()) "" else selectSpec.substring(0,selectSpec.length-1)
@@ -385,6 +386,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             os.specName = sName
             ol.add(os)
             val order = CreateOrderBean(ol)
+            Log.e("Test","image------------->"+image)
             startActivity<OrderConfirmActivity>(Pair("shopList",order))
         }
         specBottomSheet?.state = BottomSheetBehavior.STATE_HIDDEN
@@ -450,7 +452,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
                     }
                 }
                 SXContract.ADDSHOPCART -> {
-                    toast("添加成功，请在购物车中查看")
+                    toast("添加成功，请在购物车中查看").setGravity(Gravity.CENTER, 0, 0)
                     present.getShopCartCount(C.USER_ID)
                 }
                 else -> {
@@ -461,10 +463,10 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
     }
 
     override fun onFailed(string: String?, isRefreshList: Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean, isRefreshList: Boolean) {
-        toast("请检查网络连接")
+        toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
     }
 }

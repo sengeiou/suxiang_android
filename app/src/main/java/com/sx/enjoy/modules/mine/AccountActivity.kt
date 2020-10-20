@@ -1,13 +1,12 @@
 package com.sx.enjoy.modules.mine
 
 import android.content.Intent
-import android.content.SharedPreferences
+import android.view.Gravity
 import com.likai.lib.commonutils.LoadingDialog
 import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
-import com.sx.enjoy.App
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.AuthUserBean
@@ -20,6 +19,7 @@ import com.sx.enjoy.event.UserAuthSuccessEvent
 import com.sx.enjoy.event.UserStateChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.GlideEngine
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.utils.UpLoadImageUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
@@ -96,10 +96,13 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                 .selectionMode(PictureConfig.MULTIPLE)
                 .maxSelectNum(1)
                 .isCamera(true)
-                .cropWH(100,100)
+                .loadImageEngine(GlideEngine.createGlideEngine())
+                .enableCrop(true)
                 .compress(true)
+                .showCropGrid(false)
                 .withAspectRatio(1,1)
-                .hideBottomControls(false)
+                .hideBottomControls(true)
+                .minimumCompressSize(1024)
                 .forResult(1001)
         }
         ll_sex_select.setOnClickListener {
@@ -140,7 +143,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
 
         ll_public_right.setOnClickListener {
             if(et_user_name.text.toString().isEmpty()){
-                toast("用户名不能为空")
+                toast("用户名不能为空").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(photo.isEmpty()){
@@ -231,12 +234,12 @@ class AccountActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

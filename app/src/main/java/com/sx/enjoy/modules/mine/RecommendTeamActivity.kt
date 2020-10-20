@@ -1,17 +1,17 @@
 package com.sx.enjoy.modules.mine
 
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.RecommendTeamAdapter
 import com.sx.enjoy.base.BaseActivity
-import com.sx.enjoy.bean.RiceRecordListBean
 import com.sx.enjoy.bean.TeamListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_recommend_team.*
 import kotlinx.android.synthetic.main.activity_recommend_team.swipe_refresh_layout
-import kotlinx.android.synthetic.main.activity_rice_record.*
 import org.jetbrains.anko.toast
 
 class RecommendTeamActivity : BaseActivity() , SXContract.View {
@@ -19,7 +19,6 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
     private lateinit var present: SXPresent
 
     private lateinit var mAdapter: RecommendTeamAdapter
-
     private var pager = 1
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,"推荐团队")
@@ -35,6 +34,9 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
         mAdapter = RecommendTeamAdapter()
         rcy_recommend_team.layoutManager = LinearLayoutManager(this)
         rcy_recommend_team.adapter = mAdapter
+
+        val headerView = View.inflate(this,R.layout.header_recommend_team,null)
+        mAdapter.addHeaderView(headerView)
 
         getTeamList(true)
 
@@ -93,7 +95,7 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -113,7 +115,7 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

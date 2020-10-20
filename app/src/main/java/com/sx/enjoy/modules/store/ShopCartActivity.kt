@@ -1,9 +1,9 @@
 package com.sx.enjoy.modules.store
 
-import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.ShopCartAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -139,7 +139,7 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                     if(mAdapter.data[position].goodsNumber>1){
                         present.addCommodityNumber(mAdapter.data[position].id,(mAdapter.data[position].goodsNumber-1).toString(),position,0)
                     }else{
-                        toast("不能再减少了")
+                        toast("不能再减少了").setGravity(Gravity.CENTER, 0, 0)
                     }
                 }
                 R.id.tv_cart_delete -> {
@@ -223,13 +223,13 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

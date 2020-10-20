@@ -1,5 +1,6 @@
 package com.sx.enjoy.modules.mine
 
+import android.view.Gravity
 import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.OrderCommodityAdapter
@@ -150,11 +151,11 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
                     }
                 }
                 SXContract.CANCELORDER -> {
-                    toast("订单已取消")
+                    toast("订单已取消").setGravity(Gravity.CENTER, 0, 0)
                     getOrderDetails()
                 }
                 SXContract.DELETEORDER -> {
-                    toast("订单已删除")
+                    toast("订单已删除").setGravity(Gravity.CENTER, 0, 0)
                     finish()
                 }
                 else -> {
@@ -166,12 +167,12 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 }

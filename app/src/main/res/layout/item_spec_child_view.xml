@@ -9,15 +9,15 @@
         android:id="@+id/tv_spec_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_marginTop="@dimen/dimen_8"
         android:layout_marginLeft="@dimen/dimen_15"
         android:text="颜色"
         android:textColor="@color/title_main_color"
-        android:textSize="@dimen/text_15" />
+        android:textSize="@dimen/text_13" />
 
     <com.zhy.view.flowlayout.TagFlowLayout
         android:id="@+id/tf_space_list"
-        android:layout_marginTop="@dimen/dimen_16"
+        android:layout_marginTop="@dimen/dimen_10"
         android:layout_marginLeft="@dimen/dimen_15"
         android:layout_marginRight="@dimen/dimen_15"
         android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package com.sx.enjoy.modules.login
 
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.Gravity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.UserBean
@@ -58,15 +59,15 @@ class LoginActivity : BaseActivity() ,SXContract.View{
         }
         tv_login.setOnClickListener {
             if(et_user_phone.text.isEmpty()){
-                toast("请输入手机号")
+                toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("手机号不正确")
+                toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_password.text.isEmpty()){
-                toast("请输入密码")
+                toast("请输入密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.login(et_user_phone.text.toString(),EncryptionUtil.MD5(et_password.text.toString()))
@@ -96,12 +97,12 @@ class LoginActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

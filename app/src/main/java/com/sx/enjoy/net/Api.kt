@@ -69,6 +69,7 @@ class Api private constructor(hostType: Int) {
         val headerInterceptor = Interceptor{ chain ->
             val build = chain.request().newBuilder()
             build.addHeader("Content-Type", "application/json; charset=utf-8")
+            build.addHeader("deviceType","sxApp")
             chain.proceed(build.build())
         }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,7 @@
     android:background="@color/background"
     tools:context=".modules.store.CommodityActivity">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_commodity_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -166,7 +166,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcy_commodity_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -197,7 +197,7 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcy_like_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -216,10 +216,10 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_commodity_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_50"
@@ -244,7 +244,7 @@
                     android:layout_marginLeft="@dimen/dimen_15"
                     android:src="@mipmap/ic_public_back"/>
 
-                <android.support.design.widget.TabLayout
+                <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tl_commodity_title"
                     android:layout_width="@dimen/dimen_180"
                     android:layout_height="@dimen/dimen_30"
@@ -281,7 +281,7 @@
 
         </FrameLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -322,7 +322,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_13"
+                        android:textSize="@dimen/text_11"
                         android:textColor="@color/color_666666"
                         android:text="购物车"/>
 
@@ -344,7 +344,7 @@
                 android:background="@color/color_FB9A37"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_13"
                 android:text="加入购物车"/>
 
             <TextView
@@ -355,7 +355,7 @@
                 android:background="@color/main_color"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_16"
+                android:textSize="@dimen/text_13"
                 android:text="立即购买"/>
 
         </LinearLayout>
@@ -395,11 +395,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/v_head_spec"
-                android:paddingTop="@dimen/dimen_80"
+                android:paddingTop="@dimen/dimen_70"
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <android.support.v4.widget.NestedScrollView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -411,7 +411,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rcy_spec_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
@@ -419,7 +419,7 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/dimen_1"
-                            android:layout_marginTop="@dimen/dimen_20"
+                            android:layout_marginTop="@dimen/dimen_15"
                             android:layout_marginLeft="@dimen/dimen_15"
                             android:layout_marginRight="@dimen/dimen_15"
                             android:background="@color/line"/>
@@ -427,8 +427,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dimen_30"
-                            android:layout_marginBottom="@dimen/dimen_40"
+                            android:layout_marginTop="@dimen/dimen_15"
+                            android:layout_marginBottom="@dimen/dimen_20"
                             android:paddingLeft="@dimen/dimen_15"
                             android:paddingRight="@dimen/dimen_15"
                             android:gravity="center_vertical">
@@ -439,12 +439,12 @@
                                 android:layout_height="wrap_content"
                                 android:text="购买数量"
                                 android:textColor="@color/title_main_color"
-                                android:textSize="@dimen/text_15" />
+                                android:textSize="@dimen/text_13" />
 
                             <LinearLayout
                                 android:id="@+id/ll_spec_sub"
-                                android:layout_width="@dimen/dimen_25"
-                                android:layout_height="@dimen/dimen_25"
+                                android:layout_width="@dimen/dimen_20"
+                                android:layout_height="@dimen/dimen_20"
                                 android:padding="@dimen/dimen_5"
                                 android:background="@color/color_D5D5D5">
 
@@ -458,21 +458,21 @@
                             <TextView
                                 android:id="@+id/tv_spec_count"
                                 android:layout_width="wrap_content"
-                                android:layout_height="@dimen/dimen_25"
-                                android:paddingLeft="@dimen/dimen_18"
-                                android:paddingRight="@dimen/dimen_18"
+                                android:layout_height="@dimen/dimen_20"
+                                android:paddingLeft="@dimen/dimen_12"
+                                android:paddingRight="@dimen/dimen_12"
                                 android:layout_marginLeft="@dimen/dimen_5"
                                 android:layout_marginRight="@dimen/dimen_5"
                                 android:background="@drawable/bg_grey_line"
                                 android:gravity="center"
-                                android:textSize="@dimen/text_15"
+                                android:textSize="@dimen/text_13"
                                 android:textColor="@color/title_main_color"
                                 android:text="1"/>
 
                             <LinearLayout
                                 android:id="@+id/ll_spec_add"
-                                android:layout_width="@dimen/dimen_25"
-                                android:layout_height="@dimen/dimen_25"
+                                android:layout_width="@dimen/dimen_20"
+                                android:layout_height="@dimen/dimen_20"
                                 android:padding="@dimen/dimen_5"
                                 android:background="@color/color_D5D5D5">
 
@@ -487,14 +487,14 @@
 
                     </LinearLayout>
 
-                </android.support.v4.widget.NestedScrollView>
+                </androidx.core.widget.NestedScrollView>
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_47"
-                    android:layout_marginLeft="@dimen/dimen_30"
-                    android:layout_marginRight="@dimen/dimen_30"
-                    android:layout_marginBottom="@dimen/dimen_15"
+                    android:layout_height="@dimen/dimen_40"
+                    android:layout_marginLeft="@dimen/dimen_20"
+                    android:layout_marginRight="@dimen/dimen_20"
+                    android:layout_marginBottom="@dimen/dimen_10"
                     android:layout_marginTop="@dimen/dimen_10">
 
                     <TextView
@@ -520,7 +520,7 @@
                             android:background="@drawable/bg_add_cart_full_left_24"
                             android:gravity="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/text_16"
+                            android:textSize="@dimen/text_13"
                             android:text="加入购物车"/>
 
                         <TextView
@@ -531,7 +531,7 @@
                             android:background="@drawable/bg_buy_now_full_right_24"
                             android:gravity="center"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/text_16"
+                            android:textSize="@dimen/text_13"
                             android:text="立即购买"/>
 
                     </LinearLayout>
@@ -548,8 +548,8 @@
 
                 <ImageView
                     android:id="@+id/iv_spec_head"
-                    android:layout_width="@dimen/dimen_90"
-                    android:layout_height="@dimen/dimen_90"/>
+                    android:layout_width="@dimen/dimen_80"
+                    android:layout_height="@dimen/dimen_80"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -615,4 +615,4 @@
 
     </RelativeLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

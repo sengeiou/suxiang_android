@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.home
 
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.WalkHistoryAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -96,7 +97,7 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -116,7 +117,7 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

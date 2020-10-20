@@ -1,8 +1,7 @@
 package com.sx.enjoy.modules.home
 
 import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import android.view.Gravity
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -156,12 +155,12 @@ class NewsDetailsActivity : BaseActivity(),SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

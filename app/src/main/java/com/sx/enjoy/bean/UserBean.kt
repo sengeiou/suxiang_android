@@ -30,4 +30,5 @@ class UserBean: LitePalSupport(){
     var aliNumber: String = ""
     var email: String = ""
     var referralCode: String = ""
+    var userLink: String = ""
 }

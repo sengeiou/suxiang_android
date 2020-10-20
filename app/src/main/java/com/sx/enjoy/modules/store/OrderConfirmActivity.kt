@@ -2,8 +2,9 @@ package com.sx.enjoy.modules.store
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.OrderConfirmAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -86,7 +87,7 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
                 return@setOnClickListener
             }
             if(addressId.isEmpty()){
-                toast("请添加收货地址")
+                toast("请添加收货地址").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.createOrder(C.USER_ID,addressId,footView.et_user_remark.text.toString(),shopList!!.orderList)
@@ -147,12 +148,12 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

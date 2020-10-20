@@ -1,5 +1,6 @@
 package com.sx.enjoy.modules.mine
 
+import android.view.Gravity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
@@ -41,11 +42,11 @@ class FeedbackActivity : BaseActivity() ,SXContract.View{
         }
         tv_submit.setOnClickListener {
             if(!tb_question_1.isChecked&&!tb_question_2.isChecked){
-                toast("请选择反馈问题的类型")
+                toast("请选择反馈问题的类型").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_feedback_reason.text.isEmpty()){
-                toast("请输入您的宝贵意见")
+                toast("请输入您的宝贵意见").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.userFeedback(et_feedback_reason.text.toString(),"",feedbackType.toString())
@@ -70,12 +71,12 @@ class FeedbackActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

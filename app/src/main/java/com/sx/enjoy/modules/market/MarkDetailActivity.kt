@@ -1,6 +1,6 @@
 package com.sx.enjoy.modules.market
 
-import android.app.Activity
+import android.view.Gravity
 import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
@@ -28,6 +28,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
     private var marketDetail:MarketListBean? = null
 
     private var type = 0
+    private var isSend = false
     private var marketId = ""
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,if(type==0) "买入详情" else "卖出详情")
@@ -59,7 +60,10 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                 if(type == C.MARKET_ORDER_STATUS_BUY){
                     startActivity<SellRiceActivity>(Pair("type",type),Pair("marketId",marketId),Pair("amount",it.amount), Pair("buyNum",it.richNum), Pair("orderNo",it.orderNo))
                 }else{
-                    present.createMarketOrder(C.USER_ID,type.toString(),it.amount,it.richNum,"",it.orderNo)
+                    if(!isSend){
+                        isSend = true
+                        present.createMarketOrder(C.USER_ID,type.toString(),it.amount,it.richNum,"",it.orderNo)
+                    }
                 }
             }
         }
@@ -96,6 +100,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                     }
                 }
                 SXContract.CREATEMARKETORDER -> {
+                    isSend = false
                     noticeDialog.showNotice(8)
                     EventBus.getDefault().post(MarketSellSuccessEvent(0))
                 }
@@ -108,12 +113,14 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        isSend = false
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        isSend = false
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

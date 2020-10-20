@@ -2,9 +2,10 @@ package com.sx.enjoy.modules.home
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
@@ -46,6 +47,8 @@ class HomeFragment : BaseFragment(),SXContract.View{
     private var titleType = 0
     private var targetWalk = 0
 
+    private var isInitView = false
+
 
     override fun getLayoutResource() = R.layout.fragment_home
 
@@ -73,11 +76,13 @@ class HomeFragment : BaseFragment(),SXContract.View{
         iv_home_head.setImageResource(R.mipmap.ic_home_bg_walk)
         Glide.with(activity!!).load(R.mipmap.ic_step_run).into(iv_note_type)
 
-        val step = SharedPreferencesUtil.getCommonInt(activity,"step")
-        val minStep = SharedPreferencesUtil.getCommonInt(activity,"minStep")
+        if(C.USER_ID.isNotEmpty()){
+            val step = SharedPreferencesUtil.getCommonInt(activity,"step")
+            val minStep = SharedPreferencesUtil.getCommonInt(activity,"minStep")
+            headView.tv_today_step.text = (step+minStep).toString()
+        }
 
-        headView.tv_today_step.text = (step+minStep).toString()
-
+        isInitView = true
         initEvent()
     }
 
@@ -108,9 +113,11 @@ class HomeFragment : BaseFragment(),SXContract.View{
     }
 
     fun initStep(step:Int){
-        headView.tv_today_step.text = step.toString()
-        if(targetWalk != 0){
-            headView.cp_walk_progress.value = ((step)/targetWalk.toFloat())*100
+        if(isInitView){
+            headView.tv_today_step.text = step.toString()
+            if(targetWalk != 0){
+                headView.cp_walk_progress.value = ((step)/targetWalk.toFloat())*100
+            }
         }
     }
 
@@ -388,7 +395,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        activity?.toast("请检查网络连接")
+        activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()

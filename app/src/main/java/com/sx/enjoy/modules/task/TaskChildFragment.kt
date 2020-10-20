@@ -1,8 +1,8 @@
 package com.sx.enjoy.modules.task
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Gravity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.TaskListAdapter
@@ -205,7 +205,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            activity?.toast("请检查网络连接")
+            activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

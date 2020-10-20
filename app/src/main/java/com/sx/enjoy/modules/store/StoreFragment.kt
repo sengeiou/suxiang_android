@@ -1,10 +1,10 @@
 package com.sx.enjoy.modules.store
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -106,12 +106,12 @@ class StoreFragment : BaseFragment(),SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast("请检查网络连接")
+        activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     companion object {

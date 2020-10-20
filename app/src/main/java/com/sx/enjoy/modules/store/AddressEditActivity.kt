@@ -1,5 +1,6 @@
 package com.sx.enjoy.modules.store
 
+import android.view.Gravity
 import com.lljjcoder.Interface.OnCityItemClickListener
 import com.lljjcoder.bean.CityBean
 import com.lljjcoder.bean.DistrictBean
@@ -8,6 +9,7 @@ import com.lljjcoder.citywheel.CityConfig
 import com.lljjcoder.style.citypickerview.CityPickerView
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.AddressBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
@@ -29,6 +31,8 @@ class AddressEditActivity : BaseActivity() ,SXContract.View{
     private var selectCity = ""
     private var selectDistrict = ""
 
+    private var address: AddressBean? = null
+
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,if(editType == 0) "新增收货地址" else "编辑收货地址")
 
@@ -40,6 +44,17 @@ class AddressEditActivity : BaseActivity() ,SXContract.View{
 
     override fun initView() {
         editType = intent.getIntExtra("type",0)
+        if(editType == 1){
+            address = intent.getSerializableExtra("address") as AddressBean
+            et_user_name.setText(address?.receiverName)
+            et_user_phone.setText(address?.receiverPhone)
+            tv_city_area.text = address?.province+" "+address?.city+" "+address?.area
+            selectProvince = address?.province.toString()
+            selectCity = address?.city.toString()
+            selectDistrict = address?.area.toString()
+            et_address_detail.setText(address?.receiverAddress)
+            rg_address_default.check(if(address?.isDefault==1) R.id.rb_default_1 else R.id.rb_default_2)
+        }
 
         noticeDialog = NoticeDialog(this)
         mCityPicker = CityPickerView()
@@ -75,26 +90,26 @@ class AddressEditActivity : BaseActivity() ,SXContract.View{
                 return@setOnClickListener
             }
             if(et_user_name.text.isEmpty()){
-                toast("请输入收件人")
+                toast("请输入收件人").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_user_phone.text.isEmpty()){
-                toast("请输入收件人联系电话")
+                toast("请输入收件人联系电话").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("联系电话不正确")
+                toast("联系电话不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(tv_city_area.text.isEmpty()){
-                toast("请选择省市区")
+                toast("请选择省市区").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_address_detail.text.isEmpty()){
-                toast("请输入详细地址")
+                toast("请输入详细地址").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
-            present.saveAddress(C.USER_ID,et_address_detail.text.toString(),et_user_name.text.toString(),et_user_phone.text.toString(),selectProvince,selectCity,selectDistrict,if(rb_default_1.isChecked) "1" else "0")
+            present.saveAddress(C.USER_ID,if(editType == 1) address?.id.toString() else "", et_address_detail.text.toString(),et_user_name.text.toString(),et_user_phone.text.toString(),selectProvince,selectCity,selectDistrict,if(rb_default_1.isChecked) "1" else "0")
         }
         ll_city.setOnClickListener {
             mCityPicker.showCityPicker()
@@ -129,12 +144,12 @@ class AddressEditActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

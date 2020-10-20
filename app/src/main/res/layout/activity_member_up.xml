@@ -23,7 +23,7 @@
         android:id="@+id/tv_level_up"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_45"
-        android:background="@drawable/bg_main_full_2"
+        android:background="@drawable/bg_main_1_full_2"
         android:layout_marginLeft="@dimen/dimen_30"
         android:layout_marginRight="@dimen/dimen_30"
         android:layout_marginTop="@dimen/dimen_10"

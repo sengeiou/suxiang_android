@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.store
 
-import android.support.v7.widget.GridLayoutManager
+import android.view.Gravity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.CommodityListAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -143,7 +144,7 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -163,7 +164,7 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.view.Gravity
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -40,6 +41,7 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
     }
 
 
+    @SuppressLint("MissingPermission")
     private fun checkPermission(){
         AndPermission.with(this)
             .runtime()
@@ -181,12 +183,12 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

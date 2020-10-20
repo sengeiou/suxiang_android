@@ -1,22 +1,16 @@
 package com.sx.enjoy.modules.mine
 
-import android.support.v7.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import android.view.Gravity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.RiceRecordAdapter
 import com.sx.enjoy.base.BaseActivity
-import com.sx.enjoy.bean.MarketListBean
-import com.sx.enjoy.bean.MarketQuotesBean
 import com.sx.enjoy.bean.RiceRecordListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_rice_record.*
 import kotlinx.android.synthetic.main.activity_rice_record.swipe_refresh_layout
-import kotlinx.android.synthetic.main.fragment_market.*
-import kotlinx.android.synthetic.main.header_market_view.view.*
 import org.jetbrains.anko.toast
 
 class RiceRecordActivity : BaseActivity() , SXContract.View{
@@ -97,7 +91,7 @@ class RiceRecordActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -117,7 +111,7 @@ class RiceRecordActivity : BaseActivity() , SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

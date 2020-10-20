@@ -1,7 +1,8 @@
 package com.sx.enjoy.view;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class NoScrollLinearLayoutManager extends LinearLayoutManager {
 

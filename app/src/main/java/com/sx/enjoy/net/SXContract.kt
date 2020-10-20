@@ -75,6 +75,7 @@ interface SXContract {
         var MEMBERUP = "memberUp"
         var GETMEMBERINFO = "getMemberInfo"
         var GETNEWSDETAILS = "getNewsDetails"
+        var DELETEADDRESS = "deleteAddress"
     }
 
     interface View: BaseView
@@ -121,7 +122,7 @@ interface SXContract {
         fun addShopCart(userId:String,goodsId:String,constituteId:String,goodsNumber:String):Observable<HttpResult<String>>
         fun createOrder(userId:String,addressId:String,remark:String,ordersDtoList:List<OrderSendBean>):Observable<HttpResult<NewOrderBean>>
         fun getFirstAddress(userId:String):Observable<HttpResult<AddressBean>>
-        fun saveAddress(userId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String):Observable<HttpResult<String>>
+        fun saveAddress(userId:String,addressId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String):Observable<HttpResult<String>>
         fun getMyAddressList(userId:String):Observable<HttpResult<List<AddressBean>>>
         fun getMyShopCart(userId:String):Observable<HttpResult<List<ShopCartBean>>>
         fun addCommodityNumber(id:String,goodsNumber:String):Observable<HttpResult<String>>
@@ -140,6 +141,7 @@ interface SXContract {
         fun memberUp(userId:String):Observable<HttpResult<String>>
         fun getMemberInfo(userId:String):Observable<HttpResult<MemberUpBean>>
         fun getNewsDetails(id:String):Observable<HttpResult<NewsDetailsBean>>
+        fun deleteAddress(id:String):Observable<HttpResult<String>>
     }
 
     interface Present{
@@ -184,7 +186,7 @@ interface SXContract {
         fun addShopCart(userId:String,goodsId:String,constituteId:String,goodsNumber:String)
         fun createOrder(userId:String,addressId:String,remark:String,ordersDtoList:List<OrderSendBean>)
         fun getFirstAddress(userId:String)
-        fun saveAddress(userId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String)
+        fun saveAddress(userId:String,addressId:String,receiverAddress:String,receiverName:String,receiverPhone:String,province:String,city:String,area:String,isDefault:String)
         fun getMyAddressList(userId:String)
         fun getMyShopCart(userId:String)
         fun addCommodityNumber(id:String,goodsNumber:String,position:Int,type:Int)
@@ -203,6 +205,7 @@ interface SXContract {
         fun memberUp(userId:String)
         fun getMemberInfo(userId:String)
         fun getNewsDetails(id:String)
+        fun deleteAddress(id:String)
     }
 
 }

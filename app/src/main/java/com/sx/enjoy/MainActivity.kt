@@ -2,12 +2,11 @@ package com.sx.enjoy
 
 import android.content.Intent
 import android.os.Build
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
+import android.view.Gravity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.base.BaseActivity
-import com.sx.enjoy.bean.StepRiceBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.*
@@ -300,7 +299,7 @@ class MainActivity :BaseActivity() ,SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {}

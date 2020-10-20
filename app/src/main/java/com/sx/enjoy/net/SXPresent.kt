@@ -665,8 +665,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun saveAddress(userId: String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String) {
-        model.saveAddress(userId,receiverAddress,receiverName,receiverPhone,province,city,area,isDefault)
+    override fun saveAddress(userId: String, addressId:String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String) {
+        model.saveAddress(userId,addressId,receiverAddress,receiverName,receiverPhone,province,city,area,isDefault)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<String>(mContext,true){
                 override fun onSuccess(t: HttpResult<String>?) {
@@ -961,6 +961,22 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETNEWSDETAILS,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<NewsDetailsBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun deleteAddress(id: String) {
+        model.deleteAddress(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.DELETEADDRESS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
                     view.onFailed(t.message,false)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {

@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.mine
 
 import android.annotation.SuppressLint
+import android.view.Gravity
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -66,6 +67,12 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
                     data?.let {
                         data as MemberUpBean
                         tv_member_up.text = data.content
+                        if(data.isUpgrade){
+                            tv_level_up.setBackgroundResource(R.drawable.bg_main_full_2)
+                        }else{
+                            tv_level_up.isClickable = user.membershipLevel<=0
+                            tv_level_up.setBackgroundResource(R.drawable.bg_main_1_full_2)
+                        }
                     }
                 }
                 SXContract.MEMBERUP -> {
@@ -82,12 +89,12 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

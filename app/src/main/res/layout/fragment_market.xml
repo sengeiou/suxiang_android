@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:background="@color/background">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_market_title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_50"
@@ -46,7 +46,7 @@
 
             </RelativeLayout>
 
-        </android.support.v7.widget.Toolbar>
+        </androidx.appcompat.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                 app:srlAccentColor="@color/color_3A3A3A"
                 app:srlPrimaryColor="@color/white"/>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcy_market_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>

@@ -4,9 +4,10 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -188,27 +189,29 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 SXContract.GETMARKETQUOTES -> {
                     data?.let {
                         data as List<MarketQuotesBean>
-                        val xAxis = headView.lc_market_quotations.xAxis
-                        xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
-                            data[value.toInt()].createTimeStr
-                        }
+                        if(data.isNotEmpty()){
+                            val xAxis = headView.lc_market_quotations.xAxis
+                            xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
+                                data[value.toInt()].createTimeStr
+                            }
 
-                        val entries = arrayListOf<Entry>()
-                        for (i in data.indices){
-                            entries.add(Entry(i.toFloat(), data[i].amount.toFloat()))
-                        }
-                        val dataSet = LineDataSet(entries, "")
-                        dataSet.setDrawValues(true) // 设置是否显示数据点的值
-                        dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
-                        dataSet.circleSize = 5f // 设置数据点的大小
-                        dataSet.lineWidth = 2f //线条宽度
-                        dataSet.valueTextSize = 11f
-                        dataSet.color = resources.getColor(R.color.color_086E07)
-                        dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
+                            val entries = arrayListOf<Entry>()
+                            for (i in data.indices){
+                                entries.add(Entry(i.toFloat(), data[i].amount.toFloat()))
+                            }
+                            val dataSet = LineDataSet(entries, "")
+                            dataSet.setDrawValues(true) // 设置是否显示数据点的值
+                            dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
+                            dataSet.circleSize = 5f // 设置数据点的大小
+                            dataSet.lineWidth = 2f //线条宽度
+                            dataSet.valueTextSize = 11f
+                            dataSet.color = resources.getColor(R.color.color_086E07)
+                            dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
 
-                        val lineData = LineData(dataSet)
-                        headView.lc_market_quotations.data = lineData
-                        headView.lc_market_quotations.invalidate()
+                            val lineData = LineData(dataSet)
+                            headView.lc_market_quotations.data = lineData
+                            headView.lc_market_quotations.invalidate()
+                        }
                     }
                 }
                 else -> {
@@ -220,7 +223,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
                 swipe_refresh_layout.finishRefresh()
@@ -240,7 +243,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 mAdapter.loadMoreFail()
             }
         }else{
-            activity?.toast("请检查网络连接")
+            activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

@@ -1,16 +1,14 @@
 package com.sx.enjoy.modules.task
 
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.bean.TaskRiceBean
-import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.modules.mine.WebContentActivity
@@ -33,7 +31,6 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     }
 
     override fun initView() {
-        ImmersionBar.with(activity!!).statusBarDarkFont(true).titleBar(tb_task_title).init()
 
         initFragment()
         initEvent()
@@ -160,11 +157,11 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        activity?.toast("请检查网络连接")
+        activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
     }
 
 

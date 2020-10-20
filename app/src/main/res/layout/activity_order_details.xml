@@ -10,7 +10,7 @@
 
     <include layout="@layout/title_public_view"/>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -164,7 +164,7 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcy_commodity_list"
                 android:layout_marginTop="@dimen/dimen_1"
                 android:layout_width="match_parent"
@@ -203,7 +203,7 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/ll_order_bottom"

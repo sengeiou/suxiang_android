@@ -1,6 +1,7 @@
 package com.likai.lib.app;
 
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.MultiDexApplication;
 
 /**
  * Created by likai on 2018/3/13.
