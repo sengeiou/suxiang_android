@@ -1,6 +1,8 @@
 package com.sx.enjoy.modules.store
 
+import android.content.Context
 import android.view.Gravity
+import android.view.inputmethod.InputMethodManager
 import com.lljjcoder.Interface.OnCityItemClickListener
 import com.lljjcoder.bean.CityBean
 import com.lljjcoder.bean.DistrictBean
@@ -112,6 +114,8 @@ class AddressEditActivity : BaseActivity() ,SXContract.View{
             present.saveAddress(C.USER_ID,if(editType == 1) address?.id.toString() else "", et_address_detail.text.toString(),et_user_name.text.toString(),et_user_phone.text.toString(),selectProvince,selectCity,selectDistrict,if(rb_default_1.isChecked) "1" else "0")
         }
         ll_city.setOnClickListener {
+            val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            im.hideSoftInputFromWindow(et_user_phone.windowToken,0)
             mCityPicker.showCityPicker()
         }
         mCityPicker.setOnCityItemClickListener(object :OnCityItemClickListener(){

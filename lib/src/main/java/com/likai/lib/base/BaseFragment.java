@@ -18,6 +18,8 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 public abstract class BaseFragment extends RxFragment {
     public View mView ;
+    public boolean isLoadComplete = false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public abstract class BaseFragment extends RxFragment {
     }
 
     protected void beForInitView(){}
+    public void refreshData(){}
     protected abstract int getLayoutResource();
     protected abstract void initView();
     public void initData(){}

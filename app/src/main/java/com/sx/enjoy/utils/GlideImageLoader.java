@@ -2,6 +2,7 @@ package com.sx.enjoy.utils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -27,7 +28,7 @@ public class GlideImageLoader extends ImageLoader {
          传输的到的是什么格式，那么这种就使用Object接收和返回，你只需要强转成你传输的类型就行，
          切记不要胡乱强转！
          */
-
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         Glide.with(context).load(path)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)
                         .placeholder(R.mipmap.ic_default_logo)
@@ -51,7 +52,6 @@ public class GlideImageLoader extends ImageLoader {
     //提供createImageView 方法，如果不用可以不重写这个方法，主要是方便自定义ImageView的创建
     @Override
     public ImageView createImageView(Context context) {
-        //使用fresco，需要创建它提供的ImageView，当然你也可以用自己自定义的具有图片加载功能的ImageView
         RoundImageView imageView = new RoundImageView(context);
         return imageView;
     }

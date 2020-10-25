@@ -2,6 +2,7 @@ package com.sx.enjoy.modules.mine
 
 import android.content.Intent
 import android.view.Gravity
+import android.view.View
 import com.likai.lib.commonutils.LoadingDialog
 import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.luck.picture.lib.PictureSelector
@@ -27,6 +28,7 @@ import com.sx.enjoy.view.dialog.ReminderDialog
 import com.sx.enjoy.view.dialog.SexSelectDialog
 import com.umeng.analytics.MobclickAgent
 import kotlinx.android.synthetic.main.activity_account.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import kotlinx.android.synthetic.main.title_public_view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -89,6 +91,9 @@ class AccountActivity : BaseActivity() ,SXContract.View{
     }
 
     private fun initEvent(){
+        iv_network_error.setOnClickListener {
+            present.getAuthUser(C.USER_ID)
+        }
         ll_user_head.setOnClickListener {
             PictureSelector.create(this)
                 .openGallery(PictureMimeType.ofImage())
@@ -216,6 +221,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
                 }
                 SXContract.GETAUTHUSER -> {
                     data.let {
+                        em_network_view.visibility = View.GONE
                         data as AuthUserBean
                         when(data.status){
                             0 -> tv_user_auth.text = "未认证"
@@ -234,11 +240,14 @@ class AccountActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
+        em_network_view.visibility = View.GONE
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        if(boolean){
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
             toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }

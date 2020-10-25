@@ -19,6 +19,9 @@ class WebUrlActivity : BaseActivity() {
         wb_info.settings.blockNetworkImage = false
         wb_info.settings.loadsImagesAutomatically = true
         wb_info.settings.defaultTextEncodingName = "utf-8"
+        wb_info.settings.javaScriptEnabled = true
+        wb_info.settings.setSupportZoom(false)
+        wb_info.settings.builtInZoomControls = false
         wb_info.addJavascriptInterface(this, "App")
 
         wb_info.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {

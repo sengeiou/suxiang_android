@@ -55,17 +55,17 @@ class SignAnswerActivity : BaseActivity() ,SXContract.View{
             if(questList.isEmpty()){
                 return@setOnClickListener
             }
-            if(questIndex>=questList.size){
-                present.userSign(C.USER_ID)
-                return@setOnClickListener
-            }
             if(mAdapter.getSelectItem().isEmpty()){
                 toast("请选择答案").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(questList[questIndex].answer.toLowerCase() == mAdapter.getSelectItem().toLowerCase()){
-                questIndex++
-                initQuestion()
+                if(questIndex<questList.size-1){
+                    questIndex++
+                    initQuestion()
+                }else{
+                    present.userSign(C.USER_ID)
+                }
             }else{
                 errorDialog.show()
             }

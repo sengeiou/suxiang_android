@@ -9,92 +9,156 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_285">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_200"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:layout_marginRight="@dimen/dimen_15">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:id="@+id/rl_step_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.sx.enjoy.view.CircleProgress
+                    android:id="@+id/cp_walk_progress"
+                    android:layout_width="@dimen/dimen_140"
+                    android:layout_height="@dimen/dimen_140"
+                    android:layout_centerInParent="true"
+                    app:antiAlias="true"
+                    app:color_type = "1"
+                    app:arcWidth="@dimen/dimen_10"
+                    app:dottedLineWidth="@dimen/dimen_10"
+                    app:bgArcColor="@color/white"
+                    app:bgArcWidth="@dimen/dimen_1"
+                    app:hintSize="@dimen/dimen_10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.498"
+                    app:maxValue="100"/>
 
                 <RelativeLayout
-                    android:id="@+id/rl_step_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_width="@dimen/dimen_150"
+                    android:layout_height="@dimen/dimen_150"
+                    android:layout_centerInParent="true">
 
-                    <com.sx.enjoy.view.CircleProgress
-                        android:id="@+id/cp_walk_progress"
-                        android:layout_width="@dimen/dimen_160"
-                        android:layout_height="@dimen/dimen_160"
-                        android:layout_centerInParent="true"
-                        app:antiAlias="true"
-                        app:arcWidth="@dimen/dimen_10"
-                        app:dottedLineWidth="@dimen/dimen_10"
-                        app:bgArcColor="@android:color/transparent"
-                        app:bgArcWidth="0dp"
-                        app:hintSize="@dimen/dimen_10"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.498"
-                        app:maxValue="100"
-                        app:startAngle="135"
-                        app:sweepAngle="270" />
+                    <ImageView
+                        android:id="@+id/iv_target_complete"
+                        android:layout_width="@dimen/dimen_45"
+                        android:layout_height="@dimen/dimen_10"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/dimen_50"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/ic_target_complete"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_1A1A1A"
+                        android:textSize="@dimen/text_13"
+                        android:text="今日步数"/>
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_centerInParent="true"
-                        android:gravity="center_horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_13"
-                            android:text="今日步数"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:id="@+id/tv_today_step"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_25"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_E91B1A"
+                            android:textSize="@dimen/text_27"
                             android:text="0"/>
 
-                        <View
-                            android:layout_width="@dimen/dimen_120"
-                            android:layout_height="@dimen/dimen_1"
-                            android:layout_marginTop="@dimen/dimen_5"
-                            android:layout_marginBottom="@dimen/dimen_5"
-                            android:background="@color/title_main_color"/>
-
                         <TextView
-                            android:id="@+id/tv_target_step"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
+                            android:layout_height="match_parent"
+                            android:gravity="bottom"
+                            android:layout_marginLeft="@dimen/dimen_5"
+                            android:layout_marginBottom="@dimen/dimen_6"
                             android:textSize="@dimen/text_13"
-                            android:text="今日目标0步"/>
+                            android:textColor="@color/color_1A1A1A"
+                            android:text="步"/>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_target_step"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_1A1A1A"
+                        android:textSize="@dimen/text_12"
+                        android:text="今日目标0步"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_car_data"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.sx.enjoy.view.CircleProgress
+                    android:id="@+id/cp_car_progress"
+                    android:layout_width="@dimen/dimen_140"
+                    android:layout_height="@dimen/dimen_140"
+                    android:layout_centerInParent="true"
+                    app:antiAlias="true"
+                    app:arcWidth="@dimen/dimen_10"
+                    app:dottedLineWidth="@dimen/dimen_10"
+                    app:bgArcColor="@color/white"
+                    app:bgArcWidth="@dimen/dimen_1"
+                    app:hintSize="@dimen/dimen_10"
+                    app:color_type = "2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.498"
+                    app:maxValue="100"/>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dimen_160"
+                    android:layout_height="@dimen/dimen_160"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:id="@+id/iv_car_complete"
+                        android:layout_width="@dimen/dimen_45"
+                        android:layout_height="@dimen/dimen_10"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/dimen_50"
+                        android:layout_alignParentRight="true"
+                        android:src="@mipmap/ic_target_complete"/>
 
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/ll_step_count"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_40"
-                    android:visibility="gone"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_1A1A1A"
+                        android:textSize="@dimen/text_13"
+                        android:text="今日里程"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -104,132 +168,131 @@
                             android:id="@+id/tv_distances"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_25"
+                            android:textStyle="bold"
+                            android:textColor="@color/color_089930"
+                            android:textSize="@dimen/text_30"
                             android:text="0"/>
 
                         <TextView
-                            android:id="@+id/tv_distances_unit"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dimen_3"
-                            android:textColor="@color/title_main_color"
+                            android:layout_height="match_parent"
+                            android:gravity="bottom"
+                            android:layout_marginLeft="@dimen/dimen_5"
+                            android:layout_marginBottom="@dimen/dimen_8"
                             android:textSize="@dimen/text_13"
+                            android:textColor="@color/color_089930"
                             android:text="km"/>
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/dimen_1"
-                        android:background="@color/white"
-                        android:layout_marginTop="@dimen/dimen_10"
-                        android:layout_marginBottom="@dimen/dimen_10"
-                        android:layout_marginLeft="@dimen/dimen_40"
-                        android:layout_marginRight="@dimen/dimen_40"/>
-
                     <TextView
-                        android:id="@+id/tv_distances_today"
+                        android:id="@+id/tv_target_car"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dimen_3"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_14"
-                        android:text="当日车行公里数"/>
+                        android:textColor="@color/color_1A1A1A"
+                        android:textSize="@dimen/text_12"
+                        android:text="今日目标0km"/>
 
                 </LinearLayout>
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/dimen_40"
-                android:orientation="vertical">
+        </FrameLayout>
 
-                <FrameLayout
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_50"
+            android:layout_marginLeft="@dimen/dimen_15">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_38"
+                android:background="@drawable/bg_gold_full_3">
+
+                <LinearLayout
+                    android:id="@+id/ll_step_rice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:id="@+id/ll_step_rice"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/tv_step_rice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_25"
-                            android:text="0"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dimen_3"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_13"
-                            android:text="米粒"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_car_rice"
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone">
+                        android:layout_marginLeft="@dimen/dimen_3"
+                        android:text="今日"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13" />
 
-                        <TextView
-                            android:id="@+id/tv_car_rice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_25"
-                            android:text="0"/>
+                    <TextView
+                        android:id="@+id/tv_step_rice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dimen_3"
-                            android:textColor="@color/title_main_color"
-                            android:textSize="@dimen/text_13"
-                            android:text="米粒"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_3"
+                        android:text="米粒"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13" />
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                </FrameLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1"
-                    android:background="@color/white"
-                    android:layout_marginTop="@dimen/dimen_10"
-                    android:layout_marginBottom="@dimen/dimen_10"
-                    android:layout_marginLeft="@dimen/dimen_40"
-                    android:layout_marginRight="@dimen/dimen_40"/>
-
-                <TextView
-                    android:id="@+id/tv_rice_today"
+                <LinearLayout
+                    android:id="@+id/ll_car_rice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_3"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_14"
-                    android:text="当日获得米粒数"/>
+                    android:visibility="gone">
 
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_3"
+                        android:text="今日"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13" />
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_car_rice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0.00"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_3"
+                        android:text="米粒"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_13" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="@dimen/dimen_40"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_home_rice"/>
+
+        </RelativeLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_home_share"
+            android:layout_width="@dimen/dimen_40"
+            android:layout_height="@dimen/dimen_40"
+            android:layout_marginTop="@dimen/dimen_125"
             android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dimen_110"
+            android:layout_marginBottom="@dimen/dimen_60"
             android:layout_marginRight="@dimen/dimen_15"
             android:src="@mipmap/ic_home_share"/>
 
@@ -420,8 +483,8 @@
 
             <com.superluo.textbannerlibrary.TextBannerView
                 android:id="@+id/tb_home_notice"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimen_15"
                 android:layout_marginRight="@dimen/dimen_15"
                 app:setDirection="bottom_to_top"

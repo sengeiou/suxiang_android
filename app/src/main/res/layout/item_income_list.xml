@@ -36,15 +36,38 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_rice_income"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableRight="@mipmap/ic_rice_circle"
-            android:drawablePadding="@dimen/dimen_10"
-            android:textSize="@dimen/text_13"
-            android:textColor="@color/title_main_color"
-            android:text="+30"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="right">
+
+            <TextView
+                android:id="@+id/tv_rice_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:drawableRight="@mipmap/ic_rice_circle"
+                android:drawablePadding="@dimen/dimen_8"
+                android:textColor="@color/title_main_color"
+                android:textSize="@dimen/text_13"
+                android:text="+3000"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_rice_fee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/title_main_color"
+                android:textSize="@dimen/text_11"
+                android:text="手续费:0.00"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

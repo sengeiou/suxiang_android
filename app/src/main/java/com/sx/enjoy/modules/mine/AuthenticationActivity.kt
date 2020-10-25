@@ -1,12 +1,13 @@
 package com.sx.enjoy.modules.mine
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
-import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.alipay.sdk.app.PayTask
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sx.enjoy.R
@@ -18,11 +19,10 @@ import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.UserAuthSuccessEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
-import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.utils.RegularUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
-import com.sx.enjoy.view.dialog.PayMethodDialog
 import kotlinx.android.synthetic.main.activity_authentication.*
+import kotlinx.android.synthetic.main.activity_authentication.iv_close
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.toast
 
@@ -77,6 +77,8 @@ class AuthenticationActivity : BaseActivity() ,SXContract.View{
                 toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
+            val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            im.hideSoftInputFromWindow(et_user_phone.windowToken,0)
             payBottomSheet?.state = BottomSheetBehavior.STATE_EXPANDED
         }
 

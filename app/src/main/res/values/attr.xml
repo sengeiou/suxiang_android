@@ -41,6 +41,8 @@
     <!-- 线条宽度 -->
     <attr name="dottedLineWidth" format="dimension" />
 
+    <attr name="color_type" format="integer" />
+
     <declare-styleable name="CircleProgressBar">
         <attr name="antiAlias" />
         <attr name="startAngle" />
@@ -65,6 +67,7 @@
         <attr name="dottedLineCount" />
         <attr name="lineDistance" />
         <attr name="dottedLineWidth" />
+        <attr name="color_type"/>
     </declare-styleable>
 
 </resources>

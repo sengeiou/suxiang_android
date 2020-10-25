@@ -1,7 +1,9 @@
 package com.sx.enjoy.modules.task
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -16,6 +18,7 @@ import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.view.dialog.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.fragment_task_child.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
@@ -31,6 +34,9 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     private lateinit var reminderDialog: ReminderDialog
     private lateinit var noticeDialog: NoticeDialog
     private lateinit var taskErrorDialog: TaskErrorDialog
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private lateinit var mAdapter: TaskListAdapter
 
@@ -57,6 +63,10 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
         mAdapter = TaskListAdapter(type)
         rcy_task_child.layoutManager = LinearLayoutManager(activity)
         rcy_task_child.adapter = mAdapter
+
+        emptyView = View.inflate(activity,R.layout.empty_public_view,null)
+        errorView = View.inflate(activity,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         initData()
         initEvent()
@@ -102,12 +112,15 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
 
     private fun initEvent(){
         swipe_refresh_layout.setOnRefreshListener {
-            getMyTaskList(true)
+            mOnRiceRefreshListener?.onBuyTaskSuccess()
         }
         if(type!=0){
             mAdapter.setOnLoadMoreListener {
                 getMyTaskList(false)
             }
+        }
+        errorView.iv_network_error.setOnClickListener {
+            mOnRiceRefreshListener?.onBuyTaskSuccess()
         }
         mAdapter.setOnItemChildClickListener { _, view, position ->
             when(view.id){
@@ -151,7 +164,10 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
                     data?.let {
                         data as List<TaskListBean>
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
+                            mOnRiceRefreshListener?.onRefreshSuccess()
                             if(type>0){
                                 mAdapter.setEnableLoadMore(true)
                             }
@@ -182,6 +198,8 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 if(type>0){
                     mAdapter.setEnableLoadMore(true)
@@ -197,6 +215,8 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 if(type>0){
                     mAdapter.setEnableLoadMore(true)
@@ -212,6 +232,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
     interface OnRiceRefreshListener{
         fun onRiceFresh()
         fun onBuyTaskSuccess()
+        fun onRefreshSuccess()
     }
 
     private var mOnRiceRefreshListener:OnRiceRefreshListener? = null

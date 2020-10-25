@@ -15,6 +15,7 @@ import com.sx.enjoy.adapter.SpecChildListAdapter
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.*
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.ShopCartChangeEvent
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
@@ -23,6 +24,10 @@ import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.NoScrollGridManager
 import com.sx.enjoy.view.NoScrollLinearLayoutManager
 import kotlinx.android.synthetic.main.activity_commodity.*
+import kotlinx.android.synthetic.main.empty_public_network.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import q.rorbin.badgeview.Badge
@@ -59,6 +64,8 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
 
     override fun initView() {
         ImmersionBar.with(this).statusBarDarkFont(true).titleBar(tb_commodity_title).init()
+
+        EventBus.getDefault().register(this)
 
         commodityId = intent.getStringExtra("commodityId")
 
@@ -99,6 +106,14 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
 
 
     private fun initEvent(){
+        iv_network_error.setOnClickListener {
+            present.getCommodityDetails(commodityId)
+            if(C.USER_ID.isNotEmpty()){
+                present.getShopCartCount(C.USER_ID)
+            }else{
+                qbv1?.badgeNumber = 0
+            }
+        }
         v_back.setOnClickListener {
             finish()
         }
@@ -238,6 +253,9 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
                 tl_commodity_title.setScrollPosition(2,0f,true)
                 return@setOnScrollChangeListener
             }
+        }
+        likeAdapter.setOnItemClickListener { adapter, view, position ->
+            startActivity<CommodityActivity>(Pair("commodityId",likeAdapter.data[position].id))
         }
     }
 
@@ -386,10 +404,23 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             os.specName = sName
             ol.add(os)
             val order = CreateOrderBean(ol)
-            Log.e("Test","image------------->"+image)
             startActivity<OrderConfirmActivity>(Pair("shopList",order))
         }
         specBottomSheet?.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public fun shopCartChange(event: ShopCartChangeEvent){
+        if(C.USER_ID.isNotEmpty()){
+            present.getShopCartCount(C.USER_ID)
+        }else{
+            qbv1?.badgeNumber = 0
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onSuccess(flag: String?, data: Any?) {
@@ -397,6 +428,7 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             when (flag) {
                 SXContract.GETCOMMODITYDETAILS -> {
                     data?.let {
+                        em_network_view.visibility = View.GONE
                         data as CommodityDetailsBean
                         commodity = data
                         ban_commodity_info.visibility = View.VISIBLE
@@ -464,9 +496,14 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
 
     override fun onFailed(string: String?, isRefreshList: Boolean) {
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
+        em_network_view.visibility = View.GONE
     }
 
     override fun onNetError(boolean: Boolean, isRefreshList: Boolean) {
-        toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
+        }
     }
 }

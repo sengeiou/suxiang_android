@@ -59,14 +59,14 @@ public class HomeSelectTitle extends LinearLayout implements View.OnClickListene
         switch (v.getId()){
             case R.id.rl_walk:
                 tvWalk.setTextColor(getResources().getColor(R.color.main_color));
-                tvCar.setTextColor(getResources().getColor(R.color.black));
+                tvCar.setTextColor(getResources().getColor(R.color.title_main_color));
                 vWalk.setVisibility(View.VISIBLE);
                 vCar.setVisibility(View.GONE);
                 mOnHomeTitleSelectListener.onHomeTitleSelect(0);
                 break;
             case R.id.rl_car:
-                tvWalk.setTextColor(getResources().getColor(R.color.black));
-                tvCar.setTextColor(getResources().getColor(R.color.main_color));
+                tvWalk.setTextColor(getResources().getColor(R.color.title_main_color));
+                tvCar.setTextColor(getResources().getColor(R.color.second_color));
                 vWalk.setVisibility(View.GONE);
                 vCar.setVisibility(View.VISIBLE);
                 mOnHomeTitleSelectListener.onHomeTitleSelect(1);

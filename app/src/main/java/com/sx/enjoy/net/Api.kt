@@ -2,7 +2,10 @@ package com.sx.enjoy.net
 
 
 import android.text.TextUtils
+import android.util.Log
 import android.util.SparseArray
+import android.view.Gravity
+import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.likai.lib.app.BaseApplication
 import com.likai.lib.commonutils.NetUtils
@@ -14,6 +17,8 @@ import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.jetbrains.anko.runOnUiThread
+import org.jetbrains.anko.toast
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -44,6 +49,11 @@ class Api private constructor(hostType: Int) {
         }
 
         val originalResponse = chain.proceed(request)
+        if(originalResponse.code() != 200){
+            App.instance.runOnUiThread {
+                App.instance.toast("服务器异常").setGravity(Gravity.CENTER, 0, 0)
+            }
+        }
          if (NetUtils.isNetConnected(BaseApplication.instance)) {
             //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
             originalResponse.newBuilder()

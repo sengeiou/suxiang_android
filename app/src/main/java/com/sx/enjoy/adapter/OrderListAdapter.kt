@@ -40,20 +40,20 @@ class OrderListAdapter: BaseQuickAdapter<OrderListBean, BaseViewHolder>(R.layout
                 helper?.getView<TextView>(R.id.tv_order_button_2)?.visibility = View.VISIBLE
             }
             C.ORDER_NO_SEND -> {
-                helper?.setText(R.id.tv_order_button_1,"提醒发货")
+                helper?.setText(R.id.tv_order_button_1,"")
                 helper?.setText(R.id.tv_order_button_2,"")
 
-                helper?.getView<LinearLayout>(R.id.ll_order_bottom)?.visibility = View.VISIBLE
-                helper?.getView<TextView>(R.id.tv_order_button_1)?.visibility = View.VISIBLE
+                helper?.getView<LinearLayout>(R.id.ll_order_bottom)?.visibility = View.GONE
+                helper?.getView<TextView>(R.id.tv_order_button_1)?.visibility = View.GONE
                 helper?.getView<TextView>(R.id.tv_order_button_2)?.visibility = View.GONE
             }
             C.ORDER_NO_RECEIVE -> {
                 helper?.setText(R.id.tv_order_button_1,"")
-                helper?.setText(R.id.tv_order_button_2,"确认收货")
+                helper?.setText(R.id.tv_order_button_2,"")
 
-                helper?.getView<LinearLayout>(R.id.ll_order_bottom)?.visibility = View.VISIBLE
+                helper?.getView<LinearLayout>(R.id.ll_order_bottom)?.visibility = View.GONE
                 helper?.getView<TextView>(R.id.tv_order_button_1)?.visibility = View.GONE
-                helper?.getView<TextView>(R.id.tv_order_button_2)?.visibility = View.VISIBLE
+                helper?.getView<TextView>(R.id.tv_order_button_2)?.visibility = View.GONE
             }
             C.ORDER_RECEIVE_OVER -> {
                 helper?.setText(R.id.tv_order_button_1,"")

@@ -76,6 +76,13 @@ interface SXContract {
         var GETMEMBERINFO = "getMemberInfo"
         var GETNEWSDETAILS = "getNewsDetails"
         var DELETEADDRESS = "deleteAddress"
+        var GETTEAMUSER = "getTeamUser"
+        var GETUPDATEINFO = "getUpdateInfo"
+        var GETTRANSACTIONLIMIT = "getTransactionLimit"
+        var GETTRANSACTIONPROCESS = "getTransactionProcess"
+        var GETRICHFEE = "getRichFee"
+        var GETFUTURELEVEL = "getFutureLevel"
+        var EXPERTUPGRADE = "expertUpgrade"
     }
 
     interface View: BaseView
@@ -83,14 +90,14 @@ interface SXContract {
     interface Model{
         fun sendCode(phone:String,type:String): Observable<HttpResult<String>>
         fun register(code: String,electCode: String,password: String,repNewPassword: String,userPhone:String): Observable<HttpResult<String>>
-        fun login(phone:String,password:String):Observable<HttpResult<UserBean>>
+        fun login(phone:String,password:String,equipmentId:String,systems:String,tagName:String):Observable<HttpResult<UserBean>>
         fun getUserInfo(id:String):Observable<HttpResult<UserBean>>
         fun forgetPassword(phone:String,code:String,newPassword:String,repNewPassword:String):Observable<HttpResult<String>>
         fun updateUserInfo(id:String,userImg:String,userName:String,sex:String,email:String,address:String,referralCode:String):Observable<HttpResult<String>>
         fun updateUserPhone(oldPhone:String,oldPhoneCode:String,newPhone:String,newPhoneCode:String):Observable<HttpResult<String>>
         fun updateLoginPassword(userId:String,oldPassword:String,newPassword:String,repNewPassword:String):Observable<HttpResult<String>>
         fun updatePayPassword(userId:String,payPassword:String,newPayPassword:String,repNewPassword:String):Observable<HttpResult<String>>
-        fun getSignResult(userId:String):Observable<HttpResult<Boolean>>
+        fun getSignResult(userId:String):Observable<HttpResult<SignResultBean>>
         fun getQuestionList():Observable<HttpResult<List<QuestionBean>>>
         fun userSign(userId:String):Observable<HttpResult<String>>
         fun getTaskList():Observable<HttpResult<List<TaskListBean>>>
@@ -142,12 +149,19 @@ interface SXContract {
         fun getMemberInfo(userId:String):Observable<HttpResult<MemberUpBean>>
         fun getNewsDetails(id:String):Observable<HttpResult<NewsDetailsBean>>
         fun deleteAddress(id:String):Observable<HttpResult<String>>
+        fun getTeamUser(userId:String):Observable<HttpResult<TeamUserBean>>
+        fun getUpdateInfo(version:String,phoneSystem:String):Observable<HttpResult<UpdateInfoBean>>
+        fun getTransactionLimit(type:String):Observable<HttpResult<String>>
+        fun getTransactionProcess(userId:String):Observable<HttpResult<TransactionProcessBean>>
+        fun getRichFee(userId:String):Observable<HttpResult<String>>
+        fun getFutureLevel(userId:String):Observable<HttpResult<FutureLevelBean>>
+        fun expertUpgrade(userId:String):Observable<HttpResult<String>>
     }
 
     interface Present{
         fun sendCode(phone:String,type:String)
         fun register(code: String,electCode: String,password: String,repNewPassword: String,userPhone:String)
-        fun login(phone:String,password:String)
+        fun login(phone:String,password:String,equipmentId:String,systems:String,tagName:String)
         fun getUserInfo(id:String)
         fun forgetPassword(phone:String,code:String,newPassword:String,repNewPassword:String)
         fun updateUserInfo(id:String,userImg:String,userName:String,sex:String,email:String,address:String,referralCode:String)
@@ -178,7 +192,7 @@ interface SXContract {
         fun getWalkHistory(userId:String,model:String,limit:String,page:String)
         fun getHomeBanner()
         fun getHomeNotice()
-        fun getHomeNews(limit:String,page:String)
+        fun getHomeNews(limit:String,page:String,isShow:Boolean)
         fun getCommodityList(goodsCateId:String,goodsName:String,sale:String,amount:String,limit:String,page:String)
         fun getCommodityDetails(id:String)
         fun getCommodityLikeList(categoryId:String,goodsId:String)
@@ -206,6 +220,13 @@ interface SXContract {
         fun getMemberInfo(userId:String)
         fun getNewsDetails(id:String)
         fun deleteAddress(id:String)
+        fun getTeamUser(userId:String)
+        fun getUpdateInfo(version:String,phoneSystem:String)
+        fun getTransactionLimit(type:String)
+        fun getTransactionProcess(userId:String)
+        fun getRichFee(userId:String)
+        fun getFutureLevel(userId:String)
+        fun expertUpgrade(userId:String)
     }
 
 }

@@ -40,6 +40,26 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_rice_fee"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_47"
+        android:layout_marginTop="@dimen/dimen_1"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_15"
+        android:paddingRight="@dimen/dimen_15"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_rice_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_15"
+            android:text="*交易手续费"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_sell_rice"
         android:layout_width="match_parent"

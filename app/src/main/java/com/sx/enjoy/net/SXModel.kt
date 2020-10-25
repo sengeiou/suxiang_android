@@ -40,11 +40,14 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().register(body)
     }
 
-    override fun login(phone: String, password: String): Observable<HttpResult<UserBean>> {
+    override fun login(phone: String, password: String,equipmentId:String,systems:String,tagName:String): Observable<HttpResult<UserBean>> {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("phone", phone)
             jsonObject.put("password", password)
+            jsonObject.put("equipmentId", equipmentId)
+            jsonObject.put("systems", systems)
+            jsonObject.put("tagName", tagName)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -143,7 +146,7 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().updatePayPassword(body)
     }
 
-    override fun getSignResult(userId: String): Observable<HttpResult<Boolean>> {
+    override fun getSignResult(userId: String): Observable<HttpResult<SignResultBean>> {
         return Api.getDefault().getSignResult(userId)
     }
 
@@ -659,5 +662,45 @@ class SXModel  : SXContract.Model{
         val json = jsonObject.toString()
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return Api.getDefault().deleteAddress(body)
+    }
+
+    override fun getTeamUser(userId: String): Observable<HttpResult<TeamUserBean>> {
+        return Api.getDefault().getTeamUser(userId)
+    }
+
+    override fun getUpdateInfo(version: String, phoneSystem: String): Observable<HttpResult<UpdateInfoBean>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["version"] = version
+        keyMap["phoneSystem"] = phoneSystem
+        return Api.getDefault().getUpdateInfo(keyMap)
+    }
+
+    override fun getTransactionLimit(type:String): Observable<HttpResult<String>> {
+        return Api.getDefault().getTransactionLimit(type)
+    }
+
+    override fun getTransactionProcess(userId: String): Observable<HttpResult<TransactionProcessBean>> {
+        return Api.getDefault().getTransactionProcess(userId)
+    }
+
+    override fun getRichFee(userId: String): Observable<HttpResult<String>> {
+        return Api.getDefault().getRichFee(userId)
+    }
+
+    override fun getFutureLevel(userId: String): Observable<HttpResult<FutureLevelBean>> {
+        return Api.getDefault().getFutureLevel(userId)
+    }
+
+    override fun expertUpgrade(userId: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().expertUpgrade(body)
     }
 }

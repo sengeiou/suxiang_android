@@ -26,14 +26,14 @@ import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.SingleImageShowDialog
 import com.yanzhenjie.permission.AndPermission
 import kotlinx.android.synthetic.main.activity_transaction_details.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import org.jetbrains.anko.toast
 
 class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
     private lateinit var noticeDialog : NoticeDialog
     private lateinit var loadingDialog : LoadingDialog
-    private lateinit var singelImageDialog : SingleImageShowDialog
-
+    private lateinit var singleImageDialog : SingleImageShowDialog
 
     private lateinit var present: SXPresent
 
@@ -59,7 +59,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
         noticeDialog = NoticeDialog(this)
         loadingDialog = LoadingDialog(this)
-        singelImageDialog = SingleImageShowDialog(this)
+        singleImageDialog = SingleImageShowDialog(this)
 
         uploadTask = UpLoadImageUtil(this,present)
 
@@ -86,12 +86,12 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                             .forResult(1001)
                     }
                     2 ,3 -> {
-                        singelImageDialog.showImage(transaction?.transaction)
+                        singleImageDialog.showImage(transaction?.transaction)
                     }
                 }
             }else{
                 if(transaction?.status == 2||transaction?.status == 3){
-                    singelImageDialog.showImage(transaction?.transaction)
+                    singleImageDialog.showImage(transaction?.transaction)
                 }
             }
         }
@@ -135,6 +135,9 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
         ll_sell_phone.setOnClickListener {
             checkPermission(tv_sell_phone.text.toString())
         }
+        iv_network_error.setOnClickListener {
+            present.getTransactionOrderDetails(marketId)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -171,6 +174,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
         flag?.let {
             when (flag) {
                 SXContract.GETTRANSACTIONORDERDETAILS -> {
+                    em_network_view.visibility = View.GONE
                     data?.let {
                         data as TransactionOrderBean
                         transaction = data
@@ -207,7 +211,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
-                                    tv_zfb_upload.text = data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.respTime else data.createTime
                                     tv_submit.text = "提交"
 
                                     ll_sell_info.visibility = View.VISIBLE
@@ -232,7 +236,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
-                                    tv_zfb_upload.text = data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.respTime else data.createTime
                                     tv_photo_upload.text = data.payTime
 
                                     ll_sell_info.visibility = View.VISIBLE
@@ -257,7 +261,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     tv_market_time.text = data.createTime
                                     tv_zfb_number.text = data.payNumber
                                     tv_sell_phone.text = data.sellUserPhone
-                                    tv_zfb_upload.text = data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.respTime else data.createTime
                                     tv_photo_upload.text = data.payTime
 
                                     ll_sell_info.visibility = View.VISIBLE
@@ -301,7 +305,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     v_transaction_status.setBackgroundColor(resources.getColor(R.color.main_color))
                                     tv_zfb_number.text = data.payNumber
                                     tv_order_time.text = data.createTime
-                                    tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
                                     ImageLoaderUtil().displayHeadImage(this,data.headImage,iv_other_head)
                                     tv_other_name.text = data.userName
@@ -327,7 +331,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     ImageLoaderUtil().displayImage(this,data.transaction,iv_upload_documents)
                                     tv_zfb_number.text = data.payNumber
                                     tv_order_time.text = data.createTime
-                                    tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
                                     tv_other_name.text = data.userName
                                     tv_other_phone.text = data.userPhone
@@ -353,7 +357,7 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
                                     ImageLoaderUtil().displayImage(this,data.transaction,iv_upload_documents)
                                     tv_zfb_number.text = data.payNumber
                                     tv_order_time.text = data.createTime
-                                    tv_zfb_upload.text = if(data.type == data.orderType) data.createTime else data.respTime
+                                    tv_zfb_upload.text = if(data.type == type) data.createTime else data.respTime
                                     tv_photo_upload.text = data.payTime
                                     tv_other_name.text = data.userName
                                     tv_other_phone.text = data.userPhone
@@ -390,11 +394,14 @@ class TransactionDetailsActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
+        em_network_view.visibility = View.GONE
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        if(boolean){
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
             toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }

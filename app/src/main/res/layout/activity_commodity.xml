@@ -8,6 +8,14 @@
     android:background="@color/background"
     tools:context=".modules.store.CommodityActivity">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    </RelativeLayout>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_commodity_details"
         android:layout_width="match_parent"
@@ -217,71 +225,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tb_commodity_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50"
-        app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:id="@+id/rl_title_2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_48"
-                android:alpha="0"
-                android:background="@color/white">
-
-                <ImageView
-                    android:layout_width="@dimen/dimen_17"
-                    android:layout_height="@dimen/dimen_17"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_15"
-                    android:src="@mipmap/ic_public_back"/>
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tl_commodity_title"
-                    android:layout_width="@dimen/dimen_180"
-                    android:layout_height="@dimen/dimen_30"
-                    android:layout_centerInParent="true"
-                    app:tabIndicatorColor="@color/main_color"
-                    app:tabIndicatorHeight="@dimen/dimen_2"
-                    app:tabIndicatorFullWidth="false"
-                    app:tabSelectedTextColor="@color/title_main_color"
-                    app:tabTextColor="@color/title_second_color"
-                    app:tabIndicator="@drawable/bg_indicator_line"
-                    app:tabMode="fixed"
-                    app:tabRippleColor="@android:color/transparent"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_title_1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_48">
-
-                <ImageView
-                    android:layout_width="@dimen/dimen_25"
-                    android:layout_height="@dimen/dimen_25"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_12"
-                    android:src="@mipmap/ic_back_circle"/>
-
-                <View
-                    android:id="@+id/v_back"
-                    android:layout_width="@dimen/dimen_48"
-                    android:layout_height="match_parent"/>
-
-            </RelativeLayout>
-
-        </FrameLayout>
-
-    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -614,5 +557,74 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <include
+        layout="@layout/empty_public_network"
+        android:visibility="gone"
+        android:id="@+id/em_network_view"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tb_commodity_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/rl_title_2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48"
+                android:alpha="0"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_17"
+                    android:layout_height="@dimen/dimen_17"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_15"
+                    android:src="@mipmap/ic_public_back"/>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_commodity_title"
+                    android:layout_width="@dimen/dimen_180"
+                    android:layout_height="@dimen/dimen_30"
+                    android:layout_centerInParent="true"
+                    app:tabIndicatorColor="@color/main_color"
+                    app:tabIndicatorHeight="@dimen/dimen_2"
+                    app:tabIndicatorFullWidth="false"
+                    app:tabSelectedTextColor="@color/title_main_color"
+                    app:tabTextColor="@color/title_second_color"
+                    app:tabIndicator="@drawable/bg_indicator_line"
+                    app:tabMode="fixed"
+                    app:tabRippleColor="@android:color/transparent"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_title_1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48">
+
+                <ImageView
+                    android:layout_width="@dimen/dimen_25"
+                    android:layout_height="@dimen/dimen_25"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dimen_12"
+                    android:src="@mipmap/ic_back_circle"/>
+
+                <View
+                    android:id="@+id/v_back"
+                    android:layout_width="@dimen/dimen_48"
+                    android:layout_height="match_parent"/>
+
+            </RelativeLayout>
+
+        </FrameLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

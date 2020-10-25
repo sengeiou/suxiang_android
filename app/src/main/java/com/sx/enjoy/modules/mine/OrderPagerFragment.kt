@@ -2,6 +2,7 @@ package com.sx.enjoy.modules.mine
 
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -13,6 +14,7 @@ import com.sx.enjoy.modules.store.OrderPayActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.ReminderDialog
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.fragment_public_list.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
@@ -24,6 +26,9 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
     private lateinit var reminderDialog: ReminderDialog
 
     private lateinit var mAdapter: OrderListAdapter
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private var isFirstShow = false
     private var isInitView = false
@@ -43,6 +48,10 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
         mAdapter = OrderListAdapter()
         rcy_public_list.layoutManager = LinearLayoutManager(activity)
         rcy_public_list.adapter = mAdapter
+
+        emptyView = View.inflate(activity,R.layout.empty_public_view,null)
+        errorView = View.inflate(activity,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         isInitView = true
         if(isFirstShow){
@@ -73,9 +82,6 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                             operationType = 1
                             reminderDialog.showReminder(4)
                         }
-                        C.ORDER_NO_SEND -> {
-
-                        }
                         C.ORDER_ORDER_CANCEL -> {
                             operationPosition = position
                             operationType = 2
@@ -87,9 +93,6 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                     when(mAdapter.data[position].status){
                         C.ORDER_NO_PAY -> {
                             activity?.startActivity<OrderPayActivity>(Pair("order",NewOrderBean(mAdapter.data[position].orderNo,mAdapter.data[position].total)))
-                        }
-                        C.ORDER_NO_RECEIVE -> {
-
                         }
                     }
                 }
@@ -103,6 +106,10 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                 }
             }
         })
+
+        errorView.iv_network_error.setOnClickListener {
+            getOrderList(isRefresh = true, isShowProgress = true)
+        }
     }
 
     fun setIsFirstShow(isFirstShow: Boolean){
@@ -132,6 +139,8 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
                     data?.let {
                         data as List<OrderListBean>
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -165,6 +174,8 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
         activity?.toast(string!!)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -176,6 +187,8 @@ class OrderPagerFragment : BaseFragment(),SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{

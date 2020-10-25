@@ -8,5 +8,7 @@ class RiceRecordListBean (
     @SerializedName("createTime")val createTime:String,
     @SerializedName("isIncome")val isIncome:Int,
     @SerializedName("rich")val rich:String,
+    @SerializedName("type")val type:Int,
+    @SerializedName("richFee")val richFee:String,
     @SerializedName("typeStr")val typeStr:String
 ): Serializable

@@ -172,12 +172,13 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/ll_member_level"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical|right"
+                            android:orientation="vertical">
 
                             <LinearLayout
+                                android:id="@+id/ll_member_level"
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/dimen_20"
                                 android:background="@drawable/bg_red_left_full_15"
@@ -241,11 +242,38 @@
                             android:id="@+id/ll_withdraw_money"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:visibility="invisible"
                             android:layout_weight="1">
 
                             <LinearLayout
+                                android:id="@+id/ll_user_level"
+                                android:layout_width="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_height="@dimen/dimen_20"
+                                android:layout_marginTop="@dimen/dimen_15"
+                                android:background="@drawable/bg_black_left_full_15"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="@dimen/dimen_8"
+                                android:paddingRight="@dimen/dimen_8">
+
+                                <ImageView
+                                    android:layout_width="@dimen/dimen_15"
+                                    android:layout_height="@dimen/dimen_15"
+                                    android:src="@mipmap/ic_user_level" />
+
+                                <TextView
+                                    android:id="@+id/tv_user_level"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/dimen_2"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/text_10" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:id="@+id/ll_balance"
+                                android:visibility="gone"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
@@ -274,6 +302,7 @@
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:layout_above="@+id/ll_balance"
                                 android:layout_toRightOf="@+id/ll_balance"
                                 android:src="@mipmap/ic_withdraw_note" />

@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.market
 
 import android.view.Gravity
+import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
@@ -30,6 +31,8 @@ class SellOutActivity : BaseActivity() , SXContract.View{
         present = SXPresent(this)
 
         initEvent()
+
+        present.getRichFee(C.USER_ID)
     }
 
 
@@ -64,6 +67,13 @@ class SellOutActivity : BaseActivity() , SXContract.View{
                     isSend = false
                     noticeDialog.showNotice(3)
                     EventBus.getDefault().post(MarketSellSuccessEvent(1))
+                }
+                SXContract.GETRICHFEE -> {
+                    data?.let {
+                        data as String
+                        ll_rice_fee.visibility = View.VISIBLE
+                        tv_rice_fee.text = "*交易手续费$data%"
+                    }
                 }
                 else -> {
 

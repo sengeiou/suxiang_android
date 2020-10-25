@@ -72,6 +72,9 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
         wb_about_us.settings.loadsImagesAutomatically = true
         wb_about_us.settings.defaultTextEncodingName = "utf-8"
         wb_about_us.addJavascriptInterface(this, "App")
+        wb_about_us.settings.javaScriptEnabled = true
+        wb_about_us.settings.setSupportZoom(false)
+        wb_about_us.settings.builtInZoomControls = false
         setZoomControlGoneX(wb_about_us.settings, arrayOf(false))
 
         wb_about_us.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {

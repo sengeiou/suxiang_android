@@ -17,6 +17,7 @@ class UserBean: LitePalSupport(){
     var userContrib: Double = 0.0
     var isPayPwd:Int = 0
     var membershipLevel: Int = 0
+    var membershipLevelName :String = ""
     var pushId: String = ""
     var isReai: String = ""
     var isLock: String = ""

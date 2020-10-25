@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.mine
 
 import android.view.Gravity
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.TaskListAdapter
@@ -10,6 +11,7 @@ import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_my_task.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import org.jetbrains.anko.toast
 
 class MyTaskActivity : BaseActivity() , SXContract.View{
@@ -17,6 +19,9 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
     private lateinit var present: SXPresent
 
     private lateinit var mAdapter: TaskListAdapter
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private var pager = 1
 
@@ -34,6 +39,10 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
         rcy_my_task.layoutManager = LinearLayoutManager(this)
         rcy_my_task.adapter = mAdapter
 
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
+
         getMyTaskList(true)
 
         initEvent()
@@ -45,6 +54,9 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
         }
         mAdapter.setOnLoadMoreListener {
             getMyTaskList(false)
+        }
+        errorView.iv_network_error.setOnClickListener {
+            getMyTaskList(true)
         }
     }
 
@@ -67,6 +79,8 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
                     data?.let {
                         data as List<TaskListBean>
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -92,6 +106,8 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -103,6 +119,8 @@ class MyTaskActivity : BaseActivity() , SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{

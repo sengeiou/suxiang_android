@@ -24,7 +24,7 @@ android {
                 def fileName
                 if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     //这里修改apk文件名
-                    fileName = "suxiang-v${defaultConfig.versionCode}-${defaultConfig.versionName}-${releaseTime()}.apk"
+                    fileName = "suxiang-${defaultConfig.versionName}-${releaseTime()}.apk"
                     outputFileName = fileName
                 }
             }
@@ -38,8 +38,8 @@ android {
         applicationId "com.sx.enjoy"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 100
-        versionName "1.0.0"
+        versionCode 1000
+        versionName "1.0.00"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -48,9 +48,9 @@ android {
         }
 
         manifestPlaceholders = [
-                JPUSH_PKGNAME : applicationId,
+                JPUSH_PKGNAME: applicationId,
                 JPUSH_APPKEY : "75eed157785ba7a829d9a142", //JPush 上注册的包名对应的 Appkey.
-                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
         ]
 
     }
@@ -110,6 +110,7 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:2.5.1'
     implementation "com.google.zxing:core:3.3.1"
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.amap.api:location:latest.integration'
     implementation('com.github.LuckSiege.PictureSelector:picture_library:v2.5.9') {
         exclude group: "com.android.support"
     }

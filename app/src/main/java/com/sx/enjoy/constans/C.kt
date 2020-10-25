@@ -9,14 +9,14 @@ object C {
     const val PUBLIC_PAGER_NUMBER = "10"
 
     const val HX_HOST_TYPE = 1
-    const val HX_BASE_ADDRESS = "http://192.168.1.240:9900/"
+    //const val HX_BASE_ADDRESS = "http://192.168.1.240:9900/"
     //const val HX_BASE_ADDRESS = "http://58.218.43.238:9900/"
-    //const val HX_BASE_ADDRESS = "http://app.suxiang986.com/"
+    const val HX_BASE_ADDRESS = "http://app.suxiang986.com/"
 
 
     const val U_MENG_APP_KEY = "5f7197c180455950e49a2143"
 
-    const val A_MAP_API = "e88549894d99cdd69a7795e4acfa8980"
+    const val A_MAP_API = "f4e52b8303c7542164225ba6ac792391"
     const val WX_APP_ID = "wxc0d7373e2a591882"
     const val WX_APP_SECRET = "cfb961561f0e1188ed43807b3d987c52"
     const val ZFB_APP_ID = "2021001190686280"

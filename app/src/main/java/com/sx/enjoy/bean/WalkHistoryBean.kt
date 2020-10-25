@@ -5,6 +5,6 @@ import java.io.Serializable
 
 class WalkHistoryBean(
     @SerializedName("createTime")val createTime:String,
-    @SerializedName("minStep")val minStep:String,
+    @SerializedName("minStep")val minStep:Float,
     @SerializedName("riceGrains")val riceGrains:String
 ): Serializable

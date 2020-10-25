@@ -1,8 +1,8 @@
 package com.sx.enjoy.modules.store
 
-import android.app.Activity
 import android.content.Intent
 import android.view.Gravity
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.MyAddressAdapter
@@ -13,6 +13,7 @@ import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_my_address.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.title_public_view.*
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -22,6 +23,9 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
     private lateinit var present : SXPresent
 
     private lateinit var reminderDialog: ReminderDialog
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private lateinit var mAdapter: MyAddressAdapter
 
@@ -41,6 +45,10 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
         mAdapter = MyAddressAdapter()
         rcy_address_list.layoutManager = LinearLayoutManager(this)
         rcy_address_list.adapter = mAdapter
+
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         getMyAddress()
 
@@ -79,6 +87,10 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
                 present.deleteAddress(selectId)
             }
         })
+
+        errorView.iv_network_error.setOnClickListener {
+            getMyAddress()
+        }
     }
 
     private fun getMyAddress(){
@@ -87,6 +99,7 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK&&requestCode == 3001){
             getMyAddress()
         }
@@ -99,6 +112,8 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
                 SXContract.GETMYADDRESSLIST -> {
                     data?.let {
                         data as List<AddressBean>
+                        mAdapter.isUseEmpty(true)
+                        mAdapter.emptyView = emptyView
                         swipe_refresh_layout.finishRefresh()
                         mAdapter.setNewData(data)
                     }
@@ -120,12 +135,17 @@ class MyAddressActivity : BaseActivity() , SXContract.View {
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
+        mAdapter.isUseEmpty(true)
+        mAdapter.emptyView = emptyView
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        if(boolean){
+        if(isRefreshList){
+            mAdapter.isUseEmpty(true)
+            mAdapter.emptyView = emptyView
+        }else{
             toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }

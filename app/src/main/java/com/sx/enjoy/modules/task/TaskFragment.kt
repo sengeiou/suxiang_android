@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -53,6 +54,16 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
         }
         vp_task.offscreenPageLimit = 2
 
+        vp_task.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                initTaskTitle(position)
+            }
+        })
+
         initTaskTitle(0)
     }
 
@@ -72,7 +83,7 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
             initTaskTitle(0)
         }
         tv_task_content.setOnClickListener {
-            activity?.startActivity<WebContentActivity>(Pair("type",3), Pair("title","卷轴说明"))
+            activity?.startActivity<WebContentActivity>(Pair("type",5), Pair("title","卷轴说明"))
         }
         rl_task_mine.setOnClickListener {
             if(C.USER_ID.isEmpty()){
@@ -121,6 +132,13 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     }
 
     override fun onBuyTaskSuccess() {
+        fragments[0].initData()
+        fragments[1].initData()
+        fragments[2].initData()
+    }
+
+    override fun refreshData() {
+        fragments[0].initData()
         fragments[1].initData()
         fragments[2].initData()
     }
@@ -134,6 +152,10 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
         }else{
             present.getTaskRiceGrains(C.USER_ID)
         }
+    }
+
+    override fun onRefreshSuccess() {
+        isLoadComplete = true
     }
 
     override fun onSuccess(flag: String?, data: Any?) {
@@ -161,7 +183,6 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
     }
 
 

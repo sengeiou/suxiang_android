@@ -47,7 +47,8 @@
             android:id="@+id/iv_news_img"
             android:layout_width="@dimen/dimen_110"
             android:layout_height="@dimen/dimen_90"
-            android:src="@mipmap/ic_title_logo"/>
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_default_logo"/>
 
     </LinearLayout>
 

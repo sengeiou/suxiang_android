@@ -13,6 +13,7 @@ import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_market_detail.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -72,6 +73,10 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
             startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",0))
             finish()
         }
+
+        iv_network_error.setOnClickListener {
+            present.getMarketDetails(marketId)
+        }
     }
 
 
@@ -88,6 +93,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                 SXContract.GETMARKETDETAILS -> {
                     data?.let {
                         data as MarketListBean
+                        em_network_view.visibility = View.GONE
                         marketDetail = data
                         ImageLoaderUtil().displayHeadImage(this,data.userImg,iv_user_head)
                         tv_user_name.text = data.userName
@@ -114,12 +120,15 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         isSend = false
+        em_network_view.visibility = View.GONE
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         isSend = false
-        if(boolean){
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
             toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }

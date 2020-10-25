@@ -12,12 +12,14 @@ import com.sx.enjoy.bean.AddressBean
 import com.sx.enjoy.bean.CreateOrderBean
 import com.sx.enjoy.bean.NewOrderBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.ShopCartChangeEvent
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_order_confirm.*
 import kotlinx.android.synthetic.main.footer_order_confirm.view.*
 import kotlinx.android.synthetic.main.header_order_confirm.view.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -134,6 +136,7 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
                 SXContract.CREATEORDER -> {
                     data.let {
                         data as NewOrderBean
+                        EventBus.getDefault().post(ShopCartChangeEvent(0))
                         setResult(RESULT_OK)
                         startActivity<OrderPayActivity>(Pair("order",data))
                         finish()

@@ -3,6 +3,7 @@ package com.sx.enjoy
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import com.likai.lib.app.BaseApplication
+import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.tencent.smtt.sdk.QbSdk
@@ -42,6 +43,7 @@ class App: BaseApplication(){
 
         JPushInterface.setDebugMode(true)
         JPushInterface.init(this)
+        SharedPreferencesUtil.putCommonString(this,"RegistrationID",JPushInterface.getRegistrationID(this))
 
         val user = LitePal.findLast(UserBean::class.java)
         if(user!=null){

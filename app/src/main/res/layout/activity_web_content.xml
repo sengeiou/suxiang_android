@@ -15,10 +15,22 @@
         android:layout_height="@dimen/dimen_1"
         android:background="@color/background"/>
 
-    <com.tencent.smtt.sdk.WebView
-        android:id="@+id/wb_view"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/dimen_10"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.tencent.smtt.sdk.WebView
+                android:id="@+id/wb_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1"
+                android:layout_marginBottom="@dimen/dimen_10"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
