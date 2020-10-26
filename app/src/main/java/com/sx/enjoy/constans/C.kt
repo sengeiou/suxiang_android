@@ -22,6 +22,7 @@ object C {
     const val ZFB_APP_ID = "2021001190686280"
     const val QQ_APP_IP = "101896563"
     const val QQ_QPP_KEY = "7ee5b904496e4b6ca71acc3d60f6a950"
+    const val BUGLY_APP_ID = "dfb9469c57"
 
 
 

@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" />
     <uses-feature android:name="feature:android.hardware.sensor.stepdetector" /> <!-- Required -->
@@ -45,9 +46,9 @@
         android:maxAspectRatio="2.4"
         android:networkSecurityConfig="@xml/network_security_config"
         android:resizeableActivity="true"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".modules.mine.RecommendUserActivity"></activity>
 
         <meta-data
             android:name="android.max_aspect"
@@ -190,6 +191,7 @@
         <activity
             android:name=".modules.store.CommodityActivity"
             android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -321,6 +323,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
+
+        <activity android:name=".modules.mine.RecommendUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

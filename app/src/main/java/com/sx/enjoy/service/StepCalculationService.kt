@@ -96,9 +96,9 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
         AMapLocationClient.setApiKey(C.A_MAP_API)
         mLocationClient = AMapLocationClient(applicationContext)
         val mLocationOption = AMapLocationClientOption()
-        mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Battery_Saving
         mLocationOption.isNeedAddress = true
-        mLocationOption.interval = 30000
+        mLocationOption.interval = 3*60*1000
         mLocationClient?.setLocationOption(mLocationOption)
         mLocationClient?.setLocationListener(localListener)
 
@@ -138,6 +138,7 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
         if(it.errorCode == 0){
             lat = it.latitude.toString()
             lon = it.longitude.toString()
+            Log.e("Test","address ----->"+lat+"--->"+lon)
         }
     }
 
