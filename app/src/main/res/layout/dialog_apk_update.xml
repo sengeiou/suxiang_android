@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen_300"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_full_5">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_15"
+            android:text="发现新版本"/>
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_20"
+            android:textSize="@dimen/text_13"
+            android:textColor="@color/color_666666"
+            android:text=""/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_1"
+            android:background="@color/line"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_40">
+
+            <TextView
+                android:id="@+id/tv_close"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/color_3A3A3A"
+                android:textSize="@dimen/text_13"
+                android:text="关闭"/>
+
+            <View
+                android:layout_width="@dimen/dimen_1"
+                android:layout_height="match_parent"
+                android:background="@color/line"/>
+
+            <TextView
+                android:id="@+id/tv_update"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/text_13"
+                android:text="立即更新"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
