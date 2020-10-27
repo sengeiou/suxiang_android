@@ -56,11 +56,53 @@
 
 
 #----------------------------------------------------------------------------
-#---------------------------------默认保留区--------------------------------
+#---------------------------------默认保留区---------------------------------
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Application
+-keep public class * extends android.app.Service
+-keep public class * extends android.content.BroadcastReceiver
+-keep public class * extends android.content.ContentProvider
+-keep public class * extends java.lang.Throwable {*;}
+-keep public class * extends java.lang.Exception {*;}
+-keep public class * extends android.app.backup.BackupAgentHelper
+-keep public class * extends android.preference.Preference
+-keep public class * extends android.view.View
+-keep class android.support.* {*;}
 
+-keepattributes EnclosingMetho
+
+#support.v4/v7包不混淆
+-keep class android.support.*{ *; }
+-keep class android.support.v4.* { *; }
+-keep public class * extends android.support.v4.*
+-keep interface android.support.v4.app.*{ *; }
+-keep class android.support.v7.* { *; }
+-keep public class * extends android.support.v7.*
+-keep interface android.support.v7.app.* { *; }
+# 忽略警告
 -dontwarn android.support.**
 
-
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+-keepclassmembers class * extends android.app.Activity{
+    public void *(android.view.View);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keep public class * extends android.view.View{
+    *** get*();
+    void set*(***);
+    public <init>(android.content.Context);
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
+-keepclasseswithmembers class * {
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+}
 -keep public class * implements java.io.Serializable {
     public *;
 }
@@ -77,6 +119,13 @@
 }
 -keepclassmembers class * {
     void *(**On*Event);
+}
+
+# glide 的混淆代码
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
 }
 
 # banner 的混淆代码
@@ -191,6 +240,9 @@
   **[] $VALUES;
   public *;
 }
+
+# for DexGuard only
+-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 #Bugly
 -dontwarn com.tencent.bugly.**
