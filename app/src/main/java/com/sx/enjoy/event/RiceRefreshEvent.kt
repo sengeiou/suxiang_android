@@ -5,7 +5,7 @@ class RiceRefreshEvent (
     var walkRiceGrains:String,
     var drivingRiceGrains:String,
     var rotateMinStep:Int,
-    var calories:String,
     var targetWalk:Int,
-    var mileage:String
+    var mileage:Float,
+    var targetDriving:Float
 )

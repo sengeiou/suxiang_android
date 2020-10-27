@@ -1,10 +1,10 @@
 package com.sx.enjoy.modules.store
 
 import android.os.Bundle
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -13,6 +13,7 @@ import com.sx.enjoy.adapter.TypeMenuAdapter
 import com.sx.enjoy.bean.StoreCategoryBean
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.fragment_store.*
 import kotlinx.android.synthetic.main.header_type_title.view.*
 import org.jetbrains.anko.startActivity
@@ -24,6 +25,9 @@ class StoreFragment : BaseFragment(),SXContract.View{
 
     private lateinit var menuAdapter: TypeMenuAdapter
     private lateinit var contentAdapter: TypeContentAdapter
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private lateinit var headTitleView : View
 
@@ -48,9 +52,17 @@ class StoreFragment : BaseFragment(),SXContract.View{
 
         headTitleView = View.inflate(activity,R.layout.header_type_title,null)
 
+        emptyView = View.inflate(activity,R.layout.empty_public_view,null)
+        errorView = View.inflate(activity,R.layout.empty_public_network,null)
+        contentAdapter.isUseEmpty(false)
+
         present.getStoreCategory("0")
 
         initEvent()
+    }
+
+    override fun refreshData() {
+        present.getStoreCategory("0")
     }
 
     private fun initEvent(){
@@ -69,6 +81,9 @@ class StoreFragment : BaseFragment(),SXContract.View{
         tv_commodity_search.setOnClickListener {
             activity?.startActivity<CommodityListActivity>(Pair("key",et_commodity_search.text.toString()))
         }
+        errorView.iv_network_error.setOnClickListener {
+            present.getStoreCategory("0")
+        }
     }
 
 
@@ -78,6 +93,9 @@ class StoreFragment : BaseFragment(),SXContract.View{
                 SXContract.GETSTORECATEGORY -> {
                     data?.let {
                         data as List<StoreCategoryBean>
+                        isLoadComplete = true
+                        contentAdapter.isUseEmpty(true)
+                        contentAdapter.emptyView = emptyView
                         swipe_refresh_layout.finishRefresh()
                         if(data.isNotEmpty()){
                             var selectPosition = 0
@@ -106,12 +124,15 @@ class StoreFragment : BaseFragment(),SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast(string!!)
+        contentAdapter.isUseEmpty(true)
+        contentAdapter.emptyView = emptyView
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
+        contentAdapter.isUseEmpty(true)
+        contentAdapter.emptyView = errorView
         swipe_refresh_layout.finishRefresh()
-        activity?.toast("请检查网络连接")
     }
 
     companion object {

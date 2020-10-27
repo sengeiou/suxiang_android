@@ -2,6 +2,7 @@ package com.sx.enjoy.modules.mine
 
 import android.app.Activity
 import android.content.Intent
+import android.view.Gravity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.UserBean
@@ -51,11 +52,11 @@ class PhoneChangeActivity : BaseActivity() ,SXContract.View {
                 return@setOnClickListener
             }
             if(et_new_phone.text.isEmpty()){
-                toast("请输入新手机号")
+                toast("请输入新手机号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_new_phone.text.toString())){
-                toast("手机号不正确")
+                toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.sendCode(et_new_phone.text.toString(),"3")
@@ -91,19 +92,19 @@ class PhoneChangeActivity : BaseActivity() ,SXContract.View {
         }
         tv_save_phone.setOnClickListener {
             if(et_old_code.text.isEmpty()){
-                toast("请输入原手机号验证码")
+                toast("请输入原手机号验证码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_new_phone.text.isEmpty()){
-                toast("请输入新手机号")
+                toast("请输入新手机号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_new_phone.text.toString())){
-                toast("新手机号不正确")
+                toast("新手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_new_code.text.isEmpty()){
-                toast("请输入新手机号验证码")
+                toast("请输入新手机号验证码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.updateUserPhone(tv_user_phone.text.toString(),et_old_code.text.toString(),et_new_phone.text.toString(),et_new_code.text.toString())
@@ -142,12 +143,12 @@ class PhoneChangeActivity : BaseActivity() ,SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 }

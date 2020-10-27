@@ -2,6 +2,8 @@ package com.sx.enjoy.modules.mine
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
@@ -37,6 +39,9 @@ class MineFragment : BaseFragment(),SXContract.View{
     private var qbv3 : Badge? = null
     private var qbv4 : Badge? = null
 
+    private var isBannerOver = false
+    private var isOrderOver = false
+
     override fun getLayoutResource() = R.layout.fragment_mine
 
     override fun beForInitView() {
@@ -67,10 +72,15 @@ class MineFragment : BaseFragment(),SXContract.View{
         moreAdapter.setNewData(moreList)
 
         initEvent()
-
+        initLocalUserData()
         EventBus.getDefault().post(FirstInitUserEvent(true))
 
         present.getHomeBanner()
+    }
+
+    override fun refreshData() {
+        present.getHomeBanner()
+        EventBus.getDefault().post(FirstInitUserEvent(false))
     }
 
     fun initUser(){
@@ -81,6 +91,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             tv_user_contribution.text = "0"
             tv_user_activity.text = "0"
             ll_member_level.visibility = View.GONE
+            ll_user_level.visibility = View.GONE
             tv_rice_count.text = "0"
             tv_balance_money.text = "0.00"
             qbv1?.badgeNumber = 0
@@ -88,17 +99,25 @@ class MineFragment : BaseFragment(),SXContract.View{
             qbv3?.badgeNumber = 0
             qbv4?.badgeNumber = 0
         }else{
-            val user = LitePal.findLast(UserBean::class.java)
+            initLocalUserData()
+            present.getMyOrderStatusCount(C.USER_ID)
+        }
+    }
+
+    private fun initLocalUserData(){
+        val user = LitePal.findLast(UserBean::class.java)
+        if(user!=null){
             ll_sub_data.visibility = View.VISIBLE
             tv_user_name.text = if(user.userName.isEmpty()) user.userPhone else user.userName
             ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
             tv_user_contribution.text = String.format("%.2f", user.userContrib)
             tv_user_activity.text = String.format("%.2f", user.userActivity)
             ll_member_level.visibility = View.VISIBLE
-            tv_member_level.text = user.membershipLevel.toString()+"级"
+            ll_user_level.visibility = View.VISIBLE
+            tv_member_level.text = user.membershipLevelName
+            tv_user_level.text = user.userLevelName
             tv_rice_count.text = String.format("%.2f", user.riceGrains)
             tv_balance_money.text = "0.00"
-            present.getMyOrderStatusCount(C.USER_ID)
         }
     }
 
@@ -126,14 +145,14 @@ class MineFragment : BaseFragment(),SXContract.View{
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                activity?.startActivity<MemberUpActivity>()
+                activity?.startActivity<MemberUpActivity>(Pair("type",0))
             }
         }
-        ll_withdraw_money.setOnClickListener {
+        ll_user_level.setOnClickListener {
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                activity?.startActivity<BalanceActivity>()
+                activity?.startActivity<MemberUpActivity>(Pair("type",1))
             }
         }
         ll_rice_record.setOnClickListener {
@@ -196,7 +215,7 @@ class MineFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 2 -> {
-                    activity?.toast("暂未开通,敬请关注")
+                    activity?.toast("暂未开通,敬请关注")?.setGravity(Gravity.CENTER, 0, 0)
                     //activity?.startActivity<FinanceActivity>()
                 }
                 3 -> {
@@ -207,7 +226,7 @@ class MineFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 4 -> {
-                    activity?.toast("暂未开通,敬请关注")
+                    activity?.toast("暂未开通,敬请关注")?.setGravity(Gravity.CENTER, 0, 0)
                     //activity?.startActivity<LubricateActivity>()
                 }
                 5 -> {
@@ -236,11 +255,11 @@ class MineFragment : BaseFragment(),SXContract.View{
             }
         }
         swipe_refresh_layout.setOnRefreshListener {
+            present.getHomeBanner()
             if(C.USER_ID.isEmpty()){
                 swipe_refresh_layout.finishRefresh()
                 return@setOnRefreshListener
             }
-            present.getHomeBanner()
             EventBus.getDefault().post(FirstInitUserEvent(false))
         }
     }
@@ -255,6 +274,10 @@ class MineFragment : BaseFragment(),SXContract.View{
                 SXContract.GETHOMEBANNER -> {
                     data.let {
                         data as BannerListBean
+                        isBannerOver = true
+                        if(isBannerOver&&isOrderOver){
+                            isLoadComplete = true
+                        }
                         if(data.advertList.isNotEmpty()){
                             ban_mine_list.visibility = View.VISIBLE
                             val advertList = arrayListOf<String>()
@@ -275,6 +298,10 @@ class MineFragment : BaseFragment(),SXContract.View{
                 SXContract.GETMYORDERSTATUSCOUNT -> {
                     data.let {
                         data as OrderStatusCountBean
+                        isOrderOver = true
+                        if(isBannerOver&&isOrderOver){
+                            isLoadComplete = true
+                        }
                         swipe_refresh_layout.finishRefresh()
                         qbv1?.badgeNumber = data.notPayNum
                         qbv2?.badgeNumber = data.waitSendGoodsNum
@@ -292,12 +319,11 @@ class MineFragment : BaseFragment(),SXContract.View{
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         swipe_refresh_layout.finishRefresh()
-        activity?.toast("请检查网络连接")
     }
 
 

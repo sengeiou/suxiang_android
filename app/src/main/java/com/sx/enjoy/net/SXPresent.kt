@@ -51,8 +51,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun login(phone: String, password: String) {
-        model.login(phone,password)
+    override fun login(phone: String, password: String,equipmentId: String, systems: String, tagName: String) {
+        model.login(phone,password, equipmentId, systems, tagName)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<UserBean>(mContext,true){
                 override fun onSuccess(t: HttpResult<UserBean>?) {
@@ -165,18 +165,20 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
+
+
     override fun getSignResult(userId: String,isShow:Boolean) {
         model.getSignResult(userId)
             .compose(RxSchedulersHelper.io_main())
-            .subscribe(object : BaseObserver<Boolean>(mContext,isShow){
-                override fun onSuccess(t: HttpResult<Boolean>?) {
+            .subscribe(object : BaseObserver<SignResultBean>(mContext,isShow){
+                override fun onSuccess(t: HttpResult<SignResultBean>?) {
                     view.onSuccess(SXContract.GETSIGNRESULT,t?.data)
                 }
-                override fun onCodeError(t: HttpResult<Boolean>) {
+                override fun onCodeError(t: HttpResult<SignResultBean>) {
                     view.onFailed(t.message,false)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(false,false)
                 }
             })
     }
@@ -301,10 +303,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETMARKETQUOTES,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<List<MarketQuotesBean>>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -317,10 +319,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETMARKETDETAILS,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<MarketListBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -433,10 +435,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETTRANSACTIONORDERDETAILS,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<TransactionOrderBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -476,7 +478,7 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
     override fun getUserTeamList(id: String, limit: String, page: String) {
         model.getUserTeamList(id,limit,page)
             .compose(RxSchedulersHelper.io_main())
-            .subscribe(object : BaseObserver<List<TeamListBean>>(mContext,false){
+            .subscribe(object : BaseObserver<List<TeamListBean>>(mContext,true){
                 override fun onSuccess(t: HttpResult<List<TeamListBean>>?) {
                     view.onSuccess(SXContract.GETUSERTEAMLIST,t?.data)
                 }
@@ -537,10 +539,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun getHomeNews(limit: String, page: String) {
+    override fun getHomeNews(limit: String, page: String,isShow:Boolean) {
         model.getHomeNews(limit,page)
             .compose(RxSchedulersHelper.io_main())
-            .subscribe(object : BaseObserver<List<NewsListBean>>(mContext,false){
+            .subscribe(object : BaseObserver<List<NewsListBean>>(mContext,isShow){
                 override fun onSuccess(t: HttpResult<List<NewsListBean>>?) {
                     view.onSuccess(SXContract.GETHOMENEWS,t?.data)
                 }
@@ -577,10 +579,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETCOMMODITYDETAILS,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<CommodityDetailsBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -665,8 +667,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun saveAddress(userId: String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String) {
-        model.saveAddress(userId,receiverAddress,receiverName,receiverPhone,province,city,area,isDefault)
+    override fun saveAddress(userId: String, addressId:String, receiverAddress: String, receiverName: String, receiverPhone: String, province: String, city: String, area: String, isDefault: String) {
+        model.saveAddress(userId,addressId,receiverAddress,receiverName,receiverPhone,province,city,area,isDefault)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<String>(mContext,true){
                 override fun onSuccess(t: HttpResult<String>?) {
@@ -801,10 +803,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETORDERDETAILS,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<OrderDetailsBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -849,10 +851,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETAUTHUSER,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<AuthUserBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -945,10 +947,10 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.GETMEMBERINFO,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<MemberUpBean>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.message,true)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
-                    view.onNetError(isNetWorkError,false)
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }
@@ -965,6 +967,134 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun deleteAddress(id: String) {
+        model.deleteAddress(id)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.DELETEADDRESS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTeamUser(userId: String) {
+        model.getTeamUser(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<TeamUserBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<TeamUserBean>?) {
+                    view.onSuccess(SXContract.GETTEAMUSER,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<TeamUserBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getUpdateInfo(version: String, phoneSystem: String) {
+        model.getUpdateInfo(version,phoneSystem)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<UpdateInfoBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<UpdateInfoBean>?) {
+                    view.onSuccess(SXContract.GETUPDATEINFO,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<UpdateInfoBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTransactionLimit(type:String) {
+        model.getTransactionLimit(type)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.GETTRANSACTIONLIMIT,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTransactionProcess(userId: String) {
+        model.getTransactionProcess(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<TransactionProcessBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<TransactionProcessBean>?) {
+                    view.onSuccess(SXContract.GETTRANSACTIONPROCESS,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<TransactionProcessBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getRichFee(userId: String) {
+        model.getRichFee(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.GETRICHFEE,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getFutureLevel(userId: String) {
+        model.getFutureLevel(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<FutureLevelBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<FutureLevelBean>?) {
+                    view.onSuccess(SXContract.GETFUTURELEVEL,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<FutureLevelBean>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun expertUpgrade(userId: String) {
+        model.expertUpgrade(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.EXPERTUPGRADE,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }

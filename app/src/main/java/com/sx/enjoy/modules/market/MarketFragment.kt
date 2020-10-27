@@ -1,12 +1,11 @@
 package com.sx.enjoy.modules.market
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
@@ -20,21 +19,19 @@ import com.sx.enjoy.R
 import com.sx.enjoy.adapter.MarketListAdapter
 import com.sx.enjoy.bean.MarketListBean
 import com.sx.enjoy.bean.MarketQuotesBean
-import com.sx.enjoy.bean.TaskListBean
 import com.sx.enjoy.constans.C
-import com.sx.enjoy.event.TaskBuySuccessEvent
 import com.sx.enjoy.modules.login.LoginActivity
+import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.modules.mine.WebContentActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.view.dialog.TransactionProcessDialog
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.fragment_market.*
 import kotlinx.android.synthetic.main.fragment_market.swipe_refresh_layout
-import kotlinx.android.synthetic.main.fragment_task_child.*
 import kotlinx.android.synthetic.main.header_market_view.view.*
-import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
-import java.text.SimpleDateFormat
 
 
 class MarketFragment : BaseFragment(), SXContract.View{
@@ -44,12 +41,23 @@ class MarketFragment : BaseFragment(), SXContract.View{
     private lateinit var headView:View
     private lateinit var mAdapter: MarketListAdapter
 
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
+
     private var pager = 1
+    private var selectType = 0
+
+    private var isTitleOver = false
+    private var isListOver = false
 
     override fun getLayoutResource() = R.layout.fragment_market
 
     override fun beForInitView() {
         present = SXPresent(this)
+    }
+
+    override fun refreshData() {
+        getMarketList(true)
     }
 
     override fun initView() {
@@ -62,6 +70,9 @@ class MarketFragment : BaseFragment(), SXContract.View{
         headView = View.inflate(activity,R.layout.header_market_view,null)
         mAdapter.addHeaderView(headView)
 
+        emptyView = View.inflate(activity,R.layout.empty_public_view,null)
+        errorView = View.inflate(activity,R.layout.empty_public_network,null)
+        mAdapter.emptyView = emptyView
 
         initMarkChartView()
         initData()
@@ -100,6 +111,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
         }
         swipe_refresh_layout.setOnRefreshListener {
             getMarketList(true)
+            present.getMarketQuotes("1","7")
         }
         mAdapter.setOnLoadMoreListener {
             getMarketList(false)
@@ -108,17 +120,21 @@ class MarketFragment : BaseFragment(), SXContract.View{
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                val intent = Intent(activity,BuyInActivity::class.java)
-                startActivity(intent)
+                selectType = 0
+                present.getTransactionLimit("0")
             }
         }
         headView.tv_sell_out.setOnClickListener {
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                val intent = Intent(activity,SellOutActivity::class.java)
-                startActivity(intent)
+                selectType = 1
+                present.getTransactionLimit("1")
             }
+        }
+        errorView.iv_network_error.setOnClickListener {
+            getMarketList(true)
+            present.getMarketQuotes("1","7")
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val intent = Intent(activity,MarkDetailActivity::class.java)
@@ -171,7 +187,13 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 SXContract.GETMARKETLIST -> {
                     data?.let {
                         data as List<MarketListBean>
+                        isListOver = true
+                        if(isListOver&&isTitleOver){
+                            isLoadComplete = true
+                        }
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -188,27 +210,46 @@ class MarketFragment : BaseFragment(), SXContract.View{
                 SXContract.GETMARKETQUOTES -> {
                     data?.let {
                         data as List<MarketQuotesBean>
-                        val xAxis = headView.lc_market_quotations.xAxis
-                        xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
-                            data[value.toInt()].createTimeStr
+                        isTitleOver = true
+                        if(isListOver&&isTitleOver){
+                            isLoadComplete = true
                         }
+                        if(data.isNotEmpty()){
+                            val xAxis = headView.lc_market_quotations.xAxis
+                            xAxis.valueFormatter = IAxisValueFormatter { value, _ ->
+                                if(value.toInt()<0||value.toInt()>=data.size){
+                                    ""
+                                }else{
+                                    data[value.toInt()].createTimeStr
+                                }
+                            }
 
-                        val entries = arrayListOf<Entry>()
-                        for (i in data.indices){
-                            entries.add(Entry(i.toFloat(), data[i].amount.toFloat()))
+                            val entries = arrayListOf<Entry>()
+                            for (i in data.indices){
+                                entries.add(Entry(i.toFloat(), data[i].amount.toFloat()))
+                            }
+                            val dataSet = LineDataSet(entries, "")
+                            dataSet.setDrawValues(true) // 设置是否显示数据点的值
+                            dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
+                            dataSet.circleSize = 5f // 设置数据点的大小
+                            dataSet.lineWidth = 2f //线条宽度
+                            dataSet.valueTextSize = 11f
+                            dataSet.color = resources.getColor(R.color.color_086E07)
+                            dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
+
+                            val lineData = LineData(dataSet)
+                            headView.lc_market_quotations.data = lineData
+                            headView.lc_market_quotations.invalidate()
                         }
-                        val dataSet = LineDataSet(entries, "")
-                        dataSet.setDrawValues(true) // 设置是否显示数据点的值
-                        dataSet.setDrawCircleHole(true) // 设置数据点是空心还是实心，默认空心
-                        dataSet.circleSize = 5f // 设置数据点的大小
-                        dataSet.lineWidth = 2f //线条宽度
-                        dataSet.valueTextSize = 11f
-                        dataSet.color = resources.getColor(R.color.color_086E07)
-                        dataSet.setCircleColor(resources.getColor(R.color.color_086E07))
-
-                        val lineData = LineData(dataSet)
-                        headView.lc_market_quotations.data = lineData
-                        headView.lc_market_quotations.invalidate()
+                    }
+                }
+                SXContract.GETTRANSACTIONLIMIT -> {
+                    if(selectType == 0){
+                        val intent = Intent(activity,BuyInActivity::class.java)
+                        startActivity(intent)
+                    }else{
+                        val intent = Intent(activity,SellOutActivity::class.java)
+                        startActivity(intent)
                     }
                 }
                 else -> {
@@ -220,9 +261,11 @@ class MarketFragment : BaseFragment(), SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -234,13 +277,15 @@ class MarketFragment : BaseFragment(), SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
                 mAdapter.loadMoreFail()
             }
         }else{
-            activity?.toast("请检查网络连接")
+            activity?.toast("请检查网络连接")?.setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

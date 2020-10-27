@@ -2,8 +2,9 @@ package com.sx.enjoy.modules.store
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.OrderConfirmAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -11,12 +12,14 @@ import com.sx.enjoy.bean.AddressBean
 import com.sx.enjoy.bean.CreateOrderBean
 import com.sx.enjoy.bean.NewOrderBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.ShopCartChangeEvent
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_order_confirm.*
 import kotlinx.android.synthetic.main.footer_order_confirm.view.*
 import kotlinx.android.synthetic.main.header_order_confirm.view.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -86,7 +89,7 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
                 return@setOnClickListener
             }
             if(addressId.isEmpty()){
-                toast("请添加收货地址")
+                toast("请添加收货地址").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.createOrder(C.USER_ID,addressId,footView.et_user_remark.text.toString(),shopList!!.orderList)
@@ -133,6 +136,7 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
                 SXContract.CREATEORDER -> {
                     data.let {
                         data as NewOrderBean
+                        EventBus.getDefault().post(ShopCartChangeEvent(0))
                         setResult(RESULT_OK)
                         startActivity<OrderPayActivity>(Pair("order",data))
                         finish()
@@ -147,12 +151,12 @@ class OrderConfirmActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

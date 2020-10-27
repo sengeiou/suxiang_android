@@ -19,29 +19,24 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" />
-    <uses-feature android:name="feature:android.hardware.sensor.stepdetector" />
-
-    <!-- Required -->
+    <uses-feature android:name="feature:android.hardware.sensor.stepdetector" /> <!-- Required -->
     <permission
         android:name="com.sx.enjoy.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <!-- Required -->
+        android:protectionLevel="signature" /> <!-- Required -->
     <uses-permission android:name="com.sx.enjoy.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-
-    <!-- Optional. Required for location feature -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" /> <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" /> <!-- 华为角标 -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
-    <!--华为角标-->
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
 
     <application
         android:name=".App"
@@ -50,10 +45,9 @@
         android:label="@string/app_name"
         android:maxAspectRatio="2.4"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data
@@ -65,221 +59,285 @@
         <meta-data
             android:name="notch.config"
             android:value="portrait|landscape" />
-
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="${JPUSH_CHANNEL}" />
-
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="${JPUSH_APPKEY}"/>
+            android:value="${JPUSH_APPKEY}" />
 
-        <activity android:name=".GuideActivity"
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="f4e52b8303c7542164225ba6ac792391"/>
+
+        <activity
+            android:name=".GuideActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="wakeup" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".modules.mine.WebUrlActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.home.NewsDetailsActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.market.IncomeActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".modules.login.LoginActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".modules.market.BuyInActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".modules.login.PasswordForgetActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
             android:name=".modules.login.RegisterActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.AccountActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.market.MarkDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.market.SellOutActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.TransactionDetailsActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.market.SellRiceActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.TransactionActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.OrderDetailsActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.OrderListActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.OrderPayActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.AddressEditActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.OrderConfirmActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.ShopCartActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.CommodityActivity"
             android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.CommodityListActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.home.SignAnswerActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.home.WalkHistoryActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.MyTaskActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.RecommendTeamActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.LubricateActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.SmartEarnActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.FinanceActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.RiceRecordActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.BalanceRecordActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.WithdrawalActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.BalanceActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.MemberUpActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.PhoneChangeActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.FeedbackActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.AuthenticationActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.PayPasswordActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.LoginPasswordActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.MyAddressActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.home.NoticeDetailsActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
+            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".modules.store.PayResultActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.WebContentActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.mine.AboutUsActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity android:name=".modules.mine.RecommendUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.sx.enjoy.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <service
             android:name=".service.StepCalculationService"
@@ -295,31 +353,25 @@
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
             </intent-filter>
-        </service>
-
-        <!-- Rich push 核心功能 since 2.0.6-->
+        </service> <!-- Rich push 核心功能 since 2.0.6 -->
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
-            android:theme="@style/MyDialogStyle"
             android:exported="false"
-            tools:replace="android:exported">
-        </activity>
-
-        <!-- Required SDK核心功能-->
+            android:theme="@style/MyDialogStyle"
+            tools:replace="android:exported"></activity> <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:theme="@android:style/Theme.NoTitleBar"
             android:exported="false"
+            android:theme="@android:style/Theme.NoTitleBar"
             tools:replace="android:exported">
             <intent-filter>
                 <action android:name="cn.jpush.android.ui.PushActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="${applicationId}" />
             </intent-filter>
-        </activity>
-
-        <!-- Required SDK 核心功能-->
+        </activity> <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
@@ -330,17 +382,13 @@
                 <action android:name="cn.jpush.android.intent.PushService" />
                 <action android:name="cn.jpush.android.intent.PUSH_TIME" />
             </intent-filter>
-        </service>
-
-        <!-- since 3.0.9 Required SDK 核心功能-->
+        </service> <!-- since 3.0.9 Required SDK 核心功能 -->
         <provider
-            android:authorities="${applicationId}.DataProvider"
             android:name="cn.jpush.android.service.DataProvider"
-            android:process=":pushcore"
+            android:authorities="${applicationId}.DataProvider"
             android:exported="false"
-            tools:replace="android:authorities" />
-
-        <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+            android:process=":pushcore"
+            tools:replace="android:authorities" /> <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
         <!-- 若不启用该功能可删除该组件，或把 enabled 设置成 false ；App 不会被其他 App 拉起，但会拉起其他的 App。 -->
         <service
             android:name="cn.jpush.android.service.DaemonService"
@@ -348,36 +396,32 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
-
-        </service>
-
-        <!-- 可选，如果使用静态Activity方式拉起，该组件必须声明 -->
-        <activity android:name="cn.jpush.android.service.DActivity"
+        </service> <!-- 可选，如果使用静态Activity方式拉起，该组件必须声明 -->
+        <activity
+            android:name="cn.jpush.android.service.DActivity"
             android:enabled="true"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:taskAffinity="jpush.custom">
+            android:taskAffinity="jpush.custom"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.DActivity"/>
+                <action android:name="cn.jpush.android.intent.DActivity" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
-        </activity>
-
-        <!-- since 3.1.0 Required SDK 核心功能-->
+        </activity> <!-- since 3.1.0 Required SDK 核心功能 -->
         <provider
-            android:authorities="${applicationId}.DownloadProvider"
             android:name="cn.jpush.android.service.DownloadProvider"
+            android:authorities="${applicationId}.DownloadProvider"
             android:exported="true"
-            tools:replace="android:authorities" />
-
-        <!-- Required SDK核心功能-->
+            tools:replace="android:authorities" /> <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true">
             <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />   <!--Required  显示通知栏 -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" /> <!-- Required  显示通知栏 -->
                 <category android:name="${applicationId}" />
             </intent-filter>
             <intent-filter>
@@ -391,43 +435,34 @@
 
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>
-
-        <!-- Required SDK核心功能-->
-        <receiver android:name="cn.jpush.android.service.AlarmReceiver" android:exported="false"/>
-
-        <!-- 3.5.0新增，用于定时展示功能 -->
-        <receiver android:name="cn.jpush.android.service.SchedulerReceiver" android:exported="false"/>
-
-        <!-- 3.6.7 新增，用于负反馈组件 -->
-        <service android:name="cn.jpush.android.service.MessagingIntentService" />
-
-        <!-- User defined.  For test only  用户自定义的广播接收器-->
+        </receiver> <!-- Required SDK核心功能 -->
         <receiver
-            android:name="com.sx.enjoy.receiver.MyReceiver"
+            android:name="cn.jpush.android.service.AlarmReceiver"
+            android:exported="false" /> <!-- 3.5.0新增，用于定时展示功能 -->
+        <receiver
+            android:name="cn.jpush.android.service.SchedulerReceiver"
+            android:exported="false" /> <!-- 3.6.7 新增，用于负反馈组件 -->
+        <service android:name="cn.jpush.android.service.MessagingIntentService" /> <!-- User defined.  For test only  用户自定义的广播接收器 -->
+        <receiver
+            android:name=".receiver.MyReceiver"
             android:enabled="true">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!--Required  用户注册SDK的intent-->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!--Required  用户接收SDK消息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!--Required  用户接收SDK通知栏信息的intent-->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!--Required  用户打开自定义通知栏的intent-->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /><!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <category android:name="${applicationId}" />
             </intent-filter>
-        </receiver>
-
-
-
-        <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调-->
-        <!--since 3.3.0 接收JPush相关事件-->
-        <receiver android:name="com.sx.enjoy.receiver.PushMessageReceiver">
+        </receiver> <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调 -->
+        <!-- since 3.3.0 接收JPush相关事件 -->
+        <receiver android:name=".receiver.PushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />
-                <category android:name="${applicationId}"></category>
-            </intent-filter>
-        </receiver>
 
-        <!--since 3.3.0 Required SDK核心功能-->
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver> <!-- since 3.3.0 Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.service.JNotifyActivity"
             android:exported="false"
@@ -436,22 +471,23 @@
             tools:replace="android:exported">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.JNotifyActivity" />
+
                 <category android:name="${applicationId}" />
             </intent-filter>
-        </activity>
-
-        <!-- since 3.3.0 Required SDK 核心功能-->
+        </activity> <!-- since 3.3.0 Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
-        <!--User defined.  For test only 继承自cn.jpush.android.service.JCommonService-->
-        <service android:name="com.sx.enjoy.service.PushService"
+        <!-- User defined.  For test only 继承自cn.jpush.android.service.JCommonService -->
+        <service
+            android:name=".service.PushService"
             android:process=":pushcore">
             <intent-filter>
                 <action android:name="cn.jiguang.user.service.action" />
             </intent-filter>
-        </service>
-        <!-- since 3.5.6 新增华硕通道  -->
-        <receiver android:name="cn.jpush.android.asus.AsusPushMessageReceiver"></receiver>
-        <!-- Required  . Enable it you can get statistics data with channel -->
+        </service> <!-- since 3.5.6 新增华硕通道 -->
+        <receiver android:name="cn.jpush.android.asus.AsusPushMessageReceiver" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
     </application>
 
 </manifest>

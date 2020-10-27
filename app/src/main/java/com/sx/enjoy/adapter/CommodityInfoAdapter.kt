@@ -11,11 +11,6 @@ import com.sx.enjoy.utils.ImageLoaderUtil
 class CommodityInfoAdapter: BaseQuickAdapter<String, BaseViewHolder>(R.layout.item_image_show){
     override fun convert(helper: BaseViewHolder, item: String?) {
         val showImage = helper.getView<ImageView>(R.id.iv_show)
-        val p = showImage.layoutParams
-        val w = ScreenUtils.getScreenWidth(mContext)
-        p.width = w
-        p.height = w
-        showImage.layoutParams = p
         ImageLoaderUtil().displayCommodityInfoImage(mContext,item,showImage)
     }
 }

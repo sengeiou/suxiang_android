@@ -49,7 +49,7 @@ interface ApiService {
 
     //是否签到
     @GET("api-question/signRecord/judgmentSign")
-    fun getSignResult(@Query("userId")userId:String):Observable<HttpResult<Boolean>>
+    fun getSignResult(@Query("userId")userId:String):Observable<HttpResult<SignResultBean>>
 
     //题库
     @GET("api-question/findQuestionsRandom")
@@ -251,4 +251,35 @@ interface ApiService {
     @GET("api-system/sxcontentmanager/id")
     fun getNewsDetails(@Query("id")id:String):Observable<HttpResult<NewsDetailsBean>>
 
+    //删除地址
+    @POST("api-mall/receiveraddress/batchdUpdate")
+    fun deleteAddress(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //新闻详情
+    @GET("api-user/user/getTeamUser")
+    fun getTeamUser(@Query("userId")userId:String):Observable<HttpResult<TeamUserBean>>
+
+    //获取更新
+    @GET("api-system/versions/findByVersion")
+    fun getUpdateInfo(@QueryMap map:Map<String,String>):Observable<HttpResult<UpdateInfoBean>>
+
+    //交易限制
+    @GET("api-rich/rich/transc-rest")
+    fun getTransactionLimit(@Query("type")type:String):Observable<HttpResult<String>>
+
+    //订单提醒
+    @GET("api-rich/rich-order/process-rich")
+    fun getTransactionProcess(@Query("userId")userId:String):Observable<HttpResult<TransactionProcessBean>>
+
+    //交易限制
+    @GET("api-rich/rich/rich-fee")
+    fun getRichFee(@Query("userId")userId:String):Observable<HttpResult<String>>
+
+    //达人信息
+    @GET("api-system/sxexpert/getFutureLevel")
+    fun getFutureLevel(@Query("userId")userId:String):Observable<HttpResult<FutureLevelBean>>
+
+    //达人升级
+    @POST("api-system/sxexpert/expertUpgrade")
+    fun expertUpgrade(@Body body: RequestBody):Observable<HttpResult<String>>
 }

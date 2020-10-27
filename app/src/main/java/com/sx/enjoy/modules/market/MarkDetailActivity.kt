@@ -1,6 +1,6 @@
 package com.sx.enjoy.modules.market
 
-import android.app.Activity
+import android.view.Gravity
 import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
@@ -13,6 +13,7 @@ import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import kotlinx.android.synthetic.main.activity_market_detail.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -28,6 +29,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
     private var marketDetail:MarketListBean? = null
 
     private var type = 0
+    private var isSend = false
     private var marketId = ""
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,if(type==0) "买入详情" else "卖出详情")
@@ -59,7 +61,10 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                 if(type == C.MARKET_ORDER_STATUS_BUY){
                     startActivity<SellRiceActivity>(Pair("type",type),Pair("marketId",marketId),Pair("amount",it.amount), Pair("buyNum",it.richNum), Pair("orderNo",it.orderNo))
                 }else{
-                    present.createMarketOrder(C.USER_ID,type.toString(),it.amount,it.richNum,"",it.orderNo)
+                    if(!isSend){
+                        isSend = true
+                        present.createMarketOrder(C.USER_ID,type.toString(),it.amount,it.richNum,"",it.orderNo)
+                    }
                 }
             }
         }
@@ -67,6 +72,10 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
         noticeDialog.setOnDismissListener {
             startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",0))
             finish()
+        }
+
+        iv_network_error.setOnClickListener {
+            present.getMarketDetails(marketId)
         }
     }
 
@@ -84,6 +93,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                 SXContract.GETMARKETDETAILS -> {
                     data?.let {
                         data as MarketListBean
+                        em_network_view.visibility = View.GONE
                         marketDetail = data
                         ImageLoaderUtil().displayHeadImage(this,data.userImg,iv_user_head)
                         tv_user_name.text = data.userName
@@ -96,6 +106,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                     }
                 }
                 SXContract.CREATEMARKETORDER -> {
+                    isSend = false
                     noticeDialog.showNotice(8)
                     EventBus.getDefault().post(MarketSellSuccessEvent(0))
                 }
@@ -108,12 +119,17 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        isSend = false
+        em_network_view.visibility = View.GONE
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        if(boolean){
-            toast("请检查网络连接")
+        isSend = false
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

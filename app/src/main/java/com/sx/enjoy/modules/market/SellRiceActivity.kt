@@ -1,5 +1,7 @@
 package com.sx.enjoy.modules.market
 
+import android.view.Gravity
+import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
@@ -38,7 +40,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
 
         tv_sell_rice.setOnClickListener {
             if(et_ali_number.text.isEmpty()){
-                toast("请输入支付宝账号")
+                toast("请输入支付宝账号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.createMarketOrder(C.USER_ID,type.toString(),amount,buyNum,et_ali_number.text.toString(),orderNo)
@@ -48,6 +50,8 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
             startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",1))
             finish()
         }
+
+        present.getRichFee(C.USER_ID)
     }
 
     override fun onSuccess(flag: String?, data: Any?) {
@@ -56,6 +60,13 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
                 SXContract.CREATEMARKETORDER -> {
                     noticeDialog.showNotice(6)
                     EventBus.getDefault().post(MarketSellSuccessEvent(1))
+                }
+                SXContract.GETRICHFEE -> {
+                    data?.let {
+                        data as String
+                        ll_rice_fee.visibility = View.VISIBLE
+                        tv_rice_fee.text = "*交易手续费$data%"
+                    }
                 }
                 else -> {
 
@@ -66,12 +77,12 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

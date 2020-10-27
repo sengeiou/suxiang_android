@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Message
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
 import com.alipay.sdk.app.PayTask
 import com.sx.enjoy.R
@@ -55,7 +56,7 @@ class OrderPayActivity : BaseActivity() , SXContract.View{
         }
 
         ll_pay_wx.setOnClickListener {
-            toast("暂不支持微信支付")
+            toast("暂不支持微信支付").setGravity(Gravity.CENTER, 0, 0)
 //            tb_wx.isChecked = true
 //            tb_zfb.isChecked = false
 //            payMethod = 0
@@ -104,12 +105,12 @@ class OrderPayActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

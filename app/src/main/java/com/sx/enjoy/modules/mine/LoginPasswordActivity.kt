@@ -1,5 +1,6 @@
 package com.sx.enjoy.modules.mine
 
+import android.view.Gravity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
@@ -37,23 +38,23 @@ class LoginPasswordActivity : BaseActivity() ,SXContract.View{
         }
         tv_password_save.setOnClickListener {
             if(et_old_password.text.isEmpty()){
-                toast("请输入原密码")
+                toast("请输入原密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_new_password_1.text.isEmpty()){
-                toast("请输入新密码")
+                toast("请输入新密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_new_password_2.text.isEmpty()){
-                toast("请再次输入新密码")
+                toast("请再次输入新密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_new_password_1.text.toString()!=et_new_password_2.text.toString()){
-                toast("密码不一致")
+                toast("密码不一致").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_old_password.text.isNotEmpty()&&et_old_password.text.toString() == et_new_password_1.text.toString()){
-                toast("新密码不可与旧密码一致")
+                toast("新密码不可与旧密码一致").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.updateLoginPassword(C.USER_ID,
@@ -76,12 +77,12 @@ class LoginPasswordActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.view.Gravity
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -40,6 +41,7 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
     }
 
 
+    @SuppressLint("MissingPermission")
     private fun checkPermission(){
         AndPermission.with(this)
             .runtime()
@@ -70,6 +72,9 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
         wb_about_us.settings.loadsImagesAutomatically = true
         wb_about_us.settings.defaultTextEncodingName = "utf-8"
         wb_about_us.addJavascriptInterface(this, "App")
+        wb_about_us.settings.javaScriptEnabled = true
+        wb_about_us.settings.setSupportZoom(false)
+        wb_about_us.settings.builtInZoomControls = false
         setZoomControlGoneX(wb_about_us.settings, arrayOf(false))
 
         wb_about_us.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {
@@ -181,12 +186,12 @@ class AboutUsActivity : BaseActivity(), SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

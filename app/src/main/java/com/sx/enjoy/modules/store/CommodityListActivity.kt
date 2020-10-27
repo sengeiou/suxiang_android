@@ -1,6 +1,8 @@
 package com.sx.enjoy.modules.store
 
-import android.support.v7.widget.GridLayoutManager
+import android.view.Gravity
+import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.CommodityListAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -9,6 +11,7 @@ import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_commodity_list.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -17,6 +20,9 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
     private lateinit var present: SXPresent
 
     private lateinit var mAdapter : CommodityListAdapter
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private var pager = 1
     private var priceState = -1
@@ -43,6 +49,10 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
         mAdapter = CommodityListAdapter()
         rcy_commodity_list.layoutManager = GridLayoutManager(this,2)
         rcy_commodity_list.adapter = mAdapter
+
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         getCommodityList(true)
 
@@ -112,6 +122,9 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
         mAdapter.setOnLoadMoreListener {
             getCommodityList(false)
         }
+        errorView.iv_network_error.setOnClickListener {
+            getCommodityList(true)
+        }
     }
 
     override fun onSuccess(flag: String?, data: Any?) {
@@ -121,6 +134,8 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
                     data?.let {
                         data as List<CommodityListBean>
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -143,9 +158,11 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -157,13 +174,15 @@ class CommodityListActivity : BaseActivity() , SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

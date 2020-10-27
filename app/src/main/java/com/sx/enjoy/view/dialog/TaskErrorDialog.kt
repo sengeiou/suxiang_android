@@ -32,6 +32,7 @@ class TaskErrorDialog : Dialog {
         }
         tv_confirm.setOnClickListener {
             dismiss()
+            mOnNoticeConfirmListener?.onConfirm()
         }
     }
 

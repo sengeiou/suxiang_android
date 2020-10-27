@@ -1,6 +1,7 @@
 package com.sx.enjoy.modules.home
 
-import android.support.v7.widget.GridLayoutManager
+import android.view.Gravity
+import androidx.recyclerview.widget.GridLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.AnswerListAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -54,17 +55,17 @@ class SignAnswerActivity : BaseActivity() ,SXContract.View{
             if(questList.isEmpty()){
                 return@setOnClickListener
             }
-            if(questIndex>=questList.size){
-                present.userSign(C.USER_ID)
-                return@setOnClickListener
-            }
             if(mAdapter.getSelectItem().isEmpty()){
-                toast("请选择答案")
+                toast("请选择答案").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(questList[questIndex].answer.toLowerCase() == mAdapter.getSelectItem().toLowerCase()){
-                questIndex++
-                initQuestion()
+                if(questIndex<questList.size-1){
+                    questIndex++
+                    initQuestion()
+                }else{
+                    present.userSign(C.USER_ID)
+                }
             }else{
                 errorDialog.show()
             }
@@ -125,12 +126,12 @@ class SignAnswerActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

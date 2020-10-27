@@ -3,8 +3,10 @@ package com.sx.enjoy
 import android.util.Log
 import cn.jpush.android.api.JPushInterface
 import com.likai.lib.app.BaseApplication
+import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
+import com.tencent.bugly.crashreport.CrashReport
 import com.tencent.smtt.sdk.QbSdk
 import com.umeng.analytics.MobclickAgent
 import com.umeng.commonsdk.UMConfigure
@@ -42,6 +44,9 @@ class App: BaseApplication(){
 
         JPushInterface.setDebugMode(true)
         JPushInterface.init(this)
+        SharedPreferencesUtil.putCommonString(this,"RegistrationID",JPushInterface.getRegistrationID(this))
+
+        CrashReport.initCrashReport(applicationContext, C.BUGLY_APP_ID, false)
 
         val user = LitePal.findLast(UserBean::class.java)
         if(user!=null){

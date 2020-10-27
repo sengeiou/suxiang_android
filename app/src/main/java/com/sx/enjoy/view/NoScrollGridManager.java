@@ -1,8 +1,9 @@
 package com.sx.enjoy.view;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
 import android.util.AttributeSet;
+
+import androidx.recyclerview.widget.GridLayoutManager;
 
 public class NoScrollGridManager extends GridLayoutManager {
 

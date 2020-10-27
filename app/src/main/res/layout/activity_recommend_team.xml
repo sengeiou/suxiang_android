@@ -10,25 +10,6 @@
 
     <include layout="@layout/title_public_view"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_140">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@mipmap/bg_team_recommend"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:src="@mipmap/ic_show_details"/>
-
-    </RelativeLayout>
-
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -44,10 +25,10 @@
             app:srlAccentColor="@color/color_3A3A3A"
             app:srlPrimaryColor="@color/transparent"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcy_recommend_team"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 

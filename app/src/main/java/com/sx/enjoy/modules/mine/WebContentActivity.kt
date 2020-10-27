@@ -1,8 +1,6 @@
 package com.sx.enjoy.modules.mine
 
 import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -44,6 +42,9 @@ class WebContentActivity : BaseActivity() ,SXContract.View{
         wb_view.settings.loadsImagesAutomatically = true
         wb_view.settings.defaultTextEncodingName = "utf-8"
         wb_view.addJavascriptInterface(this, "App")
+        wb_view.settings.javaScriptEnabled = true
+        wb_view.settings.setSupportZoom(false)
+        wb_view.settings.builtInZoomControls = false
         setZoomControlGoneX(wb_view.settings, arrayOf(false))
 
         wb_view.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {

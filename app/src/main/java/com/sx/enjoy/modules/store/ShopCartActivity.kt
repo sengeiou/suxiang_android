@@ -1,9 +1,9 @@
 package com.sx.enjoy.modules.store
 
-import android.app.Activity
 import android.content.Intent
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.ShopCartAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -11,12 +11,15 @@ import com.sx.enjoy.bean.CreateOrderBean
 import com.sx.enjoy.bean.OrderSendBean
 import com.sx.enjoy.bean.ShopCartBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.event.ShopCartChangeEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.SwipeItemLayout
 import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_shop_cart.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
 import kotlinx.android.synthetic.main.title_public_view.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
@@ -26,6 +29,9 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
     private lateinit var present: SXPresent
 
     private lateinit var reminderDialog: ReminderDialog
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private lateinit var mAdapter: ShopCartAdapter
 
@@ -47,6 +53,10 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
         rcy_shop_cart.layoutManager = LinearLayoutManager(this)
         rcy_shop_cart.adapter = mAdapter
         rcy_shop_cart.addOnItemTouchListener(object: SwipeItemLayout.OnSwipeItemTouchListener(this){})
+
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         initEvent()
         getShopCartList()
@@ -139,7 +149,7 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                     if(mAdapter.data[position].goodsNumber>1){
                         present.addCommodityNumber(mAdapter.data[position].id,(mAdapter.data[position].goodsNumber-1).toString(),position,0)
                     }else{
-                        toast("不能再减少了")
+                        toast("不能再减少了").setGravity(Gravity.CENTER, 0, 0)
                     }
                 }
                 R.id.tv_cart_delete -> {
@@ -158,6 +168,11 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                 present.deleteCommodityFromShopCart(ids)
             }
         })
+
+        errorView.iv_network_error.setOnClickListener {
+            getShopCartList()
+        }
+
     }
 
     private fun getShopCartList(){
@@ -178,6 +193,7 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == RESULT_OK&&requestCode == 4001){
             getShopCartList()
         }
@@ -189,6 +205,8 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                 SXContract.GETMYSHOPCART -> {
                     data?.let {
                         data as List<ShopCartBean>
+                        mAdapter.isUseEmpty(true)
+                        mAdapter.emptyView = emptyView
                         swipe_refresh_layout.finishRefresh()
                         mAdapter.setNewData(data)
                         tv_total_money.text = "合计：¥0.00"
@@ -199,6 +217,7 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
                 }
                 SXContract.DELETECOMMODITYFROMSHOPCART -> {
                     getShopCartList()
+                    EventBus.getDefault().post(ShopCartChangeEvent(0))
                 }
                 else -> {
 
@@ -222,14 +241,19 @@ class ShopCartActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
+        mAdapter.isUseEmpty(true)
+        mAdapter.emptyView = emptyView
         swipe_refresh_layout.finishRefresh()
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        swipe_refresh_layout.finishRefresh()
-        if(boolean){
-            toast("请检查网络连接")
+        if(isRefreshList){
+            swipe_refresh_layout.finishRefresh()
+            mAdapter.isUseEmpty(true)
+            mAdapter.emptyView = errorView
+        }else{
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

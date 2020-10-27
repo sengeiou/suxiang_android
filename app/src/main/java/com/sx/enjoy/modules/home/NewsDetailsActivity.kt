@@ -1,8 +1,8 @@
 package com.sx.enjoy.modules.home
 
 import android.annotation.SuppressLint
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
+import android.view.Gravity
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
 import com.likai.lib.commonutils.DensityUtils
@@ -16,6 +16,7 @@ import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.tencent.smtt.sdk.WebSettings
 import kotlinx.android.synthetic.main.activity_news_details.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import org.jetbrains.anko.toast
 import java.lang.reflect.Method
 
@@ -35,6 +36,10 @@ class NewsDetailsActivity : BaseActivity(),SXContract.View {
         initWebView()
 
         present.getNewsDetails(intent.getStringExtra("nid"))
+
+        iv_network_error.setOnClickListener {
+            present.getNewsDetails(intent.getStringExtra("nid"))
+        }
     }
 
 
@@ -46,6 +51,9 @@ class NewsDetailsActivity : BaseActivity(),SXContract.View {
         wb_news_details.settings.loadsImagesAutomatically = true
         wb_news_details.settings.defaultTextEncodingName = "utf-8"
         wb_news_details.addJavascriptInterface(this, "App")
+        wb_news_details.settings.javaScriptEnabled = true
+        wb_news_details.settings.setSupportZoom(false)
+        wb_news_details.settings.builtInZoomControls = false
         setZoomControlGoneX(wb_news_details.settings, arrayOf(false))
 
         wb_news_details.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {
@@ -139,10 +147,11 @@ class NewsDetailsActivity : BaseActivity(),SXContract.View {
         flag?.let {
             when (flag) {
                 SXContract.GETNEWSDETAILS -> {
+                    em_network_view.visibility = View.GONE
                     data?.let {
                         data as NewsDetailsBean
                         wb_news_details.loadData(data.content, "text/html", "UTF-8")
-                        ImageLoaderUtil().displayImage(this,data.img,iv_news_image)
+                        ImageLoaderUtil().displayCommodityInfoImage(this,data.img,iv_news_image)
                         tv_new_title.text = data.title
                         tv_new_time.text = data.createTime
                     }
@@ -156,12 +165,13 @@ class NewsDetailsActivity : BaseActivity(),SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        em_network_view.visibility = View.GONE
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            em_network_view.visibility = View.VISIBLE
         }
     }
 

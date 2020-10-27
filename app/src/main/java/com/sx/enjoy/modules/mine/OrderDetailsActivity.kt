@@ -1,5 +1,6 @@
 package com.sx.enjoy.modules.mine
 
+import android.view.Gravity
 import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.OrderCommodityAdapter
@@ -14,6 +15,7 @@ import com.sx.enjoy.view.NoScrollLinearLayoutManager
 import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_order_details.*
+import kotlinx.android.synthetic.main.empty_public_network.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -55,6 +57,9 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
     }
 
     private fun initEvent(){
+        iv_network_error.setOnClickListener {
+            getOrderDetails()
+        }
         tv_order_button_1.setOnClickListener {
             when(order?.status){
                 C.ORDER_NO_PAY -> {
@@ -88,6 +93,7 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
         flag?.let {
             when (flag) {
                 SXContract.GETORDERDETAILS -> {
+                    em_network_view.visibility = View.GONE
                     data?.let {
                         data as OrderDetailsBean
                         order = data
@@ -104,7 +110,6 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
                         mAdapter.setNewData(data.storeInfoList)
 
                         ll_order_address.visibility = View.VISIBLE
-                        ll_order_bottom.visibility = View.VISIBLE
                         ll_order_remark.visibility = if(data.remark.isEmpty()) View.GONE else View.VISIBLE
 
                         when(data.status){
@@ -116,11 +121,28 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
                                 tv_order_button_2.visibility = View.VISIBLE
                                 tv_order_pay.visibility = View.VISIBLE
                                 tv_order_total.visibility = View.VISIBLE
+                                ll_order_bottom.visibility = View.VISIBLE
                             }
                             C.ORDER_NO_SEND -> {
-                                tv_order_button_1.text = "提醒发货"
                                 ll_order_price.visibility = View.VISIBLE
-                                tv_order_button_1.visibility = View.VISIBLE
+                                tv_order_button_1.visibility = View.GONE
+                                tv_order_button_2.visibility = View.GONE
+                                tv_order_pay.visibility = View.INVISIBLE
+                                tv_order_total.visibility = View.INVISIBLE
+                                ll_order_bottom.visibility = View.GONE
+                            }
+                            C.ORDER_NO_RECEIVE -> {
+                                ll_order_price.visibility = View.VISIBLE
+                                tv_order_button_1.visibility = View.GONE
+                                tv_order_button_2.visibility = View.GONE
+                                tv_order_pay.visibility = View.INVISIBLE
+                                tv_order_total.visibility = View.INVISIBLE
+                                ll_order_bottom.visibility = View.GONE
+                            }
+                            C.ORDER_RECEIVE_OVER -> {
+                                ll_order_price.visibility = View.VISIBLE
+                                ll_order_bottom.visibility = View.GONE
+                                tv_order_button_1.visibility = View.GONE
                                 tv_order_button_2.visibility = View.GONE
                                 tv_order_pay.visibility = View.INVISIBLE
                                 tv_order_total.visibility = View.INVISIBLE
@@ -132,29 +154,18 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
                                 tv_order_button_2.visibility = View.GONE
                                 tv_order_pay.visibility = View.INVISIBLE
                                 tv_order_total.visibility = View.INVISIBLE
-                            }
-                            C.ORDER_NO_RECEIVE -> {
-                                tv_order_button_2.text = "确认收货"
-                                ll_order_price.visibility = View.VISIBLE
-                                tv_order_button_1.visibility = View.GONE
-                                tv_order_button_2.visibility = View.VISIBLE
-                                tv_order_pay.visibility = View.INVISIBLE
-                                tv_order_total.visibility = View.INVISIBLE
-                            }
-                            C.ORDER_RECEIVE_OVER -> {
-                                ll_order_price.visibility = View.VISIBLE
-                                ll_order_bottom.visibility = View.GONE
+                                ll_order_bottom.visibility = View.VISIBLE
                             }
                         }
 
                     }
                 }
                 SXContract.CANCELORDER -> {
-                    toast("订单已取消")
+                    toast("订单已取消").setGravity(Gravity.CENTER, 0, 0)
                     getOrderDetails()
                 }
                 SXContract.DELETEORDER -> {
-                    toast("订单已删除")
+                    toast("订单已删除").setGravity(Gravity.CENTER, 0, 0)
                     finish()
                 }
                 else -> {
@@ -166,12 +177,15 @@ class OrderDetailsActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        em_network_view.visibility = View.GONE
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        if(boolean){
-            toast("请检查网络连接")
+        if(isRefreshList){
+            em_network_view.visibility = View.VISIBLE
+        }else{
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 }

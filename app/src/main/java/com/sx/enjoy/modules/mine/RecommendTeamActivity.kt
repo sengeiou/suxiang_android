@@ -1,17 +1,19 @@
 package com.sx.enjoy.modules.mine
 
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.RecommendTeamAdapter
 import com.sx.enjoy.base.BaseActivity
-import com.sx.enjoy.bean.RiceRecordListBean
 import com.sx.enjoy.bean.TeamListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import kotlinx.android.synthetic.main.activity_recommend_team.*
 import kotlinx.android.synthetic.main.activity_recommend_team.swipe_refresh_layout
-import kotlinx.android.synthetic.main.activity_rice_record.*
+import kotlinx.android.synthetic.main.empty_public_network.view.*
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class RecommendTeamActivity : BaseActivity() , SXContract.View {
@@ -19,6 +21,9 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
     private lateinit var present: SXPresent
 
     private lateinit var mAdapter: RecommendTeamAdapter
+
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
 
     private var pager = 1
 
@@ -36,6 +41,13 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
         rcy_recommend_team.layoutManager = LinearLayoutManager(this)
         rcy_recommend_team.adapter = mAdapter
 
+        val headerView = View.inflate(this,R.layout.header_recommend_team,null)
+        mAdapter.addHeaderView(headerView)
+
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.emptyView = emptyView
+
         getTeamList(true)
 
         initEvent()
@@ -48,6 +60,12 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
         }
         mAdapter.setOnLoadMoreListener {
             getTeamList(false)
+        }
+        mAdapter.setOnItemClickListener { adapter, view, position ->
+            startActivity<RecommendUserActivity>(Pair("userId",mAdapter.data[position].id))
+        }
+        errorView.iv_network_error.setOnClickListener {
+            getTeamList(true)
         }
     }
 
@@ -71,6 +89,7 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
                     data?.let {
                         data as List<TeamListBean>
                         if(pager<=1){
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -93,9 +112,10 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -107,13 +127,14 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

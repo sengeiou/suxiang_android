@@ -1,6 +1,8 @@
 package com.sx.enjoy.modules.home
 
-import android.support.v7.widget.LinearLayoutManager
+import android.view.Gravity
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.WalkHistoryAdapter
 import com.sx.enjoy.base.BaseActivity
@@ -17,6 +19,9 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
 
     private lateinit var mAdapter: WalkHistoryAdapter
 
+    private lateinit var emptyView : View
+    private lateinit var errorView : View
+
     private var pager = 1
     private var type = 0
 
@@ -31,9 +36,13 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
     override fun initView() {
         type = intent.getIntExtra("titleType",0)
 
-        mAdapter = WalkHistoryAdapter()
+        mAdapter = WalkHistoryAdapter(type)
         rcy_walk_history.layoutManager = LinearLayoutManager(this)
         rcy_walk_history.adapter = mAdapter
+
+        emptyView = View.inflate(this,R.layout.empty_public_view,null)
+        errorView = View.inflate(this,R.layout.empty_public_network,null)
+        mAdapter.isUseEmpty(false)
 
         if(type == 0){
             tv_sub_title.text = "步数"
@@ -74,6 +83,8 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
                     data?.let {
                         data as List<WalkHistoryBean>
                         if(pager<=1){
+                            mAdapter.isUseEmpty(true)
+                            mAdapter.emptyView = emptyView
                             swipe_refresh_layout.finishRefresh()
                             mAdapter.setEnableLoadMore(true)
                             mAdapter.setNewData(data)
@@ -96,9 +107,11 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = emptyView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
@@ -110,13 +123,15 @@ class WalkHistoryActivity : BaseActivity() , SXContract.View{
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
             if(pager<=1){
+                mAdapter.isUseEmpty(true)
+                mAdapter.emptyView = errorView
                 swipe_refresh_layout.finishRefresh()
                 mAdapter.setEnableLoadMore(true)
             }else{
                 mAdapter.loadMoreFail()
             }
         }else{
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

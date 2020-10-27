@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,4 +18,25 @@
         android:src="@mipmap/ic_guide_bg"
         android:scaleType="fitCenter"/>
 
-</LinearLayout>
+<!--    <TextView-->
+<!--        android:id="@+id/tv_address_host"-->
+<!--        android:layout_width="@dimen/dimen_80"-->
+<!--        android:layout_height="@dimen/dimen_40"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:background="@drawable/bg_main_full_5"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:text="正式服"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tv_confirm"-->
+<!--        android:layout_width="@dimen/dimen_80"-->
+<!--        android:layout_height="@dimen/dimen_40"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:background="@drawable/bg_main_full_5"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:text="确定"/>-->
+
+</RelativeLayout>

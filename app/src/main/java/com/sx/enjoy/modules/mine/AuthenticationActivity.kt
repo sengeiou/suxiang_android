@@ -1,13 +1,15 @@
 package com.sx.enjoy.modules.mine
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Handler
 import android.os.Message
-import android.support.design.widget.BottomSheetBehavior
 import android.text.TextUtils
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.alipay.sdk.app.PayTask
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.AuthUserBean
@@ -17,11 +19,10 @@ import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.UserAuthSuccessEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
-import com.sx.enjoy.utils.EncryptionUtil
 import com.sx.enjoy.utils.RegularUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
-import com.sx.enjoy.view.dialog.PayMethodDialog
 import kotlinx.android.synthetic.main.activity_authentication.*
+import kotlinx.android.synthetic.main.activity_authentication.iv_close
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.toast
 
@@ -57,25 +58,27 @@ class AuthenticationActivity : BaseActivity() ,SXContract.View{
                 return@setOnClickListener
             }
             if(authBean!!.status != 0&&authBean!!.status != 3){
-                toast("您已成功提交认证，无需重复提交")
+                toast("您已成功提交认证，无需重复提交").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_user_id.text.isEmpty()){
-                toast("请输入身份证号")
+                toast("请输入身份证号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_user_name.text.isEmpty()){
-                toast("请输入姓名")
+                toast("请输入姓名").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_user_phone.text.isEmpty()){
-                toast("请输入手机号")
+                toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("手机号不正确")
+                toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
+            val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            im.hideSoftInputFromWindow(et_user_phone.windowToken,0)
             payBottomSheet?.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
@@ -86,7 +89,7 @@ class AuthenticationActivity : BaseActivity() ,SXContract.View{
         }
 
         ll_pay_wx.setOnClickListener {
-            toast("暂不支持微信支付")
+            toast("暂不支持微信支付").setGravity(Gravity.CENTER, 0, 0)
 //            tb_wx.isChecked = true
 //            tb_zfb.isChecked = false
 //            payMethod = 0
@@ -115,7 +118,7 @@ class AuthenticationActivity : BaseActivity() ,SXContract.View{
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                 noticeDialog.showNotice(11)
             }else{
-                toast("支付失败")
+                toast("支付失败").setGravity(Gravity.CENTER, 0, 0)
             }
             EventBus.getDefault().post(UserAuthSuccessEvent(1))
             present.getAuthUser(C.USER_ID)
@@ -192,12 +195,12 @@ class AuthenticationActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 }

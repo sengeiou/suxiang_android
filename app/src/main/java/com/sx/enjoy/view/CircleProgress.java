@@ -81,10 +81,11 @@ public class CircleProgress extends View {
 
     // 线条数
     private int mDottedLineCount = 100;
-    // 圆弧跟虚线之间的距离
-    private int mLineDistance = 20;
     // 线条宽度
     private float mDottedLineWidth = 40;
+
+
+    private int colorType = 1;
 
     public CircleProgress(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -133,9 +134,8 @@ public class CircleProgress extends View {
         mTextOffsetPercentInRadius = typedArray.getFloat(R.styleable.CircleProgressBar_textOffsetPercentInRadius, 0.33f);
         mAnimTime = typedArray.getInt(R.styleable.CircleProgressBar_animTime, 1000);
         mDottedLineCount = typedArray.getInteger(R.styleable.CircleProgressBar_dottedLineCount, mDottedLineCount);
-        mLineDistance = typedArray.getInteger(R.styleable.CircleProgressBar_lineDistance, mLineDistance);
         mDottedLineWidth = typedArray.getDimension(R.styleable.CircleProgressBar_dottedLineWidth, mDottedLineWidth);
-
+        colorType = typedArray.getInteger(R.styleable.CircleProgressBar_color_type, 1);
         typedArray.recycle();
     }
 
@@ -222,7 +222,7 @@ public class CircleProgress extends View {
                 + ";圆的外接矩形 = " + mRectF.toString());
 
         // 虚线的外部半径
-        mExternalDottedLineRadius = (int) (mRectF.width() / 2)+mLineDistance;
+        mExternalDottedLineRadius = (int) (mRectF.width() / 2);
         // 虚线的内部半径
         mInsideDottedLineRadius = mExternalDottedLineRadius - mDottedLineWidth;
     }
@@ -235,42 +235,30 @@ public class CircleProgress extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawText(canvas);
         drawArc(canvas);
     }
 
-    /**
-     * 绘制内容文字
-     *
-     * @param canvas
-     */
-    private void drawText(Canvas canvas) {
-//        canvas.drawText(String.format(mPrecisionFormat, mValue), mCenterPoint.x, mValueOffset, mValuePaint);
-//
-//        if (mHint != null) {
-//            canvas.drawText(mHint.toString(), mCenterPoint.x, mHintOffset, mHintPaint);
-//        }
-//
-//        if (mUnit != null) {
-//            canvas.drawText(mUnit.toString(), mCenterPoint.x, mUnitOffset, mUnitPaint);
-//        }
-    }
 
     private void drawArc(Canvas canvas) {
         // 绘制背景圆弧
         // 从进度圆弧结束的地方开始重新绘制，优化性能
         canvas.save();
 
+        canvas.rotate(180, mCenterPoint.x, mCenterPoint.y);
         // 360 * Math.PI / 180
-        float evenryDegrees = (float) (2.0f * Math.PI / mDottedLineCount);
-        float startDegress = (float) (135 * Math.PI / 180);
-        float endDegress = (float) (225 * Math.PI / 180);
+        float everyDegrees = (float) (2.0f * Math.PI / mDottedLineCount);
+        int curDegrees = (int)(mPercent*mDottedLineCount);
         for (int i = 0; i < mDottedLineCount; i++) {
-            float degrees = i * evenryDegrees;
-            // 过滤底部90度的弧长
-            if (degrees > startDegress && degrees < endDegress) {
-                continue;
+            if(i<=curDegrees){
+                if(colorType == 1){
+                    mBgArcPaint.setColor(Color.rgb(255,(int)(255*(((mDottedLineCount-i)*1f)/mDottedLineCount)),0));
+                }else{
+                    mBgArcPaint.setColor(Color.rgb((int)(255*(((mDottedLineCount-i)*1f)/mDottedLineCount)),255,0));
+                }
+            }else{
+                mBgArcPaint.setColor(getResources().getColor(R.color.white));
             }
+            float degrees = i * everyDegrees;
             float startX = mArcCenterX + (float) Math.sin(degrees) * mInsideDottedLineRadius;
             float startY = mArcCenterX - (float) Math.cos(degrees) * mInsideDottedLineRadius;
 
@@ -280,18 +268,6 @@ public class CircleProgress extends View {
             canvas.drawLine(startX, startY, stopX, stopY, mBgArcPaint);
         }
 
-        canvas.rotate(mStartAngle, mCenterPoint.x, mCenterPoint.y);
-
-        // 第一个参数 oval 为 RectF 类型，即圆弧显示区域
-        // startAngle 和 sweepAngle  均为 float 类型，分别表示圆弧起始角度和圆弧度数
-        // 3点钟方向为0度，顺时针递增
-        // 如果 startAngle < 0 或者 > 360,则相当于 startAngle % 360
-        // useCenter:如果为True时，在绘制圆弧时将圆心包括在内，通常用来绘制扇形
-        float currentAngle = mSweepAngle * mPercent;
-        mArcPaint.setColor(Color.WHITE);
-        canvas.drawArc(mRectF, 0, 270, false, mArcPaint);
-        mArcPaint.setColor(Color.RED);
-        canvas.drawArc(mRectF, 0, currentAngle, false, mArcPaint);
         canvas.restore();
     }
 

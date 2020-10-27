@@ -3,6 +3,7 @@ package com.sx.enjoy.modules.login
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.Gravity
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.UserBean
@@ -76,11 +77,11 @@ class PasswordForgetActivity : BaseActivity()  ,TimeCountUtil.OnCountDownListene
         tv_forget_code.setOnClickListener {
             if(!isGetCode){
                 if(et_user_phone.text.isEmpty()){
-                    toast("请输入手机号")
+                    toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
                     return@setOnClickListener
                 }
                 if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                    toast("手机号不正确")
+                    toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                     return@setOnClickListener
                 }
                 present.sendCode(et_user_phone.text.toString(),"1")
@@ -88,27 +89,27 @@ class PasswordForgetActivity : BaseActivity()  ,TimeCountUtil.OnCountDownListene
         }
         tv_forget.setOnClickListener {
             if(et_user_phone.text.isEmpty()){
-                toast("请输入手机号")
+                toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("手机号不正确")
+                toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_code.text.isEmpty()){
-                toast("请输入验证码")
+                toast("请输入验证码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_password_1.text.isEmpty()){
-                toast("请输入密码")
+                toast("请输入密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_password_2.text.isEmpty()){
-                toast("请再次输入密码")
+                toast("请再次输入密码").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             if(et_password_1.text.toString()!=et_password_2.text.toString()){
-                toast("密码不一致")
+                toast("密码不一致").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
             present.forgetPassword(et_user_phone.text.toString(),et_code.text.toString(),
@@ -152,12 +153,12 @@ class PasswordForgetActivity : BaseActivity()  ,TimeCountUtil.OnCountDownListene
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!)
+        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(boolean){
-            toast("请检查网络连接")
+            toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }
     }
 

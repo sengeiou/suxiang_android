@@ -1,16 +1,15 @@
 package com.sx.enjoy.modules.task
 
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.util.Log
+import android.view.Gravity
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
 import com.gyf.immersionbar.ImmersionBar
 import com.likai.lib.base.BaseFragment
 import com.sx.enjoy.R
 import com.sx.enjoy.bean.TaskRiceBean
-import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.modules.login.LoginActivity
 import com.sx.enjoy.modules.mine.WebContentActivity
@@ -33,7 +32,6 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     }
 
     override fun initView() {
-        ImmersionBar.with(activity!!).statusBarDarkFont(true).titleBar(tb_task_title).init()
 
         initFragment()
         initEvent()
@@ -56,6 +54,16 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
         }
         vp_task.offscreenPageLimit = 2
 
+        vp_task.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                initTaskTitle(position)
+            }
+        })
+
         initTaskTitle(0)
     }
 
@@ -75,7 +83,7 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
             initTaskTitle(0)
         }
         tv_task_content.setOnClickListener {
-            activity?.startActivity<WebContentActivity>(Pair("type",3), Pair("title","卷轴说明"))
+            activity?.startActivity<WebContentActivity>(Pair("type",5), Pair("title","卷轴说明"))
         }
         rl_task_mine.setOnClickListener {
             if(C.USER_ID.isEmpty()){
@@ -124,6 +132,13 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
     }
 
     override fun onBuyTaskSuccess() {
+        fragments[0].initData()
+        fragments[1].initData()
+        fragments[2].initData()
+    }
+
+    override fun refreshData() {
+        fragments[0].initData()
         fragments[1].initData()
         fragments[2].initData()
     }
@@ -137,6 +152,10 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
         }else{
             present.getTaskRiceGrains(C.USER_ID)
         }
+    }
+
+    override fun onRefreshSuccess() {
+        isLoadComplete = true
     }
 
     override fun onSuccess(flag: String?, data: Any?) {
@@ -160,11 +179,10 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        activity?.toast(string!!)
+        activity?.toast(string!!)?.setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
-        activity?.toast("请检查网络连接")
     }
 
 

@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_task_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_50"
@@ -44,15 +44,15 @@
             
         </RelativeLayout>
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="true">
 
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             app:elevation="0dp"
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             android:fitsSystemWindows="true">
 
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsingToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -107,9 +107,8 @@
 
                             <TextView
                                 android:id="@+id/tv_walk_total"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_13"
                                 android:text="总步数 0"/>
@@ -134,9 +133,8 @@
 
                             <TextView
                                 android:id="@+id/tv_activity_total"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_13"
                                 android:text="总活跃度 0"/>
@@ -147,9 +145,9 @@
 
                 </RelativeLayout>
 
-            </android.support.design.widget.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -179,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:textSize="@dimen/text_16"
+                            android:textSize="@dimen/text_15"
                             android:textColor="@color/title_main_color"
                             android:text="任务卷轴"/>
 
@@ -204,7 +202,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:textSize="@dimen/text_16"
+                            android:textSize="@dimen/text_15"
                             android:textColor="@color/color_666666"
                             android:text="我的任务"/>
 
@@ -230,7 +228,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
-                            android:textSize="@dimen/text_16"
+                            android:textSize="@dimen/text_15"
                             android:textColor="@color/color_666666"
                             android:text="历史任务"/>
 
@@ -249,16 +247,13 @@
 
             </LinearLayout>
 
-            <com.sx.enjoy.view.NoScrollViewPager
+            <androidx.viewpager.widget.ViewPager
                 android:id="@+id/vp_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
 
-
-    </android.support.design.widget.CoordinatorLayout>
-
-
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

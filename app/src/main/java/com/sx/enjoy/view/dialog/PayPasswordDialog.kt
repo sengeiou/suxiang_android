@@ -2,13 +2,15 @@ package com.sx.enjoy.view.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import com.sx.enjoy.R
 import kotlinx.android.synthetic.main.dialog_pay_password.*
 
 class PayPasswordDialog : Dialog {
 
-    constructor(context: Context) : super(context, R.style.CustomDialog)
+    constructor(context: Context) : super(context, R.style.PayDialog)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +24,7 @@ class PayPasswordDialog : Dialog {
     fun showInputPassword(){
         show()
         et_password.setText("")
+        et_password.requestFocus()
     }
 
     private fun initEvent(){

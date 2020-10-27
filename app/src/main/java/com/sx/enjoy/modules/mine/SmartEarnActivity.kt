@@ -1,8 +1,19 @@
 package com.sx.enjoy.modules.mine
 
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.os.Message
+import com.gyf.immersionbar.ImmersionBar
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
+import com.sx.enjoy.utils.CodeUtil
+import com.sx.enjoy.utils.ImageLoaderUtil
+import com.sx.enjoy.utils.ScreenShotUtil
+import kotlinx.android.synthetic.main.activity_smart_earn.*
+import org.jetbrains.anko.toast
+import org.litepal.LitePal
 
 class SmartEarnActivity : BaseActivity() {
 
@@ -11,6 +22,46 @@ class SmartEarnActivity : BaseActivity() {
     override fun getLayoutResource() = R.layout.activity_smart_earn
 
     override fun initView() {
+        ImmersionBar.with(this).statusBarDarkFont(true).titleBar(tb_earn_title).init()
+
+        val user = LitePal.findLast(UserBean::class.java)
+
+        ImageLoaderUtil().displayImage(this,user.userImg,iv_user_head)
+        tv_user_name.text = user.userName
+        tv_user_star.text = user.userLevelName
+        if(user.userLink.isNotEmpty()){
+            iv_user_code.setImageBitmap(CodeUtil.createQrcode(user.userLink))
+        }
+
+
+        ll_public_back.setOnClickListener {
+            finish()
+        }
+
+        bt_save.setOnClickListener {
+            val saveRunnable = Runnable {
+                val isSuccess = ScreenShotUtil.saveScreenshotFromView(ll_earn_view,this)
+
+                val msg = Message()
+                msg.what = if(isSuccess)1 else 0
+                mHandler.sendMessage(msg)
+            }
+
+            val saveThread = Thread(saveRunnable)
+            saveThread.start()
+        }
 
     }
+
+    private val mHandler = @SuppressLint("HandlerLeak")
+    object : Handler() {
+        override fun handleMessage(msg: Message) {
+            if(msg.what == 1){
+                toast("保存成功")
+            }else{
+                toast("保存失败")
+            }
+        }
+    }
+
 }

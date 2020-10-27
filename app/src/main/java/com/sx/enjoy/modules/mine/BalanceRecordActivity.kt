@@ -1,6 +1,6 @@
 package com.sx.enjoy.modules.mine
 
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.BalanceRecordAdapter
 import com.sx.enjoy.base.BaseActivity

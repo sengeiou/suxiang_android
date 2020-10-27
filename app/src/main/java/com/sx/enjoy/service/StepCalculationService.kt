@@ -1,5 +1,7 @@
 package com.sx.enjoy.service
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -25,10 +27,15 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import com.sx.enjoy.R
 import android.hardware.SensorManager
-import android.support.v4.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-
-
+import android.view.Gravity
+import com.amap.api.location.AMapLocation
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
+import com.amap.api.location.AMapLocationListener
+import com.yanzhenjie.permission.AndPermission
+import org.jetbrains.anko.toast
 
 
 class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShakeListener{
@@ -39,7 +46,12 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
 
     private lateinit var mSensorManager: SensorManager
 
+    private var mLocationClient: AMapLocationClient? = null
+
     private var isStart = true
+
+    private var lat = "0.0"
+    private var lon  = "0.0"
 
 
     override fun onCreate() {
@@ -74,10 +86,62 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
         mShakeDetector.registerOnShakeListener(this)
         mShakeDetector.start()
 
-        mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            checkPermission()
+        }else{
+            mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
+        }
 
+        AMapLocationClient.setApiKey(C.A_MAP_API)
+        mLocationClient = AMapLocationClient(applicationContext)
+        val mLocationOption = AMapLocationClientOption()
+        mLocationOption.locationMode = AMapLocationClientOption.AMapLocationMode.Battery_Saving
+        mLocationOption.isNeedAddress = true
+        mLocationOption.interval = 3*60*1000
+        mLocationClient?.setLocationOption(mLocationOption)
+        mLocationClient?.setLocationListener(localListener)
+
+        getLocationPermission()
     }
+
+    @SuppressLint("MissingPermission")
+    private fun checkPermission(){
+        AndPermission.with(this)
+            .runtime()
+            .permission(Manifest.permission.ACTIVITY_RECOGNITION)
+            .onGranted { permissions ->
+                mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+                mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
+            }
+            .onDenied { permissions ->
+                toast("不赋于该权限应用将无法正常计步").setGravity(Gravity.CENTER, 0, 0)
+            }
+            .start()
+    }
+
+    private fun getLocationPermission(){
+        AndPermission.with(this)
+            .runtime()
+            .permission(Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION )
+            .onGranted { permissions ->
+                mLocationClient?.startLocation()
+            }
+            .onDenied { permissions ->
+                toast("不赋于定位权限将无法正常使用车行记录").setGravity(Gravity.CENTER, 0, 0)
+                getLocationPermission()
+            }
+            .start()
+    }
+
+    private val localListener = AMapLocationListener {
+        if(it.errorCode == 0){
+            lat = it.latitude.toString()
+            lon = it.longitude.toString()
+            Log.e("Test","address ----->"+lat+"--->"+lon)
+        }
+    }
+
 
     private val mSensorListener = object : SensorEventListener{
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
@@ -86,11 +150,13 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
             val sdf = getSharedPreferences(SharedPreferencesUtil.SP_COMMON_NAME,Context.MODE_PRIVATE)
             val editor = sdf.edit()
             val todayStep = sdf.getInt("todayStep",0)
+            Log.e("Test","todayStep----------------->"+todayStep)
             if(todayStep>0){
                 var minStep = sdf.getInt("minStep",0)
                 minStep += (event.values[0] - todayStep).toInt()
                 if(minStep>0){
                     editor.putInt("minStep",minStep)
+                    Log.e("Test","minStep----------------->"+minStep)
                 }
             }
             editor.putInt("todayStep",event.values[0].toInt())
@@ -103,7 +169,6 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
     private fun onStepChange(){
         val step = SharedPreferencesUtil.getCommonInt(this,"step")
         val minStep = SharedPreferencesUtil.getCommonInt(this,"minStep")
-        Log.e("Test","onStepChange----------------->step"+(step+minStep))
         EventBus.getDefault().post(StepRefreshEvent(step+minStep))
     }
 
@@ -124,6 +189,7 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
         super.onDestroy()
         isStart = false
         mShakeDetector.stop()
+        mLocationClient?.onDestroy()
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -137,21 +203,23 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
     private fun startStepTask(){
         Thread {
             while (isStart){
-                if(C.USER_ID.isNotEmpty()){
-                    val sdf = getSharedPreferences(SharedPreferencesUtil.SP_COMMON_NAME,Context.MODE_PRIVATE)
-                    val localDate = sdf.getString("localDate","")
-                    val newDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
-                    if(localDate != newDate){
-                        val editor = sdf.edit()
-                        editor.putString("localDate",newDate)
-                        editor.putInt("step",0)
-                        editor.putInt("minStep",0)
-                        editor.putInt("todayStep",0)
-                        editor.apply()
+                synchronized(this){
+                    if(C.USER_ID.isNotEmpty()){
+                        val sdf = getSharedPreferences(SharedPreferencesUtil.SP_COMMON_NAME,Context.MODE_PRIVATE)
+                        val localDate = sdf.getString("localDate","")
+                        val newDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
+                        if(localDate != newDate){
+                            val editor = sdf.edit()
+                            editor.putString("localDate",newDate)
+                            editor.putInt("step",0)
+                            editor.putInt("minStep",0)
+                            editor.putInt("todayStep",0)
+                            editor.apply()
+                        }
+                        uploadStepAndLocation()
                     }
-                    uploadStepAndLocation()
+                    Thread.sleep(30000)
                 }
-                Thread.sleep(30000)
             }
         }.start()
     }
@@ -159,8 +227,9 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
     private fun uploadStepAndLocation(){
         val step = SharedPreferencesUtil.getCommonInt(this,"step")
         val minStep= SharedPreferencesUtil.getCommonInt(this,"minStep")
-        present.getRiceFromStep(C.USER_ID,"123","0","0",minStep.toString(),step.toString())
+        present.getRiceFromStep(C.USER_ID,"123",lat,lon,minStep.toString(),step.toString())
     }
+
 
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
@@ -182,9 +251,8 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
                                 editor.putInt("minStep",data.minStep)
                             }
                             editor.apply()
-                            Log.e("Test","shakeStepRefresh-------"+step+"------>"+minStep)
                             EventBus.getDefault().post(StepRefreshEvent(step+minStep))
-                            EventBus.getDefault().post(RiceRefreshEvent(data.minStep,data.walkRiceGrains,data.drivingRiceGrains,data.rotateMinStep,data.calories,data.targetWalk,data.mileage))
+                            EventBus.getDefault().post(RiceRefreshEvent(data.minStep,data.walkRiceGrains,data.drivingRiceGrains,data.rotateMinStep,data.targetWalk,data.mileage,data.targetDriving))
                         }
                     }
                 }
