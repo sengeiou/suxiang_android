@@ -31,7 +31,7 @@ public class ShakeDetector implements SensorEventListener {
         mContext = context;
         mSensorManager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
-        mListeners = new ArrayList<OnShakeListener>();
+        mListeners = new ArrayList<>();
     }
     /**
      * 当摇晃事件发生时，接收通知
@@ -65,18 +65,15 @@ public class ShakeDetector implements SensorEventListener {
      */
     public void start() {
         if (mSensorManager == null) {
-            throw new UnsupportedOperationException();
+            return;
         }
         Sensor sensor = mSensorManager
                 .getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor == null) {
-            throw new UnsupportedOperationException();
+            return;
         }
-        boolean success = mSensorManager.registerListener(this, sensor,
+        mSensorManager.registerListener(this, sensor,
                 SensorManager.SENSOR_DELAY_GAME);
-        if (!success) {
-            throw new UnsupportedOperationException();
-        }
     }
     /**
      * 停止摇晃检测

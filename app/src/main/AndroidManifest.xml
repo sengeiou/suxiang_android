@@ -21,7 +21,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" />
     <uses-feature android:name="feature:android.hardware.sensor.stepdetector" /> <!-- Required -->
@@ -358,7 +359,7 @@
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
             android:theme="@style/MyDialogStyle"
-            tools:replace="android:exported"></activity> <!-- Required SDK核心功能 -->
+            tools:replace="android:exported"/> <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"

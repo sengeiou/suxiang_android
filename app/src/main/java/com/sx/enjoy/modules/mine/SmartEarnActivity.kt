@@ -1,8 +1,10 @@
 package com.sx.enjoy.modules.mine
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Handler
 import android.os.Message
+import android.view.Gravity
 import com.gyf.immersionbar.ImmersionBar
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
@@ -11,6 +13,7 @@ import com.sx.enjoy.constans.C
 import com.sx.enjoy.utils.CodeUtil
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.utils.ScreenShotUtil
+import com.yanzhenjie.permission.AndPermission
 import kotlinx.android.synthetic.main.activity_smart_earn.*
 import org.jetbrains.anko.toast
 import org.litepal.LitePal
@@ -39,18 +42,32 @@ class SmartEarnActivity : BaseActivity() {
         }
 
         bt_save.setOnClickListener {
-            val saveRunnable = Runnable {
-                val isSuccess = ScreenShotUtil.saveScreenshotFromView(ll_earn_view,this)
-
-                val msg = Message()
-                msg.what = if(isSuccess)1 else 0
-                mHandler.sendMessage(msg)
-            }
-
-            val saveThread = Thread(saveRunnable)
-            saveThread.start()
+            checkDownloadPermission()
         }
 
+    }
+
+
+    private fun checkDownloadPermission(){
+        AndPermission.with(this)
+            .runtime()
+            .permission(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+            .onGranted { permissions ->
+                val saveRunnable = Runnable {
+                    val isSuccess = ScreenShotUtil.saveScreenshotFromView(ll_earn_view,this)
+
+                    val msg = Message()
+                    msg.what = if(isSuccess)1 else 0
+                    mHandler.sendMessage(msg)
+                }
+
+                val saveThread = Thread(saveRunnable)
+                saveThread.start()
+            }
+            .onDenied { permissions ->
+
+            }
+            .start()
     }
 
     private val mHandler = @SuppressLint("HandlerLeak")

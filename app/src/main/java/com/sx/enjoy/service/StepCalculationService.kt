@@ -2,7 +2,7 @@ package com.sx.enjoy.service
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
@@ -18,10 +18,7 @@ import com.sx.enjoy.utils.ShakeDetector
 import org.greenrobot.eventbus.EventBus
 import java.text.SimpleDateFormat
 import java.util.*
-import android.app.Notification
 import android.os.Build
-import android.app.NotificationManager
-import android.app.NotificationChannel
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -30,10 +27,12 @@ import android.hardware.SensorManager
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.view.Gravity
+import androidx.core.app.NotificationManagerCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.sx.enjoy.MainActivity
 import com.yanzhenjie.permission.AndPermission
 import org.jetbrains.anko.toast
 
@@ -44,7 +43,7 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
 
     private lateinit var mShakeDetector :ShakeDetector
 
-    private lateinit var mSensorManager: SensorManager
+    private var mSensorManager: SensorManager? = null
 
     private var mLocationClient: AMapLocationClient? = null
 
@@ -65,19 +64,24 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
             val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel("step_service","主服务",NotificationManager.IMPORTANCE_HIGH)
             channel.enableLights(false)
-            channel.setShowBadge(true)
+            channel.setShowBadge(false)
+            channel.setSound(null, null)
+            channel.enableVibration(false)
             channel.description = "123456"
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             manager.createNotificationChannel(channel)
 
+            val pIntent = PendingIntent.getActivity(this,0,Intent(Intent(this, MainActivity::class.java)),0)
             val notification = Notification.Builder(this)
                 .setChannelId("step_service")
                 .setAutoCancel(true)
                 .setContentTitle("速享")
                 .setContentText("运行中...")
+                .setAutoCancel(true)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_logo)
                 .setOngoing(true)
+                .setContentIntent(pIntent)
                 .build()
             startForeground(1,notification)
         }
@@ -86,11 +90,11 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
         mShakeDetector.registerOnShakeListener(this)
         mShakeDetector.start()
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P){
             checkPermission()
         }else{
             mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-            mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
+            mSensorManager?.registerListener(mSensorListener, mSensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
         }
 
         AMapLocationClient.setApiKey(C.A_MAP_API)
@@ -112,7 +116,7 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
             .permission(Manifest.permission.ACTIVITY_RECOGNITION)
             .onGranted { permissions ->
                 mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-                mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
+                mSensorManager?.registerListener(mSensorListener, mSensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL)
             }
             .onDenied { permissions ->
                 toast("不赋于该权限应用将无法正常计步").setGravity(Gravity.CENTER, 0, 0)

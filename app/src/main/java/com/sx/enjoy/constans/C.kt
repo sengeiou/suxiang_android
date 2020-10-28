@@ -10,7 +10,6 @@ object C {
 
     const val HX_HOST_TYPE = 1
     //const val HX_BASE_ADDRESS = "http://192.168.1.240:9900/"
-    //const val HX_BASE_ADDRESS = "http://58.218.43.238:9900/"
     const val HX_BASE_ADDRESS = "http://app.suxiang986.com/"
 
 

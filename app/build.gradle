@@ -38,8 +38,8 @@ android {
         applicationId "com.sx.enjoy"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 1000
-        versionName "1.0.00"
+        versionCode 1001
+        versionName "1.0.01"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
