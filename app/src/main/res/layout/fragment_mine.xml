@@ -266,7 +266,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/dimen_2"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/color_EEC190"
                                     android:textSize="@dimen/text_10" />
 
                             </LinearLayout>

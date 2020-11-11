@@ -13,6 +13,7 @@ class UserBean: LitePalSupport(){
     var sex: String = ""
     var address: String = ""
     var riceGrains: Double = 0.0
+    var riceGrain: String = ""
     var userActivity: Double = 0.0
     var userContrib: Double = 0.0
     var isPayPwd:Int = 0

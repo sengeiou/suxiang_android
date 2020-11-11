@@ -2,44 +2,212 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:id="@+id/ll_market_header"
-    android:padding="@dimen/dimen_15"
-    android:orientation="vertical">
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lc_market_quotations"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_200"
-        android:background="@color/color_F1FFF0"/>
+    android:orientation="vertical"
+    android:id="@+id/ll_market_header">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_8">
-        
-        <TextView
-            android:id="@+id/tv_sell_out"
-            android:layout_width="0dp"
+        android:background="@drawable/bg_white_full_7"
+        android:layout_margin="@dimen/dimen_10"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_40"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@mipmap/bg_sell_out"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_15"
-            android:text="发布卖出"/>
+            android:gravity="center_vertical|right"
+            android:paddingLeft="@dimen/dimen_15"
+            android:paddingRight="@dimen/dimen_15">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/ic_market_quotations"
+                android:drawablePadding="@dimen/dimen_5"
+                android:visibility="gone"
+                android:textColor="@color/color_5A5A5A"
+                android:textSize="@dimen/text_13"
+                android:text="行情价格"/>
+
+            <TextView
+                android:id="@+id/tv_transaction_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_right_grey"
+                android:drawablePadding="@dimen/dimen_5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_13"
+                android:text="交易流程"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_1"
+            android:layout_marginLeft="@dimen/dimen_15"
+            android:layout_marginRight="@dimen/dimen_15"
+            android:background="@color/background"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_15"
+                    android:textColor="@color/main_color"
+                    android:text="10000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_10"
+                    android:textColor="@color/color_FF3B2D"
+                    android:text=""/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_13"
+                    android:textColor="@color/main_color"
+                    android:text="需求总量"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_15"
+                    android:textColor="@color/color_089930"
+                    android:text="10000"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_10"
+                    android:textColor="@color/color_FF3B2D"
+                    android:text=""/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_13"
+                    android:textColor="@color/color_089930"
+                    android:text="昨日交易总量"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_15"
+                        android:textColor="@color/title_main_color"
+                        android:text="0.7USDT"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_10"
+                        android:textColor="@color/color_FF3B2D"
+                        android:text="≈4.5ZGCT"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_13"
+                    android:textColor="@color/title_main_color"
+                    android:text="当前指导价格"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_10"
+                    android:textColor="@color/color_FF3B2D"
+                    android:text="注:交易米粒价格不得\n超过当前指导价格40%"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_buy_in"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/dimen_40"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:background="@mipmap/bg_buy_in"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_15"
-            android:text="发布买入"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:textSize="@dimen/text_13"
+            android:textColor="@color/color_666666"
+            android:text="ZGCT"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lc_market_quotations"
+            android:layout_marginLeft="@dimen/dimen_5"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_200"
+            android:background="@color/white"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_10"
+            android:layout_marginBottom="@dimen/dimen_10"
+            android:layout_marginTop="@dimen/dimen_8">
+
+            <TextView
+                android:id="@+id/tv_sell_out"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@mipmap/bg_sell_out"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_15"
+                android:text="发布卖出"/>
+
+            <TextView
+                android:id="@+id/tv_buy_in"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dimen_40"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:background="@mipmap/bg_buy_in"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_15"
+                android:text="发布买入"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

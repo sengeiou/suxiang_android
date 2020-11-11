@@ -40,7 +40,15 @@ class ReminderDialog : Dialog {
             6 -> {
                 tv_reminder_text.text = "是否删除该地址？"
             }
+            7 -> {
+                tv_reminder_text.text = ""
+            }
         }
+    }
+
+    fun showReminder(reminderString:String){
+        show()
+        tv_reminder_text.text = reminderString
     }
 
     private fun initEvent(){

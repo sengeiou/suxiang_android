@@ -703,4 +703,41 @@ class SXModel  : SXContract.Model{
         val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
         return Api.getDefault().expertUpgrade(body)
     }
+
+    override fun getMarketDemand(): Observable<HttpResult<MarketDemandBean>> {
+        return Api.getDefault().getMarketDemand()
+    }
+
+    override fun getNewMarketList(type: String, userPhone: String, richMin: String, richMax: String, priceMin: String, priceMax: String, payMethod: String, sectionId: String, page: String, limit: String): Observable<HttpResult<List<NewMarketListBean>>> {
+        val keyMap = HashMap<String,String>()
+        if(type.isNotEmpty()){
+            keyMap["type"] = type
+        }
+        if(userPhone.isNotEmpty()){
+            keyMap["userPhone"] = userPhone
+        }
+        if(richMin.isNotEmpty()){
+            keyMap["richMin"] = richMin
+        }
+        if(richMax.isNotEmpty()){
+            keyMap["richMax"] = richMax
+        }
+        if(priceMin.isNotEmpty()){
+            keyMap["priceMin"] = priceMin
+        }
+        if(priceMax.isNotEmpty()){
+            keyMap["priceMax"] = priceMax
+        }
+        if(sectionId.isNotEmpty()){
+            keyMap["sectionId"] = sectionId
+        }
+        keyMap["payMethod"] = payMethod
+        keyMap["page"] = page
+        keyMap["limit"] = limit
+        return Api.getDefault().getNewMarketList(keyMap)
+    }
+
+    override fun getRiceRange(): Observable<HttpResult<RiceRangeBean>> {
+        return Api.getDefault().getRiceRange()
+    }
 }

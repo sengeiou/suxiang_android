@@ -403,7 +403,7 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.PUBLISHMARKETINFO,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<String>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.code.toString()+"-"+t.message,false)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,false)
@@ -419,7 +419,7 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                     view.onSuccess(SXContract.CREATEMARKETORDER,t?.data)
                 }
                 override fun onCodeError(t: HttpResult<String>) {
-                    view.onFailed(t.message,false)
+                    view.onFailed(t.code.toString()+"-"+t.message,false)
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,false)
@@ -1095,6 +1095,54 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getMarketDemand() {
+        model.getMarketDemand()
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<MarketDemandBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<MarketDemandBean>?) {
+                    view.onSuccess(SXContract.GETMARKETDEMAND,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<MarketDemandBean>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getNewMarketList(type: String, userPhone: String, richMin: String, richMax: String, priceMin: String, priceMax: String, payMethod: String, sectionId: String, page: String, limit: String,isShow:Boolean) {
+        model.getNewMarketList(type,userPhone,richMin,richMax,priceMin,priceMax,payMethod,sectionId,page,limit)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<NewMarketListBean>>(mContext,isShow){
+                override fun onSuccess(t: HttpResult<List<NewMarketListBean>>?) {
+                    view.onSuccess(SXContract.GETNEWMARKETLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<NewMarketListBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getRiceRange() {
+        model.getRiceRange()
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<RiceRangeBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<RiceRangeBean>?) {
+                    view.onSuccess(SXContract.GETRICERANGE,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<RiceRangeBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
                 }
             })
     }

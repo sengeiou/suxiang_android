@@ -282,4 +282,13 @@ interface ApiService {
     //达人升级
     @POST("api-system/sxexpert/expertUpgrade")
     fun expertUpgrade(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    @GET("api-rich/rich/v1.1/rich-demand")
+    fun getMarketDemand():Observable<HttpResult<MarketDemandBean>>
+
+    @GET("api-rich/rich/v1.1")
+    fun getNewMarketList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<NewMarketListBean>>>
+
+    @GET("api-rich/rich/v1.1/price-range")
+    fun getRiceRange():Observable<HttpResult<RiceRangeBean>>
 }

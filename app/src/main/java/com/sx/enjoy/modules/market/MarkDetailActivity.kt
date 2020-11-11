@@ -7,11 +7,13 @@ import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.bean.MarketListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MarketSellSuccessEvent
+import com.sx.enjoy.modules.mine.AuthenticationActivity
 import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
+import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_market_detail.*
 import kotlinx.android.synthetic.main.empty_public_network.*
 import org.greenrobot.eventbus.EventBus
@@ -23,6 +25,7 @@ import org.jetbrains.anko.toast
 class MarkDetailActivity : BaseActivity() ,SXContract.View{
 
     private lateinit var noticeDialog: NoticeDialog
+    private lateinit var reminderDialog: ReminderDialog
 
     private lateinit var present: SXPresent
 
@@ -31,6 +34,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
     private var type = 0
     private var isSend = false
     private var marketId = ""
+    private var errorCode = "0"
 
     override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,if(type==0) "买入详情" else "卖出详情")
 
@@ -44,6 +48,7 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
         EventBus.getDefault().register(this)
 
         noticeDialog = NoticeDialog(this)
+        reminderDialog = ReminderDialog(this)
 
         type = intent.getIntExtra("type",0)
 
@@ -77,6 +82,13 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
         iv_network_error.setOnClickListener {
             present.getMarketDetails(marketId)
         }
+        reminderDialog.setOnNoticeConfirmListener(object :ReminderDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                if(errorCode == "12"){
+                    startActivity<AuthenticationActivity>()
+                }
+            }
+        })
     }
 
 
@@ -95,8 +107,8 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
                         data as MarketListBean
                         em_network_view.visibility = View.GONE
                         marketDetail = data
-                        ImageLoaderUtil().displayHeadImage(this,data.userImg,iv_user_head)
-                        tv_user_name.text = data.userName
+                        ImageLoaderUtil().displayHeadImage(this,if(data.type == 0)data.userImg else data.sellUserImg,iv_user_head)
+                        tv_user_name.text = if(data.type == 0)data.userName else data.sellUserName
                         tv_market_time.text = data.createTime
                         tv_market_price.text = "¥${data.amount}"
                         tv_market_count.text = data.richNum
@@ -121,7 +133,22 @@ class MarkDetailActivity : BaseActivity() ,SXContract.View{
     override fun onFailed(string: String?,isRefreshList:Boolean) {
         isSend = false
         em_network_view.visibility = View.GONE
-        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
+        string?.let {
+            if(it.contains  ("-")){
+                val sm = it.split("-")
+                errorCode = sm[0]
+                when(sm[0]){
+                    "11","12" -> {
+                        reminderDialog.showReminder(sm[1])
+                    }
+                    else -> {
+                        toast(sm[1]).setGravity(Gravity.CENTER, 0, 0)
+                    }
+                }
+            }else{
+                toast(string).setGravity(Gravity.CENTER, 0, 0)
+            }
+        }
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {

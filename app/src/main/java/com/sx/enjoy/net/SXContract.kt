@@ -83,6 +83,9 @@ interface SXContract {
         var GETRICHFEE = "getRichFee"
         var GETFUTURELEVEL = "getFutureLevel"
         var EXPERTUPGRADE = "expertUpgrade"
+        var GETMARKETDEMAND = "getMarketDemand"
+        var GETNEWMARKETLIST = "getNewMarketList"
+        var GETRICERANGE = "getRiceRange"
     }
 
     interface View: BaseView
@@ -156,6 +159,9 @@ interface SXContract {
         fun getRichFee(userId:String):Observable<HttpResult<String>>
         fun getFutureLevel(userId:String):Observable<HttpResult<FutureLevelBean>>
         fun expertUpgrade(userId:String):Observable<HttpResult<String>>
+        fun getMarketDemand():Observable<HttpResult<MarketDemandBean>>
+        fun getNewMarketList(type:String,userPhone:String,richMin:String,richMax:String,priceMin:String,priceMax:String,payMethod:String,sectionId:String,page:String,limit:String):Observable<HttpResult<List<NewMarketListBean>>>
+        fun getRiceRange():Observable<HttpResult<RiceRangeBean>>
     }
 
     interface Present{
@@ -227,6 +233,9 @@ interface SXContract {
         fun getRichFee(userId:String)
         fun getFutureLevel(userId:String)
         fun expertUpgrade(userId:String)
+        fun getMarketDemand()
+        fun getNewMarketList(type:String,userPhone:String,richMin:String,richMax:String,priceMin:String,priceMax:String,payMethod:String,sectionId:String,page:String,limit:String,isShow:Boolean)
+        fun getRiceRange()
     }
 
 }

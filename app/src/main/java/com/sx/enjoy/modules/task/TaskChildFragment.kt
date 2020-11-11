@@ -183,7 +183,7 @@ class TaskChildFragment : BaseFragment(),SXContract.View{
                     }
                 }
                 SXContract.BUYTASK -> {
-                    noticeDialog.showNotice(1,"兑换成功!,获取${activityCount}活跃值")
+                    noticeDialog.showNotice(1,"兑换成功!获取${activityCount}活跃值")
                     mOnRiceRefreshListener?.onBuyTaskSuccess()
                     EventBus.getDefault().post(TaskBuySuccessEvent(1))
                 }

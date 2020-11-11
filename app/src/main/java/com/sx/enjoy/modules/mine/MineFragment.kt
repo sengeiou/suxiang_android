@@ -30,7 +30,7 @@ import q.rorbin.badgeview.QBadgeView
 
 class MineFragment : BaseFragment(),SXContract.View{
 
-    private lateinit var present: SXPresent
+    private var present: SXPresent? = null
 
     private lateinit var moreAdapter: MineMoreAdapter
 
@@ -75,12 +75,12 @@ class MineFragment : BaseFragment(),SXContract.View{
         initLocalUserData()
         EventBus.getDefault().post(FirstInitUserEvent(true))
 
-        present.getHomeBanner()
+        present?.getHomeBanner()
     }
 
     override fun refreshData() {
-        present.getHomeBanner()
         EventBus.getDefault().post(FirstInitUserEvent(false))
+        present?.getHomeBanner()
     }
 
     fun initUser(){
@@ -100,7 +100,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             qbv4?.badgeNumber = 0
         }else{
             initLocalUserData()
-            present.getMyOrderStatusCount(C.USER_ID)
+            present?.getMyOrderStatusCount(C.USER_ID)
         }
     }
 
@@ -116,7 +116,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             ll_user_level.visibility = View.VISIBLE
             tv_member_level.text = user.membershipLevelName
             tv_user_level.text = user.userLevelName
-            tv_rice_count.text = String.format("%.2f", user.riceGrains)
+            tv_rice_count.text = user.riceGrain
             tv_balance_money.text = "0.00"
         }
     }
@@ -255,7 +255,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             }
         }
         swipe_refresh_layout.setOnRefreshListener {
-            present.getHomeBanner()
+            present?.getHomeBanner()
             if(C.USER_ID.isEmpty()){
                 swipe_refresh_layout.finishRefresh()
                 return@setOnRefreshListener

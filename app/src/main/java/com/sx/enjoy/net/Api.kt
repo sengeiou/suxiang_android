@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.likai.lib.app.BaseApplication
+import com.likai.lib.commonutils.AppUtils
 import com.likai.lib.commonutils.NetUtils
 import com.likai.lib.net.TrustAllCerts
 import com.sx.enjoy.App
@@ -80,6 +81,8 @@ class Api private constructor(hostType: Int) {
             val build = chain.request().newBuilder()
             build.addHeader("Content-Type", "application/json; charset=utf-8")
             build.addHeader("deviceType","sxApp")
+            build.addHeader("versions", AppUtils.getVersionName(App.instance))
+            build.addHeader("phoneSystem","Android")
             chain.proceed(build.build())
         }
 

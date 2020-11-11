@@ -346,7 +346,7 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public fun marketRiceChange(event: MarketSellSuccessEvent){
-        (fragments[2] as MarketFragment).getMarketList(true)
+        (fragments[2] as MarketFragment).getMarketList(true,false)
         if(event.state == 1){
             if(C.USER_ID.isEmpty()){
                 changeUserInfo()

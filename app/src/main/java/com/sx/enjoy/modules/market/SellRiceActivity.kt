@@ -6,10 +6,12 @@ import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MarketSellSuccessEvent
+import com.sx.enjoy.modules.mine.AuthenticationActivity
 import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
 import com.sx.enjoy.view.dialog.NoticeDialog
+import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_sell_rice.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
@@ -18,8 +20,11 @@ import org.jetbrains.anko.toast
 class SellRiceActivity : BaseActivity() ,SXContract.View{
 
     private lateinit var noticeDialog: NoticeDialog
+    private lateinit var reminderDialog: ReminderDialog
 
     private lateinit var present: SXPresent
+
+    private var errorCode = "0"
 
     override fun getTitleType() = PublicTitleData (C.TITLE_NORMAL,"我要卖出")
 
@@ -31,6 +36,7 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
 
     override fun initView() {
         noticeDialog = NoticeDialog(this)
+        reminderDialog = ReminderDialog(this)
 
         val type = intent.getIntExtra("type",C.MARKET_ORDER_STATUS_BUY)
         val marketId = intent.getStringExtra("marketId")
@@ -50,6 +56,14 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
             startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",1))
             finish()
         }
+
+        reminderDialog.setOnNoticeConfirmListener(object :ReminderDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                if(errorCode == "12"){
+                    startActivity<AuthenticationActivity>()
+                }
+            }
+        })
 
         present.getRichFee(C.USER_ID)
     }
@@ -77,7 +91,22 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        toast(string!!).setGravity(Gravity.CENTER, 0, 0)
+        string?.let {
+            if(it.contains  ("-")){
+                val sm = it.split("-")
+                errorCode = sm[0]
+                when(sm[0]){
+                    "11","12" -> {
+                        reminderDialog.showReminder(sm[1])
+                    }
+                    else -> {
+                        toast(sm[1]).setGravity(Gravity.CENTER, 0, 0)
+                    }
+                }
+            }else{
+                toast(string).setGravity(Gravity.CENTER, 0, 0)
+            }
+        }
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {

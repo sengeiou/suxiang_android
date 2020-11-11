@@ -119,7 +119,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
         if(user!=null){
             headView.tv_user_activity.text = String.format("%.2f", user.userActivity)
             headView.tv_user_contribution.text = String.format("%.2f", user.userContrib)
-            headView.tv_user_rice.text = String.format("%.2f", user.riceGrains)
+            headView.tv_user_rice.text = user.riceGrain
         }else{
             headView.tv_user_activity.text = "0"
             headView.tv_user_contribution.text = "0"
