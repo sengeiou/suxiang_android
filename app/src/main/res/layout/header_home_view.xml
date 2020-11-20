@@ -98,7 +98,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/color_1A1A1A"
-                        android:textSize="@dimen/text_12"
+                        android:textSize="@dimen/text_10"
                         android:text="今日目标0步"/>
 
                 </LinearLayout>

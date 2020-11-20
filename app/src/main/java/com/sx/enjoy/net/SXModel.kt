@@ -208,8 +208,9 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().getMarketList(keyMap)
     }
 
-    override fun getMarketQuotes(pager:String,limit:String): Observable<HttpResult<List<MarketQuotesBean>>> {
+    override fun getMarketQuotes(type:String,pager:String,limit:String): Observable<HttpResult<List<MarketQuotesBean>>> {
         val keyMap = HashMap<String,String>()
+        keyMap["type"] = type
         keyMap["page"] = pager
         keyMap["limit"] = limit
         return Api.getDefault().getMarketQuotes(keyMap)
@@ -267,16 +268,15 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().getRiceFromStep(body)
     }
 
-    override fun publishMarketInfo(userId: String, type: String, amount: String, richNum: String, alipayNumber: String): Observable<HttpResult<String>> {
+    override fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,isAliPay:String,isWxPay:String): Observable<HttpResult<String>> {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("userId", userId)
             jsonObject.put("type", type)
             jsonObject.put("amount", amount)
             jsonObject.put("richNum", richNum)
-            if(alipayNumber.isNotEmpty()){
-                jsonObject.put("alipayNumber", alipayNumber)
-            }
+            jsonObject.put("isAliPay", isAliPay)
+            jsonObject.put("isWxPay", isWxPay)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -286,16 +286,23 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().publishMarketInfo(body)
     }
 
-    override fun createMarketOrder(userId: String, type: String, amount: String, buyNum: String, alipayNumber: String, orderNo: String): Observable<HttpResult<String>> {
+    override fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,richOrderNo:String,orderNo:String,isCancel:String): Observable<HttpResult<String>> {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("userId", userId)
-            jsonObject.put("type", type)
-            jsonObject.put("amount", amount)
-            jsonObject.put("buyNum", buyNum)
-            jsonObject.put("orderNo", orderNo)
-            if(alipayNumber.isNotEmpty()){
-                jsonObject.put("alipayNumber", alipayNumber)
+            jsonObject.put("richOrderNo", richOrderNo)
+            jsonObject.put("isCancel", isCancel)
+            if(type.isNotEmpty()){
+                jsonObject.put("type", type)
+            }
+            if(amount.isNotEmpty()){
+                jsonObject.put("amount", amount)
+            }
+            if(buyNum.isNotEmpty()){
+                jsonObject.put("buyNum", buyNum)
+            }
+            if(orderNo.isNotEmpty()){
+                jsonObject.put("orderNo", orderNo)
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -306,8 +313,11 @@ class SXModel  : SXContract.Model{
         return Api.getDefault().createMarketOrder(body)
     }
 
-    override fun getTransactionOrderDetails(id: String): Observable<HttpResult<TransactionOrderBean>> {
-        return Api.getDefault().getTransactionOrderDetails(id)
+    override fun getTransactionOrderDetails(userId:String,richOrderNo:String): Observable<HttpResult<TransactionOrderBean>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["richOrderNo"] = richOrderNo
+        return Api.getDefault().getTransactionOrderDetails(keyMap)
     }
 
     override fun payMarketOrder(orderNo: String, transaction: String): Observable<HttpResult<String>> {
@@ -739,5 +749,92 @@ class SXModel  : SXContract.Model{
 
     override fun getRiceRange(): Observable<HttpResult<RiceRangeBean>> {
         return Api.getDefault().getRiceRange()
+    }
+
+    override fun postPayMethodInfo(userId: String, type: String, wxPayName: String, wxQrcode: String, aliPayName: String, payQrcode: String, aliNumber: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            if(type == "1"){
+                jsonObject.put("type","0")
+                jsonObject.put("aliPayName",aliPayName)
+                jsonObject.put("payQrcode",payQrcode)
+                jsonObject.put("aliNumber",aliNumber)
+            }else{
+                jsonObject.put("type","1")
+                jsonObject.put("wxPayName",wxPayName)
+                jsonObject.put("wxQrcode",wxQrcode)
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().postPayMethodInfo(body)
+    }
+
+    override fun deletePayMethodInfo(userId: String, type: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            if(type == "1"){
+                jsonObject.put("type","0")
+            }else{
+                jsonObject.put("type","1")
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().deletePayMethodInfo(body)
+    }
+
+    override fun getTeamUserCount(userId: String): Observable<HttpResult<TeamCountBean>> {
+        return Api.getDefault().getTeamUserCount(userId)
+    }
+
+    override fun getCancelCount(userId: String): Observable<HttpResult<CancelCountBean>> {
+        return Api.getDefault().getCancelCount(userId)
+    }
+
+    override fun exchangeVip(userId: String, payPassword: String): Observable<HttpResult<String>> {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("userId", userId)
+            jsonObject.put("payPassword", payPassword)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val json = jsonObject.toString()
+        val body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)
+        return Api.getDefault().exchangeVip(body)
+    }
+
+    override fun getMyContribList(userId: String, limit: String, page: String): Observable<HttpResult<List<UserPropertyBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getMyContribList(keyMap)
+    }
+
+    override fun getMyActivityList(userId: String, limit: String, page: String): Observable<HttpResult<List<UserPropertyBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getMyActivityList(keyMap)
+    }
+
+    override fun getMySufferList(userId: String, limit: String, page: String): Observable<HttpResult<List<UserPropertyBean>>> {
+        val keyMap = HashMap<String,String>()
+        keyMap["userId"] = userId
+        keyMap["limit"] = limit
+        keyMap["page"] = page
+        return Api.getDefault().getMySufferList(keyMap)
     }
 }

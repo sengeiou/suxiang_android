@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
@@ -38,6 +36,7 @@
     <TextView
         android:id="@+id/tv_home"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="@dimen/dimen_43"
         android:layout_marginTop="@dimen/dimen_25"
         android:layout_marginLeft="@dimen/dimen_60"

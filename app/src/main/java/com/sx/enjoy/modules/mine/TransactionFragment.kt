@@ -40,7 +40,7 @@ class TransactionFragment : BaseFragment(), SXContract.View{
         type = arguments!!.getInt("type",0)
         status = arguments!!.getInt("status",0)
 
-        mAdapter = TransactionListAdapter(type)
+        mAdapter = TransactionListAdapter()
         rcy_public_list.layoutManager = LinearLayoutManager(activity)
         rcy_public_list.adapter = mAdapter
 
@@ -62,7 +62,7 @@ class TransactionFragment : BaseFragment(), SXContract.View{
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
             activity?.startActivityForResult<TransactionDetailsActivity>(3003,
-                Pair("marketId",mAdapter.data[position].id),
+                Pair("richOrderNo",mAdapter.data[position].richOrderNo),
                 Pair("type",type)
             )
         }

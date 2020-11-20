@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES
+import android.util.Log
 import android.view.Gravity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -39,6 +40,10 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import java.io.File
+import com.trello.rxlifecycle2.RxLifecycle.bindUntilEvent
+import androidx.core.content.ContextCompat.getSystemService
+
+
 
 class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownLoadCompleteListener,
     HomeFragment.OnTaskEmptyListener {
@@ -108,13 +113,15 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
         authorityDialog.setOnApkDownloadConfirmListener(object :OpenAuthorityDialog.OnOpenAuthorityConfirmListener{
             override fun onConfirmDownload() {
                 val intent = Intent(ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
                 startActivityForResult(intent, 10003)
             }
         })
 
         transactionDialog.setOnNoticeConfirmListener(object :TransactionProcessDialog.OnNoticeConfirmListener{
             override fun onConfirm(orderId: String,type:Int) {
-                startActivity<TransactionDetailsActivity>(Pair("marketId",orderId),Pair("type",type))
+                startActivity<TransactionDetailsActivity>(Pair("richOrderNo",orderId),Pair("type",type))
             }
         })
 
@@ -385,14 +392,6 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        if(intent?.extras != null){
-            val position = intent.getIntExtra("position",0)
-            vp_home.currentItem = position
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         if(isFirstInitUser){
@@ -435,6 +434,8 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
                     data?.let {
                         data as UserBean
                         data.userId = data.id.toString()
+                        data.setIsWxPay(data.isWxPay)
+                        data.setIsAliPay(data.isAliPay)
                         data.updateAll("userId = ?", data.userId)
                         changeUserInfo()
                     }
@@ -456,7 +457,7 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
                 SXContract.GETTRANSACTIONPROCESS -> {
                     data?.let {
                         data as TransactionProcessBean
-                        transactionDialog.showNotice(data.id,data.orderType)
+                        transactionDialog.showNotice(data.richOrderNo,data.orderType)
                     }
                 }
                 else -> {

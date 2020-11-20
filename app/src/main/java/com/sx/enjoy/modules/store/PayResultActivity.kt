@@ -38,9 +38,6 @@ class PayResultActivity : BaseActivity() {
     }
 
     private fun initEvent(){
-        tv_home.setOnClickListener {
-            startActivity<MainActivity>(Pair("position",0))
-        }
         tv_order.setOnClickListener {
             startActivity<OrderDetailsActivity>(Pair("orderNo",orderNo))
             finish()

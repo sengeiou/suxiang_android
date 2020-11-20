@@ -43,6 +43,9 @@ class ReminderDialog : Dialog {
             7 -> {
                 tv_reminder_text.text = ""
             }
+            8 -> {
+                tv_reminder_text.text = "是否删除该收款账户？"
+            }
         }
     }
 

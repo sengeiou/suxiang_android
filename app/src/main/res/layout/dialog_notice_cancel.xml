@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dimen_300"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_white_full_5">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:gravity="center"
+        android:textColor="@color/title_main_color"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_15"
+        android:text="提示"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_1"
+        android:background="@color/background"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"/>
+
+    <TextView
+        android:id="@+id/tv_notice_text_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:textColor="@color/title_main_color"
+        android:textSize="@dimen/text_13"
+        android:text="今日取消次数"/>
+
+    <TextView
+        android:id="@+id/tv_notice_text_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:layout_marginBottom="@dimen/dimen_15"
+        android:textColor="@color/title_main_color"
+        android:textSize="@dimen/text_13"
+        android:text="今日取消次数累计"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_1"
+        android:background="@color/background"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40">
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:text="确定"/>
+
+        <View
+            android:layout_width="@dimen/dimen_1"
+            android:layout_height="match_parent"
+            android:background="@color/background"/>
+
+        <TextView
+            android:id="@+id/tv_close"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/main_color"
+            android:textSize="@dimen/text_15"
+            android:text="返回"/>
+
+    </LinearLayout>
+
+</LinearLayout>

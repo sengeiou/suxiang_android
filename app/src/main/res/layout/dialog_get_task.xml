@@ -55,7 +55,7 @@
             android:layout_marginTop="@dimen/dimen_20"
             android:textColor="@color/color_3A3A3A"
             android:textSize="@dimen/text_13"
-            android:text="你将消耗30米粒 是否兑换？"/>
+            android:text="您将消耗30米粒 是否兑换？"/>
 
     </LinearLayout>
 

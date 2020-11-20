@@ -3,6 +3,7 @@ package com.sx.enjoy.modules.home
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import com.sx.enjoy.modules.mine.SmartEarnActivity
 import com.sx.enjoy.modules.mine.WebUrlActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.AppStatusManager
 import com.sx.enjoy.utils.GlideImageLoader
 import com.sx.enjoy.view.dialog.SignOverDialog
 import com.sx.enjoy.view.dialog.TaskEmptyDialog
@@ -35,15 +37,12 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.litepal.LitePal
 
-
-
-
 class HomeFragment : BaseFragment(),SXContract.View{
 
     private lateinit var signOverDialog: SignOverDialog
     private lateinit var taskEmptyDialog: TaskEmptyDialog
 
-    private lateinit var present: SXPresent
+    private var present: SXPresent? = null
 
     private lateinit var headView:View
     private lateinit var footView:View
@@ -85,8 +84,8 @@ class HomeFragment : BaseFragment(),SXContract.View{
         mAdapter.addHeaderView(headView)
         mAdapter.addFooterView(footView)
 
-        present.getHomeBanner()
-        present.getHomeNotice()
+        present?.getHomeBanner()
+        present?.getHomeNotice()
         getNewsList(true,false)
 
         iv_home_head.setImageResource(R.mipmap.ic_home_bg_walk)
@@ -108,8 +107,8 @@ class HomeFragment : BaseFragment(),SXContract.View{
     }
 
     override fun refreshData() {
-        present.getHomeBanner()
-        present.getHomeNotice()
+        present?.getHomeBanner()
+        present?.getHomeNotice()
         getNewsList(true,false)
         getStepAndDayRice()
     }
@@ -135,7 +134,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
 
     fun getStepAndDayRice(){
         if(C.USER_ID.isNotEmpty()){
-            present.getRiceFromStep(C.USER_ID,"123","0","0","0","0")
+            present?.getRiceFromStep(C.USER_ID,"123","0","0","0","0")
         }
     }
 
@@ -197,7 +196,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                present.getSignResult(C.USER_ID,true)
+                present?.getSignResult(C.USER_ID,true)
             }
         }
         tv_note_list.setOnClickListener {
@@ -215,12 +214,12 @@ class HomeFragment : BaseFragment(),SXContract.View{
             }
         }
         footView.ll_empty_view.setOnClickListener {
-            present.getHomeBanner()
-            present.getHomeNotice()
+            present?.getHomeBanner()
+            present?.getHomeNotice()
             getNewsList(true,true)
             getStepAndDayRice()
             if(C.USER_ID.isNotEmpty()){
-                present.getSignResult(C.USER_ID,false)
+                present?.getSignResult(C.USER_ID,false)
             }
         }
         hst_title.setOnSortSelectListener {
@@ -248,8 +247,8 @@ class HomeFragment : BaseFragment(),SXContract.View{
         }
 
         swipe_refresh_layout.setOnRefreshListener {
-            present.getHomeBanner()
-            present.getHomeNotice()
+            present?.getHomeBanner()
+            present?.getHomeNotice()
             getNewsList(true,false)
         }
 
@@ -319,7 +318,7 @@ class HomeFragment : BaseFragment(),SXContract.View{
             pager++
             swipe_refresh_layout.finishRefresh()
         }
-        present.getHomeNews(C.PUBLIC_PAGER_NUMBER,pager.toString(),isShow)
+        present?.getHomeNews(C.PUBLIC_PAGER_NUMBER,pager.toString(),isShow)
     }
 
     override fun onResume() {
@@ -346,14 +345,14 @@ class HomeFragment : BaseFragment(),SXContract.View{
                 SXContract.GETSIGNRESULT -> {
                     data?.let {
                         data as SignResultBean
-                        if(data.taskJudge){
-                            if(data.signJudge){
-                                signOverDialog.show()
-                            }else{
-                                activity?.startActivity<SignAnswerActivity>()
-                            }
+                        if(data.signJudge){
+                            signOverDialog.show()
                         }else{
-                            taskEmptyDialog.show()
+                            if(data.taskJudge){
+                                activity?.startActivity<SignAnswerActivity>()
+                            }else{
+                                taskEmptyDialog.show()
+                            }
                         }
                     }
                 }

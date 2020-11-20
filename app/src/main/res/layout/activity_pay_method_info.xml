@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".modules.mine.PayMethodInfoActivity">
+
+    <include layout="@layout/title_public_view"/>
+
+    <TextView
+        android:id="@+id/tv_pay_method"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_40"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dimen_15"
+        android:textSize="@dimen/text_15"
+        android:textColor="@color/title_main_color"
+        android:text=""/>
+
+    <LinearLayout
+        android:id="@+id/ll_pay_account"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_47"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_15"
+        android:paddingRight="@dimen/dimen_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:text="账号"/>
+
+        <EditText
+            android:id="@+id/et_account"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:singleLine="true"
+            android:gravity="right"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:hint="请输入账号"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_47"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_15"
+        android:paddingRight="@dimen/dimen_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:text="真实姓名"/>
+
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:singleLine="true"
+            android:maxLength="15"
+            android:gravity="right"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:hint="请输入真实姓名"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_15"
+        android:paddingRight="@dimen/dimen_15"
+        android:paddingTop="@dimen/dimen_10"
+        android:paddingBottom="@dimen/dimen_10">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title_main_color"
+            android:textSize="@dimen/text_15"
+            android:text="收款码"/>
+
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_80"
+            android:layout_height="@dimen/dimen_80"
+            android:background="@color/background">
+
+            <ImageView
+                android:id="@+id/iv_upload_documents"
+                android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:src="@mipmap/ic_upload_pay"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_45"
+        android:background="@drawable/bg_main_full_2"
+        android:layout_marginLeft="@dimen/dimen_30"
+        android:layout_marginRight="@dimen/dimen_30"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_16"
+        android:text="确定"/>
+
+</LinearLayout>

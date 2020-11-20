@@ -63,9 +63,13 @@ class BuyInActivity : BaseActivity() ,SXContract.View{
                 toast("单价输入有误").setGravity(Gravity.CENTER, 0, 0)
                 return@setOnClickListener
             }
+            if(!tb_checked_zfb.isChecked&&!tb_checked_wx.isChecked){
+                toast("请选择支付方式").setGravity(Gravity.CENTER, 0, 0)
+                return@setOnClickListener
+            }
             if(!isSend){
                 isSend = true
-                present.publishMarketInfo(C.USER_ID,"0",et_rice_price.text.toString(),et_rice_count.text.toString(),"")
+                present.publishMarketInfo(C.USER_ID,"0",et_rice_price.text.toString(),et_rice_count.text.toString(),if(tb_checked_zfb.isChecked) "1" else "0",if(tb_checked_wx.isChecked) "1" else "0")
             }
         }
 

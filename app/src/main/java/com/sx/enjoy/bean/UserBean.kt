@@ -12,25 +12,39 @@ class UserBean: LitePalSupport(){
     var userLevelName: String = ""
     var sex: String = ""
     var address: String = ""
-    var riceGrains: Double = 0.0
     var riceGrain: String = ""
     var userActivity: Double = 0.0
     var userContrib: Double = 0.0
+    var experience : Int = 0
     var isPayPwd:Int = 0
     var membershipLevel: Int = 0
     var membershipLevelName :String = ""
-    var pushId: String = ""
     var isReai: String = ""
-    var isLock: String = ""
-    var wxName: String = ""
-    var wxOpenId: String = ""
-    var wxQrcode: String = ""
-    var wxUnionId: String = ""
-    var cardNo: String = ""
-    var payQrcode: String = ""
     var wxNumber: String = ""
-    var aliNumber: String = ""
     var email: String = ""
     var referralCode: String = ""
     var userLink: String = ""
+    var isWxPay: Boolean = false
+    var isAliPay: Boolean = false
+    var aliNumber : String = ""
+    var aliPayName : String = ""
+    var payQrcode : String = ""
+    var wxPayName : String = ""
+    var wxQrcode : String = ""
+
+    fun setIsWxPay(isWxPay:Boolean){
+        if(isWxPay){
+            this.isWxPay = isWxPay
+        }else{
+            this.setToDefault("isWxPay")
+        }
+    }
+
+    fun setIsAliPay(isAliPay:Boolean){
+        if(isAliPay){
+            this.isAliPay = isAliPay
+        }else{
+            this.setToDefault("isAliPay")
+        }
+    }
 }

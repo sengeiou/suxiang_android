@@ -13,5 +13,7 @@ class RecommendTeamAdapter: BaseQuickAdapter<TeamListBean, BaseViewHolder>(R.lay
         helper?.setText(R.id.tv_member_name,item?.membershipLevelName)
         helper?.setText(R.id.tv_user_contribution,"贡献值 ${item?.userContrib}")
         helper?.setText(R.id.tv_user_activity,"活跃度 ${item?.userActivity}")
+        helper?.setText(R.id.tv_user_experience,"经验值 ${item?.experience}")
+        helper?.setText(R.id.tv_recommend_type,item?.typeStr)
     }
 }

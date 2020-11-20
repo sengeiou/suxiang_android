@@ -28,7 +28,7 @@
                 android:layout_width="@dimen/dimen_90"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="买入数量"/>
 
             <EditText
@@ -39,7 +39,7 @@
                 android:singleLine="true"
                 android:inputType="numberDecimal"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:hint="请输入买入数量"/>
 
         </LinearLayout>
@@ -62,7 +62,7 @@
                 android:layout_width="@dimen/dimen_90"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="确认价格"/>
 
             <EditText
@@ -73,7 +73,7 @@
                 android:singleLine="true"
                 android:inputType="numberDecimal"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:hint="请输入买入单价"/>
 
         </LinearLayout>
@@ -103,7 +103,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="买入总价"/>
 
             <TextView
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"/>
+                android:textSize="@dimen/text_13"/>
 
         </LinearLayout>
 
@@ -133,7 +133,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="选择支付方式"/>
 
             <ToggleButton
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="支付宝"/>
 
             <ToggleButton
@@ -168,24 +168,29 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dimen_5"
                 android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
+                android:textSize="@dimen/text_13"
                 android:text="微信"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <TextView
         android:id="@+id/tv_submit"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_45"
+        android:layout_height="@dimen/dimen_40"
         android:layout_marginLeft="@dimen/dimen_30"
         android:layout_marginRight="@dimen/dimen_30"
-        android:layout_marginTop="@dimen/dimen_30"
+        android:layout_marginBottom="@dimen/dimen_10"
         android:gravity="center"
         android:background="@drawable/bg_main_full_5"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_16"
+        android:textSize="@dimen/text_15"
         android:text="发布"/>
 
 </LinearLayout>

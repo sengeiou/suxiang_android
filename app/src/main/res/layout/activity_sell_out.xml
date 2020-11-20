@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,146 +9,264 @@
 
     <include layout="@layout/title_public_view"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_1"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_47"
-            android:paddingLeft="@dimen/dimen_15"
-            android:paddingRight="@dimen/dimen_15"
-            android:gravity="center_vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_1"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_47"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_90"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="卖出数量"/>
+
+                <EditText
+                    android:id="@+id/et_sell_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:hint="请输入卖出数量"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:layout_marginRight="@dimen/dimen_15"
+                android:background="@color/background"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_47"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_90"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="确认价格"/>
+
+                <EditText
+                    android:id="@+id/et_sell_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:hint="请输入卖出价格"/>
+
+            </LinearLayout>
 
             <TextView
-                android:layout_width="@dimen/dimen_90"
-                android:layout_height="wrap_content"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:text="卖出数量"/>
-
-            <EditText
-                android:id="@+id/et_sell_count"
+                android:id="@+id/tv_rice_range"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:singleLine="true"
-                android:inputType="number"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:hint="请输入卖出数量"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_1"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:layout_marginRight="@dimen/dimen_15"
-            android:background="@color/background"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_47"
-            android:paddingLeft="@dimen/dimen_15"
-            android:paddingRight="@dimen/dimen_15"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="@dimen/dimen_90"
-                android:layout_height="wrap_content"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:text="确认价格"/>
-
-            <EditText
-                android:id="@+id/et_sell_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:singleLine="true"
-                android:inputType="numberDecimal"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:hint="请输入卖出价格"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_1"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:layout_marginRight="@dimen/dimen_15"
-            android:background="@color/background"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_47"
-            android:paddingLeft="@dimen/dimen_15"
-            android:paddingRight="@dimen/dimen_15"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="@dimen/dimen_90"
-                android:layout_height="wrap_content"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:text="支付宝账号"/>
-
-            <EditText
-                android:id="@+id/et_zfb_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:singleLine="true"
-                android:textColor="@color/title_main_color"
-                android:textSize="@dimen/text_15"
-                android:hint="请输入支付宝账号"/>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_1"
-            android:layout_marginLeft="@dimen/dimen_15"
-            android:layout_marginRight="@dimen/dimen_15"
-            android:background="@color/background"/>
-
-        <LinearLayout
-            android:id="@+id/ll_rice_fee"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_47"
-            android:visibility="gone"
-            android:paddingLeft="@dimen/dimen_15"
-            android:paddingRight="@dimen/dimen_15"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:id="@+id/tv_rice_fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:paddingTop="@dimen/dimen_3"
+                android:paddingBottom="@dimen/dimen_3"
+                android:textSize="@dimen/text_10"
                 android:textColor="@color/main_color"
-                android:textSize="@dimen/text_15"
-                android:text="*交易手续费"/>
+                android:text=""/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_47"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="卖出总价"/>
+
+                <TextView
+                    android:id="@+id/tv_rice_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_1"
+                android:layout_marginLeft="@dimen/dimen_15"
+                android:layout_marginRight="@dimen/dimen_15"
+                android:background="@color/background"/>
+
+            <LinearLayout
+                android:id="@+id/ll_rice_fee"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_47"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_rice_fee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="*交易手续费"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_10"
+                android:background="@color/background"/>
+
+            <LinearLayout
+                android:id="@+id/ll_zfb_number"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_47"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:layout_marginTop="@dimen/dimen_1"
+                android:gravity="center_vertical"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_120"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:textSize="@dimen/text_13"
+                    android:textColor="@color/title_main_color"
+                    android:text="支付宝账号"/>
+
+                <TextView
+                    android:id="@+id/tv_ali_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_zfb_code"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:paddingTop="@dimen/dimen_10"
+                android:paddingBottom="@dimen/dimen_10">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_120"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="支付宝收款码"/>
+
+
+                <ImageView
+                    android:id="@+id/iv_zfb_code"
+                    android:layout_width="@dimen/dimen_80"
+                    android:layout_height="@dimen/dimen_80"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/v_zfb_line"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_10"
+                android:background="@color/background"/>
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_wx_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:layout_marginTop="@dimen/dimen_1"
+                android:layout_marginBottom="@dimen/dimen_10"
+                android:paddingLeft="@dimen/dimen_15"
+                android:paddingRight="@dimen/dimen_15"
+                android:paddingTop="@dimen/dimen_10"
+                android:paddingBottom="@dimen/dimen_10">
+
+                <TextView
+                    android:layout_width="@dimen/dimen_120"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title_main_color"
+                    android:textSize="@dimen/text_13"
+                    android:text="微信收款码"/>
+
+
+                <ImageView
+                    android:id="@+id/iv_wx_code"
+                    android:layout_width="@dimen/dimen_80"
+                    android:layout_height="@dimen/dimen_80"
+                    android:scaleType="fitXY"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/v_wx_line"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_10"
+                android:background="@color/background"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_submit"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_45"
+        android:layout_height="@dimen/dimen_40"
         android:layout_marginLeft="@dimen/dimen_30"
         android:layout_marginRight="@dimen/dimen_30"
-        android:layout_marginTop="@dimen/dimen_30"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_marginBottom="@dimen/dimen_10"
         android:gravity="center"
         android:background="@drawable/bg_main_full_5"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_16"
+        android:textSize="@dimen/text_15"
         android:text="发布"/>
 
 </LinearLayout>

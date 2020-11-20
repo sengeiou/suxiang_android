@@ -204,7 +204,7 @@
                             android:layout_centerInParent="true"
                             android:textSize="@dimen/text_15"
                             android:textColor="@color/color_666666"
-                            android:text="我的任务"/>
+                            android:text="进行中"/>
 
                         <View
                             android:id="@+id/v_task_mine"
@@ -230,7 +230,7 @@
                             android:layout_centerInParent="true"
                             android:textSize="@dimen/text_15"
                             android:textColor="@color/color_666666"
-                            android:text="历史任务"/>
+                            android:text="已过期"/>
 
                         <View
                             android:id="@+id/v_task_history"
@@ -247,7 +247,7 @@
 
             </LinearLayout>
 
-            <androidx.viewpager.widget.ViewPager
+            <com.sx.enjoy.view.NoScrollViewPager
                 android:id="@+id/vp_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

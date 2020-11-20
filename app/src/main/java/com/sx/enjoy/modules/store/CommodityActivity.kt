@@ -118,6 +118,10 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             finish()
         }
         rl_shop_cart.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                startActivity<LoginActivity>()
+                return@setOnClickListener
+            }
             startActivity<ShopCartActivity>()
         }
         ll_spec_select.setOnClickListener {
@@ -140,6 +144,10 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
         }
 
         tv_add_cart.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                startActivity<LoginActivity>()
+                return@setOnClickListener
+            }
             if(commodity!=null){
                 tv_spec_confirm.text = "加入购物车"
                 tv_spec_confirm.visibility = View.VISIBLE
@@ -149,6 +157,10 @@ class CommodityActivity : BaseActivity() ,SXContract.View, SpecChildListAdapter.
             }
         }
         tv_buy_now.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                startActivity<LoginActivity>()
+                return@setOnClickListener
+            }
             if(commodity!=null){
                 tv_spec_confirm.text = "立即购买"
                 tv_spec_confirm.visibility = View.VISIBLE

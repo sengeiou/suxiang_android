@@ -16,6 +16,8 @@ object C {
     const val U_MENG_APP_KEY = "5f7197c180455950e49a2143"
     const val A_MAP_API = "f4e52b8303c7542164225ba6ac792391"
     const val BUGLY_APP_ID = "dfb9469c57"
+    const val DOMOB_DEMO_ID = "A1008331715"
+    const val DOMOB_APP_KEY = "96AgXrrQ0XM+goOBgZ"
     const val WX_APP_ID = "wxc0d7373e2a591882"
     const val WX_APP_SECRET = "cfb961561f0e1188ed43807b3d987c52"
     const val QQ_APP_IP = "101896563"
@@ -25,6 +27,7 @@ object C {
     const val TITLE_CUSTOM = 0
     const val TITLE_NORMAL = 1
     const val TITLE_RIGHT_TEXT = 2
+    const val TITLE_RIGHT_TEXT_BACKGROUND = 3
 
     const val ORDER_ALL = -1
     const val ORDER_NO_PAY = 0

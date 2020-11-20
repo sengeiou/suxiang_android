@@ -88,7 +88,7 @@ interface ApiService {
     fun uploadFile(@Body body: RequestBody): Call<HttpResult<UploadImageBean>>
 
     //我购买的/我售卖的
-    @GET("api-rich/rich-order")
+    @GET("api-rich/rich-order/v1.1")
     fun getMyMarketOrderList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketTransactionListBean>>>
 
     //步行模式计算距离
@@ -96,7 +96,7 @@ interface ApiService {
     fun getRiceFromStep(@Body body: RequestBody):Observable<HttpResult<StepRiceBean>>
 
     //发布买入/卖出
-    @POST("api-rich/rich")
+    @POST("api-rich/rich/v1.1")
     fun publishMarketInfo(@Body body: RequestBody):Observable<HttpResult<String>>
 
     //市场列表
@@ -108,23 +108,23 @@ interface ApiService {
     fun getMarketQuotes(@QueryMap map:Map<String,String>):Observable<HttpResult<List<MarketQuotesBean>>>
 
     //买入/卖出详情
-    @GET("api-rich/rich/id")
+    @GET("api-rich/rich/v1.1/id")
     fun getMarketDetails(@Query("id")id:String):Observable<HttpResult<MarketListBean>>
 
     //米粒订单创建
-    @POST("api-rich/rich-order")
+    @POST("api-rich/rich-order/v1.1")
     fun createMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
 
     //买入/卖出订单详情
-    @GET("api-rich/rich-order/id")
-    fun getTransactionOrderDetails(@Query("id")id:String):Observable<HttpResult<TransactionOrderBean>>
+    @GET("api-rich/rich-order/v1.1/id")
+    fun getTransactionOrderDetails(@QueryMap map:Map<String,String>):Observable<HttpResult<TransactionOrderBean>>
 
     //米粒订单支付
-    @POST("api-rich/rich-order/pay")
+    @POST("api-rich/rich-order/v1.1/pay")
     fun payMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
 
     //米粒订单确认
-    @POST("api-rich/rich-order/confirm")
+    @POST("api-rich/rich-order/v1.1/confirm")
     fun confirmMarketOrder(@Body body: RequestBody):Observable<HttpResult<String>>
 
     //推荐团队
@@ -283,12 +283,47 @@ interface ApiService {
     @POST("api-system/sxexpert/expertUpgrade")
     fun expertUpgrade(@Body body: RequestBody):Observable<HttpResult<String>>
 
+    //市场信息
     @GET("api-rich/rich/v1.1/rich-demand")
     fun getMarketDemand():Observable<HttpResult<MarketDemandBean>>
 
+    //新市场列表
     @GET("api-rich/rich/v1.1")
     fun getNewMarketList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<NewMarketListBean>>>
 
+    //价格区间
     @GET("api-rich/rich/v1.1/price-range")
     fun getRiceRange():Observable<HttpResult<RiceRangeBean>>
+
+    //上传付款码
+    @POST("api-user/user/v1.1/set-qrcode")
+    fun postPayMethodInfo(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //删除付款码
+    @POST("api-user/user/deletePay")
+    fun deletePayMethodInfo(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //价格区间
+    @GET("api-user/user/getUserCount")
+    fun getTeamUserCount(@Query("userId")userId:String):Observable<HttpResult<TeamCountBean>>
+
+    //取消次数
+    @GET("api-rich/rich-order/v1.1/cancel-count")
+    fun getCancelCount(@Query("userId")userId:String):Observable<HttpResult<CancelCountBean>>
+
+    //兑换VIP
+    @POST("api-user/sxuservip/exchangeVip")
+    fun exchangeVip(@Body body: RequestBody):Observable<HttpResult<String>>
+
+    //贡献值列表
+    @GET("api-user/sxcontrib/getMyContrib")
+    fun getMyContribList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<UserPropertyBean>>>
+
+    //活跃度列表
+    @GET("api-user/sxactivity/getMyActivity")
+    fun getMyActivityList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<UserPropertyBean>>>
+
+    //经验值列表
+    @GET("api-user/exp-recode/getMySuffer")
+    fun getMySufferList(@QueryMap map:Map<String,String>):Observable<HttpResult<List<UserPropertyBean>>>
 }

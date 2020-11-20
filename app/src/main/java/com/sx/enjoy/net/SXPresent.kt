@@ -295,8 +295,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun getMarketQuotes(pager:String,limit:String) {
-        model.getMarketQuotes(pager,limit)
+    override fun getMarketQuotes(type:String,pager:String,limit:String) {
+        model.getMarketQuotes(type,pager,limit)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<List<MarketQuotesBean>>(mContext,false){
                 override fun onSuccess(t: HttpResult<List<MarketQuotesBean>>?) {
@@ -395,8 +395,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun publishMarketInfo(userId: String, type: String, amount: String, richNum: String, alipayNumber: String) {
-        model.publishMarketInfo(userId,type,amount,richNum,alipayNumber)
+    override fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,isAliPay:String,isWxPay:String) {
+        model.publishMarketInfo(userId,type,amount,richNum,isAliPay,isWxPay)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<String>(mContext,true){
                 override fun onSuccess(t: HttpResult<String>?) {
@@ -411,8 +411,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun createMarketOrder(userId: String, type: String, amount: String, buyNum: String, alipayNumber: String, orderNo: String) {
-        model.createMarketOrder(userId,type,amount,buyNum,alipayNumber,orderNo)
+    override fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,richOrderNo:String,orderNo:String,isCancel:String) {
+        model.createMarketOrder(userId,type,amount,buyNum,richOrderNo,orderNo,isCancel)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<String>(mContext,true){
                 override fun onSuccess(t: HttpResult<String>?) {
@@ -427,8 +427,8 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
             })
     }
 
-    override fun getTransactionOrderDetails(id: String) {
-        model.getTransactionOrderDetails(id)
+    override fun getTransactionOrderDetails(userId:String,richOrderNo:String) {
+        model.getTransactionOrderDetails(userId,richOrderNo)
             .compose(RxSchedulersHelper.io_main())
             .subscribe(object : BaseObserver<TransactionOrderBean>(mContext,true){
                 override fun onSuccess(t: HttpResult<TransactionOrderBean>?) {
@@ -1143,6 +1143,135 @@ class SXPresent(baseView: SXContract.View) : BasePresent<SXContract.View>(baseVi
                 }
                 override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
                     view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun postPayMethodInfo(userId: String, type: String, wxPayName: String, wxQrcode: String, aliPayName: String, payQrcode: String, aliNumber: String) {
+        model.postPayMethodInfo(userId,type,wxPayName,wxQrcode,aliPayName,payQrcode,aliNumber)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.POSTPAYMETHODINFO,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun deletePayMethodInfo(userId: String, type: String) {
+        model.deletePayMethodInfo(userId,type)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.DELETEPAYMETHODINFO,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getTeamUserCount(userId: String) {
+        model.getTeamUserCount(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<TeamCountBean>(mContext,false){
+                override fun onSuccess(t: HttpResult<TeamCountBean>?) {
+                    view.onSuccess(SXContract.GETTEAMUSERCOUNT,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<TeamCountBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getCancelCount(userId: String,isAutoCancel:Boolean) {
+        model.getCancelCount(userId)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<CancelCountBean>(mContext,true){
+                override fun onSuccess(t: HttpResult<CancelCountBean>?) {
+                    t?.data?.isAutoCancel = isAutoCancel
+                    view.onSuccess(SXContract.GETCANCELCOUNT,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<CancelCountBean>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun exchangeVip(userId: String, payPassword: String) {
+        model.exchangeVip(userId,payPassword)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<String>(mContext,true){
+                override fun onSuccess(t: HttpResult<String>?) {
+                    view.onSuccess(SXContract.EXCHANGEVIP,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<String>) {
+                    view.onFailed(t.message,false)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,false)
+                }
+            })
+    }
+
+    override fun getMyContribList(userId: String, limit: String, page: String) {
+        model.getMyContribList(userId,limit,page)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<UserPropertyBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<UserPropertyBean>>?) {
+                    view.onSuccess(SXContract.GETMYCONTRIBLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<UserPropertyBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getMyActivityList(userId: String, limit: String, page: String) {
+        model.getMyActivityList(userId,limit,page)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<UserPropertyBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<UserPropertyBean>>?) {
+                    view.onSuccess(SXContract.GETMYACTIVITYLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<UserPropertyBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
+                }
+            })
+    }
+
+    override fun getMySufferList(userId: String, limit: String, page: String) {
+        model.getMySufferList(userId,limit,page)
+            .compose(RxSchedulersHelper.io_main())
+            .subscribe(object : BaseObserver<List<UserPropertyBean>>(mContext,false){
+                override fun onSuccess(t: HttpResult<List<UserPropertyBean>>?) {
+                    view.onSuccess(SXContract.GETMYSUFFERLIST,t?.data)
+                }
+                override fun onCodeError(t: HttpResult<List<UserPropertyBean>>) {
+                    view.onFailed(t.message,true)
+                }
+                override fun onFailure(e: Throwable?, isNetWorkError: Boolean) {
+                    view.onNetError(isNetWorkError,true)
                 }
             })
     }

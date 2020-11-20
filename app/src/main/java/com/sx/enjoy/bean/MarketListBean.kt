@@ -13,12 +13,13 @@ class MarketListBean(
     @SerializedName("richOrderNo")val richOrderNo:String,
     @SerializedName("userImg")val userImg:String,
     @SerializedName("userPhone")val userPhone:String,
-    @SerializedName("sellUserImg")val sellUserImg:String,
-    @SerializedName("sellUserName")val sellUserName:String,
-    @SerializedName("sellUserPhone")val sellUserPhone:String,
     @SerializedName("amount")val amount:String,
     @SerializedName("richNum")val richNum:String,
-    @SerializedName("amountSum")val amountSum:Double,
+    @SerializedName("amountSum")val amountSum:String,
     @SerializedName("transaction")val transaction:String,
-    @SerializedName("alipayNumber")val alipayNumber:String
+    @SerializedName("aliNumber")val aliNumber:String,
+    @SerializedName("aliQrcode")val aliQrcode:String,
+    @SerializedName("wxQrcode")val wxQrcode:String,
+    @SerializedName("isAliPay")val isAliPay:Int,
+    @SerializedName("isWxPay")val isWxPay:Int
 ): Serializable

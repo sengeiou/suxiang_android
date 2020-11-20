@@ -6,13 +6,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sx.enjoy.R
 import com.sx.enjoy.adapter.RecommendTeamAdapter
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.TeamCountBean
 import com.sx.enjoy.bean.TeamListBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.view.dialog.QuestionDialog
 import kotlinx.android.synthetic.main.activity_recommend_team.*
 import kotlinx.android.synthetic.main.activity_recommend_team.swipe_refresh_layout
 import kotlinx.android.synthetic.main.empty_public_network.view.*
+import kotlinx.android.synthetic.main.header_recommend_team.view.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
@@ -22,8 +25,11 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
 
     private lateinit var mAdapter: RecommendTeamAdapter
 
+    private lateinit var headerView : View
     private lateinit var emptyView : View
     private lateinit var errorView : View
+
+    private lateinit var questionDialog: QuestionDialog
 
     private var pager = 1
 
@@ -36,18 +42,20 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
     }
 
     override fun initView() {
+        questionDialog = QuestionDialog(this)
 
         mAdapter = RecommendTeamAdapter()
         rcy_recommend_team.layoutManager = LinearLayoutManager(this)
         rcy_recommend_team.adapter = mAdapter
 
-        val headerView = View.inflate(this,R.layout.header_recommend_team,null)
+        headerView = View.inflate(this,R.layout.header_recommend_team,null)
         mAdapter.addHeaderView(headerView)
 
         emptyView = View.inflate(this,R.layout.empty_public_view,null)
         errorView = View.inflate(this,R.layout.empty_public_network,null)
         mAdapter.emptyView = emptyView
 
+        present.getTeamUserCount(C.USER_ID)
         getTeamList(true)
 
         initEvent()
@@ -56,6 +64,7 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
 
     private fun initEvent(){
         swipe_refresh_layout.setOnRefreshListener {
+            present.getTeamUserCount(C.USER_ID)
             getTeamList(true)
         }
         mAdapter.setOnLoadMoreListener {
@@ -66,6 +75,9 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
         }
         errorView.iv_network_error.setOnClickListener {
             getTeamList(true)
+        }
+        headerView.tv_team_value.setOnClickListener {
+            questionDialog.showQuestion(1,"指实名认证成功的会员")
         }
     }
 
@@ -101,6 +113,15 @@ class RecommendTeamActivity : BaseActivity() , SXContract.View {
                                 mAdapter.loadMoreComplete()
                             }
                         }
+                    }
+                }
+                SXContract.GETTEAMUSERCOUNT -> {
+                    data?.let {
+                        data as TeamCountBean
+                        headerView.tv_team_count.text = data.teamTotal
+                        headerView.tv_team_value.text = "有效${data.teamValid}人"
+                        headerView.tv_next_count.text = data.nextTotal
+                        headerView.tv_next_value.text = "有效${data.nextValid}人"
                     }
                 }
                 else -> {

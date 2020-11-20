@@ -88,8 +88,9 @@ class MineFragment : BaseFragment(),SXContract.View{
             ll_sub_data.visibility = View.GONE
             tv_user_name.text = "登录/注册"
             iv_user_head.setImageResource(R.mipmap.ic_user_head)
-            tv_user_contribution.text = "0"
-            tv_user_activity.text = "0"
+            tv_user_contribution.text = "0.00"
+            tv_user_activity.text = "0.00"
+            tv_user_experience.text = "0"
             ll_member_level.visibility = View.GONE
             ll_user_level.visibility = View.GONE
             tv_rice_count.text = "0"
@@ -112,6 +113,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             ImageLoaderUtil().displayHeadImage(activity,user.userImg,iv_user_head)
             tv_user_contribution.text = String.format("%.2f", user.userContrib)
             tv_user_activity.text = String.format("%.2f", user.userActivity)
+            tv_user_experience.text = user.experience.toString()
             ll_member_level.visibility = View.VISIBLE
             ll_user_level.visibility = View.VISIBLE
             tv_member_level.text = user.membershipLevelName
@@ -152,7 +154,7 @@ class MineFragment : BaseFragment(),SXContract.View{
             if(C.USER_ID.isEmpty()){
                 activity?.startActivity<LoginActivity>()
             }else{
-                activity?.startActivity<MemberUpActivity>(Pair("type",1))
+                activity?.startActivity<TalentUpActivity>()
             }
         }
         ll_rice_record.setOnClickListener {
@@ -195,6 +197,27 @@ class MineFragment : BaseFragment(),SXContract.View{
                 activity?.startActivity<LoginActivity>()
             }else{
                 activity?.startActivity<OrderListActivity>(Pair("type",C.ORDER_RECEIVE_OVER))
+            }
+        }
+        ll_property_1.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<UserPropertyListActivity>(Pair("type",0))
+            }
+        }
+        ll_property_2.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<UserPropertyListActivity>(Pair("type",1))
+            }
+        }
+        ll_property_3.setOnClickListener {
+            if(C.USER_ID.isEmpty()){
+                activity?.startActivity<LoginActivity>()
+            }else{
+                activity?.startActivity<UserPropertyListActivity>(Pair("type",2))
             }
         }
 

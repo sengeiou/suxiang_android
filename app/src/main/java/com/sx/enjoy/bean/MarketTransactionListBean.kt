@@ -21,5 +21,11 @@ class MarketTransactionListBean(
     @SerializedName("aliNumber")val aliNumber:String,
     @SerializedName("releaseUserName")val releaseUserName:String,
     @SerializedName("releaseUserImg")val releaseUserImg:String,
-    @SerializedName("releaseUserPhone")val releaseUserPhone:String
+    @SerializedName("releaseUserPhone")val releaseUserPhone:String,
+    @SerializedName("statusStr")val statusStr:String,
+    @SerializedName("usdt")val usdt:String,
+    @SerializedName("richOrderNo")val richOrderNo:String,
+    @SerializedName("isAliPay")val isAliPay:Int,
+    @SerializedName("isWxPay")val isWxPay:Int
+
 ): Serializable

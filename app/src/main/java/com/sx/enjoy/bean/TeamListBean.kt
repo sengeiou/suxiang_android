@@ -9,5 +9,7 @@ class TeamListBean(
     @SerializedName("userActivity")val userActivity:String,
     @SerializedName("userContrib")val userContrib:String,
     @SerializedName("userImg")val userImg:String,
-    @SerializedName("userName")val userName:String
+    @SerializedName("userName")val userName:String,
+    @SerializedName("experience")val experience:String,
+    @SerializedName("typeStr")val typeStr:String
 ): Serializable

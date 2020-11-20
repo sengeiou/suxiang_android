@@ -103,6 +103,7 @@ class TaskFragment : BaseFragment(),SXContract.View,TaskChildFragment.OnRiceRefr
 
     fun initTaskTitle(position:Int){
         vp_task.setCurrentItem(position,false)
+        vp_task.setNoScroll(C.USER_ID.isEmpty())
         when(position){
             0 -> {
                 tv_task_all.setTextColor(resources.getColor(R.color.title_main_color))

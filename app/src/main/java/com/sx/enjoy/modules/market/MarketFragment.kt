@@ -68,6 +68,8 @@ class MarketFragment : BaseFragment(), SXContract.View{
     private var payType = "-1"
     private var sectionPosition = -1
 
+    private var type = 0
+
     private var sectionList = arrayListOf<SectionList>()
 
     override fun getLayoutResource() = R.layout.fragment_market
@@ -105,7 +107,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
     }
 
     override fun initData() {
-        present.getMarketQuotes("1","7")
+        present.getMarketQuotes(type.toString(),"1","7")
         present.getMarketDemand()
         present.getNewMarketList(sellType,et_commodity_search_2.text.toString(),et_count_min.text.toString(),et_count_max.text.toString(),et_price_min.text.toString(),et_price_max.text.toString(), payType,"",pager.toString(),C.PUBLIC_PAGER_NUMBER,false)
     }
@@ -115,7 +117,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
             pager = 1
             mAdapter.loadMoreComplete()
             mAdapter.setEnableLoadMore(false)
-            present.getMarketQuotes("1","7")
+            present.getMarketQuotes(type.toString(),"1","7")
             present.getMarketDemand()
         }else{
             pager++
@@ -138,7 +140,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
         }
         swipe_refresh_layout.setOnRefreshListener {
             getMarketList(true,false)
-            present.getMarketQuotes("1","7")
+            present.getMarketQuotes(type.toString(),"1","7")
         }
         mAdapter.setOnLoadMoreListener {
             getMarketList(false,false)
@@ -161,7 +163,7 @@ class MarketFragment : BaseFragment(), SXContract.View{
         }
         errorView.iv_network_error.setOnClickListener {
             getMarketList(true,true)
-            present.getMarketQuotes("1","7")
+            present.getMarketQuotes(type.toString(),"1","7")
         }
         mAdapter.setOnItemClickListener { adapter, view, position ->
             val intent = Intent(activity,MarkDetailActivity::class.java)
@@ -174,12 +176,16 @@ class MarketFragment : BaseFragment(), SXContract.View{
             tv_cart_day.setBackgroundResource(R.drawable.bg_blue_full_15)
             tv_cart_week.setTextColor(resources.getColor(R.color.color_666666))
             tv_cart_week.setBackgroundColor(resources.getColor(R.color.white))
+            type = 0
+            present.getMarketQuotes(type.toString(),"1","7")
         }
         tv_cart_week.setOnClickListener {
             tv_cart_day.setTextColor(resources.getColor(R.color.color_666666))
             tv_cart_day.setBackgroundColor(resources.getColor(R.color.white))
             tv_cart_week.setTextColor(resources.getColor(R.color.color_3A7CA3))
             tv_cart_week.setBackgroundResource(R.drawable.bg_blue_full_15)
+            type = 1
+            present.getMarketQuotes(type.toString(),"1","7")
         }
         nsv_market_list.setOnScrollListener {
             if(it>=ll_market_header.height){

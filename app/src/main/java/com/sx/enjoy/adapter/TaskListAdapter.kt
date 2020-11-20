@@ -53,7 +53,7 @@ class TaskListAdapter(var type:Int): BaseQuickAdapter<TaskListBean, BaseViewHold
                 helper?.setText(R.id.tv_task_walk,"有效步数${item?.effSteps}")
                 helper?.setText(R.id.tv_task_car,"有效公里数${item?.effMileage}")
                 helper?.setText(R.id.tv_day_rice,"单日奖励${item?.dayRich}米粒")
-                helper?.setText(R.id.tv_day_count,"时效${item?.taskEffTime}天")
+                helper?.setText(R.id.tv_day_count,"有效期${item?.createTime}至${item?.endTime}")
                 helper?.setVisible(R.id.tv_single_rice,item!!.rank>0)
                 helper?.setText(R.id.tv_rice_count,item?.taskRich)
                 helper?.setVisible(R.id.tv_rice_count,item!!.rank>0)

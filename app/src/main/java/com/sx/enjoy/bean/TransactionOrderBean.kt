@@ -20,11 +20,19 @@ class TransactionOrderBean(
     @SerializedName("respTime")val respTime:String,
     @SerializedName("payTime")val payTime:String,
     @SerializedName("richUserId")val richUserId:String,
+    @SerializedName("sellUserId")val sellUserId:String,
     @SerializedName("sellUserName")val sellUserName:String,
     @SerializedName("sellUserImg")val sellUserImg:String,
     @SerializedName("sellUserPhone")val sellUserPhone:String,
     @SerializedName("userId")val userId:String,
     @SerializedName("userName")val userName:String,
     @SerializedName("headImage")val headImage:String,
-    @SerializedName("userPhone")val userPhone:String
+    @SerializedName("userPhone")val userPhone:String,
+    @SerializedName("isAliPay")val isAliPay:Int,
+    @SerializedName("alipayNumber")val alipayNumber:String,
+    @SerializedName("payQrcode")val payQrcode:String,
+    @SerializedName("isWxPay")val isWxPay:Int,
+    @SerializedName("wxQrcode")val wxQrcode:String,
+    @SerializedName("seconds")val seconds:Long,
+    @SerializedName("kfPhone")val kfPhone:String
 ): Serializable

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="userinf" />
-    <version value="4" />
+    <version value="8" />
     <list>
         <mapping class="com.sx.enjoy.bean.UserBean" />
     </list>

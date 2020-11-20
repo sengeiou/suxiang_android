@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.Gravity
 import com.likai.lib.commonutils.SharedPreferencesUtil
 import com.sx.enjoy.R
@@ -28,6 +29,8 @@ class LoginActivity : BaseActivity() ,SXContract.View{
     private lateinit var present: SXPresent
 
     private var isShowPassword = false
+
+    private var lastClickTime = 0L
 
     override fun getTitleType() = PublicTitleData (C.TITLE_NORMAL,"")
 
@@ -66,19 +69,22 @@ class LoginActivity : BaseActivity() ,SXContract.View{
             startActivity<PasswordForgetActivity>()
         }
         tv_login.setOnClickListener {
-            if(et_user_phone.text.isEmpty()){
-                toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
-                return@setOnClickListener
+            if(System.currentTimeMillis()-lastClickTime>1000){
+                lastClickTime = System.currentTimeMillis()
+                if(et_user_phone.text.isEmpty()){
+                    toast("请输入手机号").setGravity(Gravity.CENTER, 0, 0)
+                    return@setOnClickListener
+                }
+                if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
+                    toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
+                    return@setOnClickListener
+                }
+                if(et_password.text.isEmpty()){
+                    toast("请输入密码").setGravity(Gravity.CENTER, 0, 0)
+                    return@setOnClickListener
+                }
+                present.login(et_user_phone.text.toString(),EncryptionUtil.MD5(et_password.text.toString()),SharedPreferencesUtil.getCommonString(this,"RegistrationID"),"Android","")
             }
-            if(!RegularUtil.isChinaPhoneLegal(et_user_phone.text.toString())){
-                toast("手机号不正确").setGravity(Gravity.CENTER, 0, 0)
-                return@setOnClickListener
-            }
-            if(et_password.text.isEmpty()){
-                toast("请输入密码").setGravity(Gravity.CENTER, 0, 0)
-                return@setOnClickListener
-            }
-            present.login(et_user_phone.text.toString(),EncryptionUtil.MD5(et_password.text.toString()),SharedPreferencesUtil.getCommonString(this,"RegistrationID"),"Android","")
         }
     }
 

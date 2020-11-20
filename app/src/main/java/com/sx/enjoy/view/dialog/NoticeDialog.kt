@@ -35,7 +35,7 @@ class NoticeDialog : Dialog {
                 tv_notice_text.text = "修改成功"
             }
             5 -> {
-
+                tv_notice_text.text = "兑换成功"
             }
             6 -> {
                 tv_notice_text.text = "卖出成功"

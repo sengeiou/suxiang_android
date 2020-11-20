@@ -21,7 +21,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.READ_LOGS"
+    <uses-permission android:name="android.permission.ACCESSNETWORKSTATE" />
+    <uses-permission android:name="android.permission.REQUESTINSTALLPACKAGES" />
+
+
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" />
@@ -34,10 +39,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" /> <!-- 华为角标 -->
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
-
 
     <application
         android:name=".App"
@@ -47,10 +50,9 @@
         android:maxAspectRatio="2.4"
         android:networkSecurityConfig="@xml/network_security_config"
         android:resizeableActivity="true"
-        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" /> <!-- 适配华为（huawei）刘海屏 -->
@@ -66,8 +68,9 @@
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="${JPUSH_APPKEY}" />
-
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="f4e52b8303c7542164225ba6ac792391"/>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="f4e52b8303c7542164225ba6ac792391" />
 
         <activity
             android:name=".GuideActivity"
@@ -81,16 +84,15 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="wakeup" />
-            </intent-filter>
 
+                <data android:scheme="wakeup" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
@@ -191,8 +193,8 @@
             tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".modules.store.CommodityActivity"
-            android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
@@ -324,8 +326,29 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".modules.mine.RecommendUserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".modules.mine.PayMethodInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".modules.mine.PayMethodSetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity" />
 
-        <activity android:name=".modules.mine.RecommendUserActivity"
+        <activity android:name=".modules.mine.UserPropertyListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity
+            android:name=".modules.mine.TalentUpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             tools:ignore="LockedOrientationActivity"/>
@@ -359,7 +382,7 @@
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
             android:theme="@style/MyDialogStyle"
-            tools:replace="android:exported"/> <!-- Required SDK核心功能 -->
+            tools:replace="android:exported" /> <!-- Required SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
             android:configChanges="orientation|keyboardHidden"

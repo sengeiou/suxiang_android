@@ -1,42 +1,41 @@
 package com.sx.enjoy.modules.mine
 
-import android.annotation.SuppressLint
+import android.text.Html
 import android.view.Gravity
 import android.view.View
-import android.webkit.JavascriptInterface
-import android.widget.LinearLayout
-import com.likai.lib.commonutils.DensityUtils
-import com.likai.lib.commonutils.ScreenUtils
+import com.gyf.immersionbar.ImmersionBar
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
-import com.sx.enjoy.bean.FutureLevelBean
 import com.sx.enjoy.bean.MemberUpBean
 import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MemberUpSuccessEvent
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
-import com.sx.enjoy.view.dialog.LevelUpDialog
-import com.tencent.smtt.sdk.WebSettings
+import com.sx.enjoy.utils.EncryptionUtil
+import com.sx.enjoy.view.dialog.*
 import kotlinx.android.synthetic.main.activity_member_up.*
-import kotlinx.android.synthetic.main.empty_public_network.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import org.litepal.LitePal
-import java.lang.reflect.Method
 
 class MemberUpActivity : BaseActivity() , SXContract.View{
 
     private lateinit var present: SXPresent
 
     private lateinit var levelDialog : LevelUpDialog
+    private lateinit var questionDialog: QuestionDialog
+    private lateinit var payDialog: PayPasswordDialog
+    private lateinit var reminderDialog: ReminderDialog
+    private lateinit var vipChangeDialog: VIPChangeDialog
 
-    private lateinit var user : UserBean
+    private var user : UserBean? = null
+    private var member : MemberUpBean? = null
 
-    private var type = 0
+    private var isLevelUp = false
 
-    override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,if(type == 0) "会员等级" else "达人等级")
+    override fun getTitleType() = PublicTitleData(C.TITLE_CUSTOM)
 
     override fun getLayoutResource() = R.layout.activity_member_up
 
@@ -45,347 +44,151 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
     }
 
     override fun initView() {
-        levelDialog = LevelUpDialog(this)
+        ImmersionBar.with(this).statusBarDarkFont(true).titleBar(member_up_title).init()
 
-        type = intent.getIntExtra("type",0)
+        levelDialog = LevelUpDialog(this)
+        questionDialog = QuestionDialog(this)
+        payDialog = PayPasswordDialog(this)
+        reminderDialog = ReminderDialog(this)
+        vipChangeDialog = VIPChangeDialog(this)
+
         user = LitePal.findLast(UserBean::class.java)
 
-        initWebView()
-
-        if(type == 0){
-            present.getMemberInfo(C.USER_ID)
-        }else{
-            present.getFutureLevel(C.USER_ID)
-        }
+        present.getMemberInfo(C.USER_ID)
 
         initEvent()
     }
 
     private fun initEvent(){
+        ll_member_back.setOnClickListener {
+            finish()
+        }
         tv_level_up.setOnClickListener {
-            if(type == 0){
-                if(user.membershipLevel<=0&&user.isReai != "1"){
-                    startActivity<AuthenticationActivity>()
-                    return@setOnClickListener
-                }
+            if(isLevelUp){
                 present.memberUp(C.USER_ID)
+            }
+        }
+        iv_change_vip.setOnClickListener {
+            questionDialog.showQuestion(2,member!!.exchangeExplain)
+        }
+        tv_change_vip.setOnClickListener {
+            if(user?.isPayPwd == 1){
+                vipChangeDialog.showVIPChange(member!!.vipBuyRich,member!!.useNumber,member!!.maxNumber)
             }else{
-                present.expertUpgrade(C.USER_ID)
+                reminderDialog.showReminder(2)
             }
         }
         iv_network_error.setOnClickListener {
-            if(type == 0){
-                present.getMemberInfo(C.USER_ID)
-            }else{
-                present.getFutureLevel(C.USER_ID)
+            present.getMemberInfo(C.USER_ID)
+        }
+        tv_auth_result.setOnClickListener {
+            if(user!!.isReai != "1"){
+                startActivity<AuthenticationActivity>()
             }
         }
-    }
 
-    private fun initWebView(){
-        wb_member_up.settings.setSupportZoom(true)
-        wb_member_up.settings.builtInZoomControls = true
-        wb_member_up.settings.displayZoomControls = true
-        wb_member_up.settings.blockNetworkImage = false
-        wb_member_up.settings.loadsImagesAutomatically = true
-        wb_member_up.settings.defaultTextEncodingName = "utf-8"
-        wb_member_up.settings.javaScriptEnabled = true
-        wb_member_up.settings.setSupportZoom(false)
-        wb_member_up.settings.builtInZoomControls = false
-        wb_member_up.addJavascriptInterface(this, "App")
-        setZoomControlGoneX(wb_member_up.settings, arrayOf(false))
-
-        wb_member_up.webViewClient = object : com.tencent.smtt.sdk.WebViewClient() {
-            override fun onPageFinished(view: com.tencent.smtt.sdk.WebView, p1: String?) {
-                super.onPageFinished(view, p1)
-                try {
-                    val screenWidth: Int = ScreenUtils.getScreenWidth(this@MemberUpActivity)
-                    val width2: String = java.lang.String.valueOf(DensityUtils.px2dp(this@MemberUpActivity, screenWidth.toFloat()) - 20)
-                    val javascript = "javascript:function ResizeImages() {" +
-                            "var myimg,oldwidth;" +
-                            "var maxwidth = document.body.clientWidth;" +
-                            "for(i=0;i <document.images.length;i++){" +
-                            "myimg = document.images[i];" +
-                            "if(myimg.width > " + width2 + "){" +
-                            "oldwidth = myimg.width;" +
-                            "myimg.width =" + width2 + ";" +
-                            "}" +
-                            "}" +
-                            "}"
-                    view.loadUrl(javascript)
-                    view.loadUrl("javascript:ResizeImages();")
-                    view.loadUrl("javascript:App.resize(document.body.getBoundingClientRect().height)");
-
-                } catch (e: Exception) {
-                }
+        reminderDialog.setOnNoticeConfirmListener(object :ReminderDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                startActivity<PayPasswordActivity>()
             }
-            override fun shouldOverrideUrlLoading(p0: com.tencent.smtt.sdk.WebView?, request: com.tencent.smtt.export.external.interfaces.WebResourceRequest?): Boolean {
-                return false
+        })
+        payDialog.setOnNoticeConfirmListener(object :PayPasswordDialog.OnNoticeConfirmListener{
+            override fun onConfirm(password: String) {
+                present.exchangeVip(C.USER_ID, EncryptionUtil.MD5(password))
             }
-
-        }
-    }
-
-    @JavascriptInterface
-    fun resize(height: Float) {
-        runOnUiThread(Runnable {
-            wb_member_up.layoutParams = LinearLayout.LayoutParams(resources.displayMetrics.widthPixels, (height * resources.displayMetrics.density).toInt()+30)
+        })
+        vipChangeDialog.setOnNoticeConfirmListener(object :VIPChangeDialog.OnNoticeConfirmListener{
+            override fun onConfirm() {
+                payDialog.showInputPassword()
+            }
         })
     }
-
-    private fun setZoomControlGoneX(view: WebSettings, args: Array<Any>) {
-        val classType: Class<*> = view.javaClass
-        try {
-            val argsClass: Array<Class<*>?> = arrayOfNulls(args.size)
-            run {
-                var i = 0
-                val j = args.size
-                while (i < j) {
-                    argsClass[i] = args[i].javaClass
-                    i++
-                }
-            }
-            val ms: Array<Method> = classType.methods
-            for (i in ms.indices) {
-                if (ms[i].getName().equals("setDisplayZoomControls")) {
-                    try {
-                        ms[i].invoke(view, false)
-                    } catch (e: java.lang.Exception) {
-                        e.printStackTrace()
-                    }
-                    break
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
-    @SuppressLint("SetJavaScriptEnabled")
-    override fun onResume() {
-        super.onResume()
-        wb_member_up.onResume()
-        wb_member_up.settings.javaScriptEnabled = true
-    }
-
-    override fun onPause() {
-        super.onPause()
-        wb_member_up.onPause()
-        wb_member_up.settings.lightTouchEnabled = false
-    }
-
-    override fun onDestroy() {
-        if (wb_member_up != null) {
-            wb_member_up.destroy()
-        }
-        super.onDestroy()
-    }
-
 
     override fun onSuccess(flag: String?, data: Any?) {
         flag?.let {
             when (flag) {
                 SXContract.GETMEMBERINFO -> {
-                    em_network_view.visibility = View.GONE
                     data?.let {
                         data as MemberUpBean
-                        tv_level_up.visibility = View.VISIBLE
-
-                        val url = "<div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                "   </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     用户当前VIP等级\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{userLevel}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     下一个等级\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{nextLevel}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     当前手续费\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{userFee}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     下一级手续费\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{nextFee}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     卷轴要求\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{scrollSpread}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     奖励任务卷轴\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{task}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     奖励个数\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{taskCount}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     奖励活跃值\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{active}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     奖励米粒数\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{rice}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     当前经验值\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{experience}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     所需经验值\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{nextExperience}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>\n" +
-                                " <div style=\"color:#323233;font-size:16px;background-color:#F7F8FA;\">\n" +
-                                "  <div style=\"background-color:#FFFFFF;\">\n" +
-                                "   <div style=\"padding:10px 16px;font-size:14px;\">\n" +
-                                "    <div>\n" +
-                                "     升级要求\n" +
-                                "    </div>\n" +
-                                "    <div style=\"color:#969799;text-align:right;vertical-align:middle;margin-top: -20px\">\n" +
-                                "     {{upgradeReq}}\n" +
-                                "    </div>\n" +
-                                "   </div>\n" +
-                                "  </div>\n" +
-                                " </div>\n" +
-                                " <div style=\"height: 1px;width:100%;background-color:#e6e7e8\">\n" +
-                                " </div>"
-
-                        wb_member_up.loadData(data.content, "text/html", "UTF-8")
-                        if(data.isUpgrade){
-                            tv_level_up.isClickable = true
-                            tv_level_up.setBackgroundResource(R.drawable.bg_main_full_2)
+                        rl_error_view.visibility = View.GONE
+                        member = data
+                        ll_vip_level.text = "VIP等级"+data.userLevel
+                        tv_charge_level.text = "当前手续费：${data.userPoundage}%"
+                        tv_vip_next.text = "下一等级 VIP${data.level}奖励"
+                        if(data.number > 0){
+                            ll_get_task.visibility = View.VISIBLE
+                            tv_task_get.text = "${if(data.rank == "0") "初" else data.rank}级卷轴x${data.number}"
                         }else{
-                            tv_level_up.isClickable = user.membershipLevel<=0
-                            tv_level_up.setBackgroundResource(R.drawable.bg_main_1_full_2)
+                            ll_get_task.visibility = View.GONE
                         }
-                    }
-                }
-                SXContract.GETFUTURELEVEL -> {
-                    em_network_view.visibility = View.GONE
-                    data?.let {
-                        data as FutureLevelBean
-                        tv_level_up.visibility = View.VISIBLE
-                        wb_member_up.loadData(data.content, "text/html", "UTF-8")
-                        if(data.isUpgrade){
-                            tv_level_up.isClickable = true
-                            tv_level_up.setBackgroundResource(R.drawable.bg_balck_full_2)
+                        if(data.activity > 0){
+                            ll_get_activity.visibility = View.VISIBLE
+                            tv_activity_get.text = "活跃度${String.format("%.2f",data.activity)}"
                         }else{
-                            tv_level_up.isClickable = false
-                            tv_level_up.setBackgroundResource(R.drawable.bg_balck_1_full_2)
+                            ll_get_activity.visibility = View.GONE
                         }
+                        if(data.riceGrains > 0){
+                            ll_get_rice.visibility = View.VISIBLE
+                            tv_rice_get.text = "米粒${String.format("%.2f",data.riceGrains)}"
+                        }else{
+                            ll_get_rice.visibility = View.GONE
+                        }
+                        if(data.poundage > 0){
+                            ll_get_charge.visibility = View.VISIBLE
+                            tv_charge_get.text = "手续费${data.poundage}%"
+                        }else{
+                            ll_get_charge.visibility = View.GONE
+                        }
+
+                        if(data.userLevel>0){
+                            ll_auth_view.visibility = View.GONE
+                            if(data.suffer>0){
+                                ll_exp_view.visibility = View.VISIBLE
+                                tv_user_cur_exp.text = data.userSuffer
+                                tv_user_total_exp.text = "/"+data.suffer
+                                tv_exp_get_way.text = data.sufferAccess
+                            }else{
+                                ll_exp_view.visibility = View.GONE
+                            }
+                            if(data.scrollNumber>0){
+                                ll_task_view.visibility = View.VISIBLE
+                                tv_task_target.text = if(data.scrollRequire == 0) "初" else data.scrollRequire.toString() + "级卷轴"
+                                tv_user_cur_task.text = data.userScrollNumber
+                                tv_user_total_task.text = "/"+data.scrollNumber
+                                tv_task_get_way.text = data.taskAccess
+                            }else{
+                                ll_task_view.visibility = View.GONE
+                            }
+                            if(data.upgradeAskVoList.isNotEmpty()){
+                                ll_team_view.visibility = View.VISIBLE
+                                val sb = StringBuffer()
+                                for(i in data.upgradeAskVoList.indices){
+                                    for (j in data.upgradeAskVoList[i].upgradeAskList.indices){
+                                        sb.append("<font color='#F36F4A'>${data.upgradeAskVoList[i].upgradeAskList[j].userNumberFirst}</font>/${data.upgradeAskVoList[i].upgradeAskList[j].numberFirst} v${data.upgradeAskVoList[i].upgradeAskList[j].levelFirst} ")
+                                        if(j<data.upgradeAskVoList[i].upgradeAskList.size-1){
+                                            sb.append("<font color='#666666'>且 </font>")
+                                        }
+                                    }
+                                    if(i<data.upgradeAskVoList.size-1){
+                                        sb.append("<font color='#666666'>或</font><br/>")
+                                    }
+                                }
+                                tv_team_value.text = Html.fromHtml(sb.toString())
+                                tv_team_get_way.text = data.teamAccess
+                            }else{
+                                ll_team_view.visibility = View.GONE
+                            }
+                        }else{
+                            ll_auth_view.visibility = View.VISIBLE
+                            ll_exp_view.visibility = View.GONE
+                            ll_task_view.visibility = View.GONE
+                            ll_team_view.visibility = View.GONE
+
+                            tv_auth_result.text = if(user!!.isReai == "1") "已实名" else "去实名"
+                        }
+
+                        isLevelUp = data.isUpgrade
+                        tv_level_up.setBackgroundResource(if(data.isUpgrade) R.drawable.bg_main_full_2 else R.drawable.bg_main_1_full_2)
                     }
                 }
                 SXContract.MEMBERUP -> {
@@ -393,10 +196,9 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
                     present.getMemberInfo(C.USER_ID)
                     levelDialog.show()
                 }
-                SXContract.EXPERTUPGRADE -> {
-                    EventBus.getDefault().post(MemberUpSuccessEvent(2))
-                    present.getFutureLevel(C.USER_ID)
-                    levelDialog.show()
+                SXContract.EXCHANGEVIP -> {
+                    toast("兑换成功").setGravity(Gravity.CENTER, 0, 0)
+                    present.getMemberInfo(C.USER_ID)
                 }
                 else -> {
 
@@ -407,13 +209,15 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
 
 
     override fun onFailed(string: String?,isRefreshList:Boolean) {
-        em_network_view.visibility = View.GONE
+        if(isRefreshList){
+            rl_error_view.visibility = View.GONE
+        }
         toast(string!!).setGravity(Gravity.CENTER, 0, 0)
     }
 
     override fun onNetError(boolean: Boolean,isRefreshList:Boolean) {
         if(isRefreshList){
-            em_network_view.visibility = View.VISIBLE
+            rl_error_view.visibility = View.VISIBLE
         }else{
             toast("请检查网络连接").setGravity(Gravity.CENTER, 0, 0)
         }

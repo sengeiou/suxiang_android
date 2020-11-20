@@ -36,10 +36,10 @@ android {
 
     defaultConfig {
         applicationId "com.sx.enjoy"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 1002
-        versionName "1.0.02"
+        versionCode 1004
+        versionName "1.0.04"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -73,6 +73,7 @@ android {
         targetCompatibility 1.8
     }
 }
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -113,6 +114,7 @@ dependencies {
     implementation 'com.amap.api:location:5.2.0'
     implementation 'com.tencent.bugly:crashreport:3.2.422'
     implementation 'com.tencent.bugly:nativecrashreport:3.7.471'
+
     implementation('com.github.LuckSiege.PictureSelector:picture_library:v2.5.9') {
         exclude group: "com.android.support"
     }

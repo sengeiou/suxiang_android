@@ -54,8 +54,7 @@ class AccountActivity : BaseActivity() ,SXContract.View{
 
     private var photo = ""
 
-
-    override fun getTitleType() = PublicTitleData(C.TITLE_RIGHT_TEXT,"个人资料","保存")
+    override fun getTitleType() = PublicTitleData(C.TITLE_RIGHT_TEXT_BACKGROUND,"个人资料","保存")
 
     override fun getLayoutResource() = R.layout.activity_account
 
@@ -124,6 +123,9 @@ class AccountActivity : BaseActivity() ,SXContract.View{
         }
         ll_user_phone.setOnClickListener {
             startActivityForResult<PhoneChangeActivity>(1002,Pair("phone",user.userPhone))
+        }
+        ll_pay_method.setOnClickListener {
+            startActivity<PayMethodSetActivity>()
         }
         tv_login_exit.setOnClickListener {
             reminderDialog.showReminder(1)

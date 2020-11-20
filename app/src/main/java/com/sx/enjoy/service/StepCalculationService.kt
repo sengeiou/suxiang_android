@@ -133,7 +133,6 @@ class StepCalculationService : Service() ,SXContract.View , ShakeDetector.OnShak
             }
             .onDenied { permissions ->
                 toast("不赋于定位权限将无法正常使用车行记录").setGravity(Gravity.CENTER, 0, 0)
-                getLocationPermission()
             }
             .start()
     }

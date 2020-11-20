@@ -1,6 +1,6 @@
 package com.sx.enjoy
 
-import android.util.Log
+import android.app.Activity
 import cn.jpush.android.api.JPushInterface
 import com.likai.lib.app.BaseApplication
 import com.likai.lib.commonutils.SharedPreferencesUtil
@@ -15,6 +15,8 @@ import kotlin.properties.Delegates
 
 
 class App: BaseApplication(){
+
+    private val mActivityList = arrayListOf<Activity>()
 
     override fun onCreate() {
         super.onCreate()
@@ -33,9 +35,7 @@ class App: BaseApplication(){
         QbSdk.setDownloadWithoutWifi(true)
         QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
             override fun onCoreInitFinished() {}
-            override fun onViewInitFinished(b: Boolean) {
-                Log.e("Test", "X5--------->complete--->$b")
-            }
+            override fun onViewInitFinished(b: Boolean) {}
         })
 
         UMConfigure.init(this,C.U_MENG_APP_KEY, "Umeng",UMConfigure.DEVICE_TYPE_PHONE, null)
@@ -52,6 +52,22 @@ class App: BaseApplication(){
         if(user!=null){
             C.USER_ID = user.userId
         }
+    }
+
+
+    fun addActivity(activity: Activity) {
+        mActivityList.add(activity)
+    }
+
+    /**
+     * 关闭程序所有的Activity
+     */
+    fun clearActivityList() {
+        for (i in mActivityList.indices) {
+            val activity = mActivityList[i]
+            activity.finish()
+        }
+        mActivityList.clear()
     }
 
 }

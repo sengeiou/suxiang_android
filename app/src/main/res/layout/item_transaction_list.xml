@@ -5,16 +5,29 @@
     android:paddingLeft="@dimen/dimen_15"
     android:paddingRight="@dimen/dimen_15"
     android:paddingTop="@dimen/dimen_8"
-    android:paddingBottom="@dimen/dimen_8">
+    android:paddingBottom="@dimen/dimen_8"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_order_status"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_30"
+        android:gravity="center_vertical|right"
+        android:background="@color/white"
+        android:textSize="@dimen/text_13"
+        android:textColor="@color/main_color"
+        android:text="待付款"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_1"
         android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:padding="@dimen/dimen_15">
 
             <com.sx.enjoy.view.CircleImageView
@@ -25,41 +38,78 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dimen_15"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_user_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:singleLine="true"
-                    android:ellipsize="end"
-                    android:textSize="@dimen/text_13"
-                    android:textColor="@color/title_main_color"
-                    android:text="人生如梦"/>
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dimen_15">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/dimen_50"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:ellipsize="end"
+                        android:textSize="@dimen/text_13"
+                        android:textColor="@color/title_main_color"
+                        android:text="人生如梦"/>
 
                     <TextView
                         android:id="@+id/tv_rice_count"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="数量 20"
-                        android:textColor="@color/title_main_color"
+                        android:textColor="@color/main_color"
                         android:textSize="@dimen/text_12" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/iv_pay_zfb"
+                            android:layout_width="@dimen/dimen_20"
+                            android:layout_height="@dimen/dimen_20"
+                            android:src="@mipmap/ic_market_zfb"/>
+
+                        <ImageView
+                            android:id="@+id/iv_pay_wx"
+                            android:layout_width="@dimen/dimen_20"
+                            android:layout_height="@dimen/dimen_20"
+                            android:layout_marginLeft="@dimen/dimen_8"
+                            android:src="@mipmap/ic_market_wx"/>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_us_amount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_10"
+                        android:textSize="@dimen/text_13"
+                        android:textColor="@color/title_main_color"
+                        android:text="USDT单价;0.00"/>
 
                     <TextView
                         android:id="@+id/tv_rice_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_15"
-                        android:textColor="@color/main_color"
-                        android:text="¥ 32.00"/>
+                        android:textSize="@dimen/text_13"
+                        android:textColor="@color/color_0000FF"
+                        android:text="ZGCT单价;0.00"/>
 
                 </LinearLayout>
 

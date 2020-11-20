@@ -4,18 +4,21 @@ import android.view.Gravity
 import android.view.View
 import com.sx.enjoy.R
 import com.sx.enjoy.base.BaseActivity
+import com.sx.enjoy.bean.UserBean
 import com.sx.enjoy.constans.C
 import com.sx.enjoy.event.MarketSellSuccessEvent
 import com.sx.enjoy.modules.mine.AuthenticationActivity
 import com.sx.enjoy.modules.mine.TransactionDetailsActivity
 import com.sx.enjoy.net.SXContract
 import com.sx.enjoy.net.SXPresent
+import com.sx.enjoy.utils.ImageLoaderUtil
 import com.sx.enjoy.view.dialog.NoticeDialog
 import com.sx.enjoy.view.dialog.ReminderDialog
 import kotlinx.android.synthetic.main.activity_sell_rice.*
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
+import org.litepal.LitePal
 
 class SellRiceActivity : BaseActivity() ,SXContract.View{
 
@@ -43,17 +46,26 @@ class SellRiceActivity : BaseActivity() ,SXContract.View{
         val amount = intent.getStringExtra("amount")
         val buyNum = intent.getStringExtra("buyNum")
         val orderNo = intent.getStringExtra("orderNo")
+        val richOrderNo = intent.getStringExtra("richOrderNo")
+
+        val user = LitePal.findLast(UserBean::class.java)
+        if(user.isAliPay){
+            ll_zfb_number.visibility = View.VISIBLE
+            ll_zfb_code.visibility = View.VISIBLE
+            tv_ali_number.text = user.aliNumber
+            ImageLoaderUtil().displayImage(this,user.payQrcode,iv_zfb_code)
+        }
+        if(user.isWxPay){
+            ll_wx_code.visibility = View.VISIBLE
+            ImageLoaderUtil().displayImage(this,user.wxQrcode,iv_wx_code)
+        }
 
         tv_sell_rice.setOnClickListener {
-            if(et_ali_number.text.isEmpty()){
-                toast("请输入支付宝账号").setGravity(Gravity.CENTER, 0, 0)
-                return@setOnClickListener
-            }
-            present.createMarketOrder(C.USER_ID,type.toString(),amount,buyNum,et_ali_number.text.toString(),orderNo)
+            present.createMarketOrder(C.USER_ID,type.toString(),amount,buyNum,richOrderNo,orderNo,"0")
         }
 
         noticeDialog.setOnDismissListener {
-            startActivity<TransactionDetailsActivity>(Pair("marketId",marketId),Pair("type",1))
+            startActivity<TransactionDetailsActivity>(Pair("richOrderNo",richOrderNo),Pair("type",1))
             finish()
         }
 

@@ -20,7 +20,7 @@ import org.litepal.LitePal
 
 class SmartEarnActivity : BaseActivity() {
 
-    override fun getTitleType() = PublicTitleData(C.TITLE_NORMAL,"速享赚赚")
+    override fun getTitleType() = PublicTitleData(C.TITLE_CUSTOM,"速享赚赚")
 
     override fun getLayoutResource() = R.layout.activity_smart_earn
 

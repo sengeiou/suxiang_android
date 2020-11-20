@@ -86,6 +86,14 @@ interface SXContract {
         var GETMARKETDEMAND = "getMarketDemand"
         var GETNEWMARKETLIST = "getNewMarketList"
         var GETRICERANGE = "getRiceRange"
+        var POSTPAYMETHODINFO = "postPayMethodInfo"
+        var DELETEPAYMETHODINFO = "deletePayMethodInfo"
+        var GETTEAMUSERCOUNT = "getTeamUserCount"
+        var GETCANCELCOUNT = "getCancelCount"
+        var EXCHANGEVIP = "exchangeVip"
+        var GETMYCONTRIBLIST = "getMyContribList"
+        var GETMYACTIVITYLIST = "getMyActivityList"
+        var GETMYSUFFERLIST = "getMySufferList"
     }
 
     interface View: BaseView
@@ -108,16 +116,16 @@ interface SXContract {
         fun buyTask(userId:String,taskId:String,payPassword:String):Observable<HttpResult<String>>
         fun getTaskRiceGrains(userId:String):Observable<HttpResult<TaskRiceBean>>
         fun getMarketList(pager:String,limit:String):Observable<HttpResult<List<MarketListBean>>>
-        fun getMarketQuotes(pager:String,limit:String):Observable<HttpResult<List<MarketQuotesBean>>>
+        fun getMarketQuotes(type:String,pager:String,limit:String):Observable<HttpResult<List<MarketQuotesBean>>>
         fun getMarketDetails(id:String):Observable<HttpResult<MarketListBean>>
         fun getRiceRecordList(userId:String,type:String,pager:String,limit:String):Observable<HttpResult<List<RiceRecordListBean>>>
         fun getStoreCategory(pid:String):Observable<HttpResult<List<StoreCategoryBean>>>
         fun uploadFile(imageFile: File): Call<HttpResult<UploadImageBean>>
         fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String):Observable<HttpResult<List<MarketTransactionListBean>>>
         fun getRiceFromStep(userId:String,deviceId:String,latitude:String,longitude:String,minStep:String,rotateMinStep:String):Observable<HttpResult<StepRiceBean>>
-        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,alipayNumber:String):Observable<HttpResult<String>>
-        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String):Observable<HttpResult<String>>
-        fun getTransactionOrderDetails(id:String):Observable<HttpResult<TransactionOrderBean>>
+        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,isAliPay:String,isWxPay:String):Observable<HttpResult<String>>
+        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,richOrderNo:String,orderNo:String,isCancel:String):Observable<HttpResult<String>>
+        fun getTransactionOrderDetails(userId:String,richOrderNo:String):Observable<HttpResult<TransactionOrderBean>>
         fun payMarketOrder(orderNo:String,transaction:String):Observable<HttpResult<String>>
         fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String):Observable<HttpResult<String>>
         fun getUserTeamList(id:String,limit:String,page:String):Observable<HttpResult<List<TeamListBean>>>
@@ -162,6 +170,14 @@ interface SXContract {
         fun getMarketDemand():Observable<HttpResult<MarketDemandBean>>
         fun getNewMarketList(type:String,userPhone:String,richMin:String,richMax:String,priceMin:String,priceMax:String,payMethod:String,sectionId:String,page:String,limit:String):Observable<HttpResult<List<NewMarketListBean>>>
         fun getRiceRange():Observable<HttpResult<RiceRangeBean>>
+        fun postPayMethodInfo(userId:String,type:String,wxPayName:String,wxQrcode:String,aliPayName:String,payQrcode:String,aliNumber:String):Observable<HttpResult<String>>
+        fun deletePayMethodInfo(userId:String,type:String):Observable<HttpResult<String>>
+        fun getTeamUserCount(userId:String):Observable<HttpResult<TeamCountBean>>
+        fun getCancelCount(userId:String):Observable<HttpResult<CancelCountBean>>
+        fun exchangeVip(userId:String,payPassword:String):Observable<HttpResult<String>>
+        fun getMyContribList(userId:String,limit:String,page:String):Observable<HttpResult<List<UserPropertyBean>>>
+        fun getMyActivityList(userId:String,limit:String,page:String):Observable<HttpResult<List<UserPropertyBean>>>
+        fun getMySufferList(userId:String,limit:String,page:String):Observable<HttpResult<List<UserPropertyBean>>>
     }
 
     interface Present{
@@ -182,16 +198,16 @@ interface SXContract {
         fun buyTask(userId:String,taskId:String,payPassword:String)
         fun getTaskRiceGrains(userId:String)
         fun getMarketList(pager:String,limit:String)
-        fun getMarketQuotes(pager:String,limit:String)
+        fun getMarketQuotes(type:String,pager:String,limit:String)
         fun getMarketDetails(id:String)
         fun getRiceRecordList(userId:String,type:String,pager:String,limit:String)
         fun getStoreCategory(pid:String)
         fun uploadFile(imageFile:File):HttpResult<UploadImageBean>?
         fun getMyMarketOrderList(userId:String,type:String,status:String,pager:String,limit:String)
         fun getRiceFromStep(userId:String,deviceId:String,latitude:String,longitude:String,minStep:String,rotateMinStep:String)
-        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,alipayNumber:String)
-        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,alipayNumber:String,orderNo:String)
-        fun getTransactionOrderDetails(id:String)
+        fun publishMarketInfo(userId:String,type:String,amount:String,richNum:String,isAliPay:String,isWxPay:String)
+        fun createMarketOrder(userId:String,type:String,amount:String,buyNum:String,richOrderNo:String,orderNo:String,isCancel:String)
+        fun getTransactionOrderDetails(userId:String,richOrderNo:String)
         fun payMarketOrder(orderNo:String,transaction:String)
         fun confirmMarketOrder(userId:String,richUserId:String,buyNum:String,orderNo:String,type:String)
         fun getUserTeamList(id:String,limit:String,page:String)
@@ -236,6 +252,14 @@ interface SXContract {
         fun getMarketDemand()
         fun getNewMarketList(type:String,userPhone:String,richMin:String,richMax:String,priceMin:String,priceMax:String,payMethod:String,sectionId:String,page:String,limit:String,isShow:Boolean)
         fun getRiceRange()
+        fun postPayMethodInfo(userId:String,type:String,wxPayName:String,wxQrcode:String,aliPayName:String,payQrcode:String,aliNumber:String)
+        fun deletePayMethodInfo(userId:String,type:String)
+        fun getTeamUserCount(userId:String)
+        fun getCancelCount(userId:String,isAutoCancel:Boolean)
+        fun exchangeVip(userId:String,payPassword:String)
+        fun getMyContribList(userId:String,limit:String,page:String)
+        fun getMyActivityList(userId:String,limit:String,page:String)
+        fun getMySufferList(userId:String,limit:String,page:String)
     }
 
 }
