@@ -8,7 +8,6 @@ class UserBean: LitePalSupport(){
     var userName: String = ""
     var userPhone: String = ""
     var userImg: String = ""
-    var userLevel: Int = 0
     var userLevelName: String = ""
     var sex: String = ""
     var address: String = ""
@@ -17,7 +16,6 @@ class UserBean: LitePalSupport(){
     var userContrib: Double = 0.0
     var experience : Int = 0
     var isPayPwd:Int = 0
-    var membershipLevel: Int = 0
     var membershipLevelName :String = ""
     var isReai: String = ""
     var wxNumber: String = ""
@@ -45,6 +43,38 @@ class UserBean: LitePalSupport(){
             this.isAliPay = isAliPay
         }else{
             this.setToDefault("isAliPay")
+        }
+    }
+
+    fun setActivity(userActivity:Double){
+        if(userActivity != 0.0){
+            this.userActivity = userActivity
+        }else{
+            this.setToDefault("userActivity")
+        }
+    }
+
+    fun setContrib(userContrib:Double){
+        if(userContrib != 0.0){
+            this.userContrib = userContrib
+        }else{
+            this.setToDefault("userContrib")
+        }
+    }
+
+    fun setUserExperience(experience:Int){
+        if(experience != 0){
+            this.experience = experience
+        }else{
+            this.setToDefault("experience")
+        }
+    }
+
+    fun setIsPayPwd(isPayPwd:Int){
+        if(isPayPwd != 0){
+            this.isPayPwd = isPayPwd
+        }else{
+            this.setToDefault("isPayPwd")
         }
     }
 }

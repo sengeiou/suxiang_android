@@ -104,6 +104,12 @@ class LoginActivity : BaseActivity() ,SXContract.View{
                     data?.let {
                         data as UserBean
                         data.userId = data.id.toString()
+                        data.setIsWxPay(data.isWxPay)
+                        data.setIsAliPay(data.isAliPay)
+                        data.setActivity(data.userActivity)
+                        data.setContrib(data.userContrib)
+                        data.setUserExperience(data.experience)
+                        data.setIsPayPwd(data.isPayPwd)
                         C.USER_ID = data.userId
                         data.save()
                         SharedPreferencesUtil.putCommonString(this,"savePhone",data.userPhone)

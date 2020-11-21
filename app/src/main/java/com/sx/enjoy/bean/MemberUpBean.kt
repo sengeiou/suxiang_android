@@ -8,7 +8,7 @@ class MemberUpBean(
     @SerializedName("activity")val activity:Double,
     @SerializedName("heigestLevel")val heigestLevel:String,
     @SerializedName("isUpgrade")val isUpgrade:Boolean,
-    @SerializedName("level")val level:String,
+    @SerializedName("level")val level:Int,
     @SerializedName("maxNumber")val maxNumber:String,
     @SerializedName("number")val number:Int,
     @SerializedName("poundage")val poundage:Int,

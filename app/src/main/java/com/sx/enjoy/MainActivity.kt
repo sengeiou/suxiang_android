@@ -436,6 +436,10 @@ class MainActivity :BaseActivity() ,SXContract.View , APKRefreshDownload.OnDownL
                         data.userId = data.id.toString()
                         data.setIsWxPay(data.isWxPay)
                         data.setIsAliPay(data.isAliPay)
+                        data.setIsPayPwd(data.isPayPwd)
+                        data.setActivity(data.userActivity)
+                        data.setContrib(data.userContrib)
+                        data.setUserExperience(data.experience)
                         data.updateAll("userId = ?", data.userId)
                         changeUserInfo()
                     }

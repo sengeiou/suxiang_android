@@ -73,7 +73,11 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
         }
         tv_change_vip.setOnClickListener {
             if(user?.isPayPwd == 1){
-                vipChangeDialog.showVIPChange(member!!.vipBuyRich,member!!.useNumber,member!!.maxNumber)
+                if(member!!.useNumber != member!!.maxNumber){
+                    vipChangeDialog.showVIPChange(member!!.vipBuyRich,member!!.useNumber,member!!.maxNumber)
+                }else{
+                    toast("本周兑换VIP次数已满").setGravity(Gravity.CENTER, 0, 0)
+                }
             }else{
                 reminderDialog.showReminder(2)
             }
@@ -112,83 +116,94 @@ class MemberUpActivity : BaseActivity() , SXContract.View{
                         data as MemberUpBean
                         rl_error_view.visibility = View.GONE
                         member = data
-                        ll_vip_level.text = "VIP等级"+data.userLevel
-                        tv_charge_level.text = "当前手续费：${data.userPoundage}%"
-                        tv_vip_next.text = "下一等级 VIP${data.level}奖励"
-                        if(data.number > 0){
-                            ll_get_task.visibility = View.VISIBLE
-                            tv_task_get.text = "${if(data.rank == "0") "初" else data.rank}级卷轴x${data.number}"
+                        if(data.userLevel == data.level){
+                            ll_vip_level.text = "VIP等级"+data.userLevel
+                            tv_charge_level.text = "当前手续费：${data.userPoundage}%"
+                            ll_next_get.visibility = View.GONE
+                            ll_up_view.visibility = View.GONE
+                            tv_level_up.visibility = View.GONE
                         }else{
-                            ll_get_task.visibility = View.GONE
-                        }
-                        if(data.activity > 0){
-                            ll_get_activity.visibility = View.VISIBLE
-                            tv_activity_get.text = "活跃度${String.format("%.2f",data.activity)}"
-                        }else{
-                            ll_get_activity.visibility = View.GONE
-                        }
-                        if(data.riceGrains > 0){
-                            ll_get_rice.visibility = View.VISIBLE
-                            tv_rice_get.text = "米粒${String.format("%.2f",data.riceGrains)}"
-                        }else{
-                            ll_get_rice.visibility = View.GONE
-                        }
-                        if(data.poundage > 0){
-                            ll_get_charge.visibility = View.VISIBLE
-                            tv_charge_get.text = "手续费${data.poundage}%"
-                        }else{
-                            ll_get_charge.visibility = View.GONE
-                        }
+                            ll_next_get.visibility = View.VISIBLE
+                            ll_up_view.visibility = View.VISIBLE
+                            tv_level_up.visibility = View.VISIBLE
+                            ll_vip_level.text = "VIP等级"+data.userLevel
+                            tv_charge_level.text = "当前手续费：${data.userPoundage}%"
+                            tv_vip_next.text = "下一等级 VIP${data.level}奖励"
+                            if(data.number > 0){
+                                ll_get_task.visibility = View.VISIBLE
+                                tv_task_get.text = "${if(data.rank == "0") "初" else data.rank}级卷轴x${data.number}"
+                            }else{
+                                ll_get_task.visibility = View.GONE
+                            }
+                            if(data.activity > 0){
+                                ll_get_activity.visibility = View.VISIBLE
+                                tv_activity_get.text = "活跃度${String.format("%.2f",data.activity)}"
+                            }else{
+                                ll_get_activity.visibility = View.GONE
+                            }
+                            if(data.riceGrains > 0){
+                                ll_get_rice.visibility = View.VISIBLE
+                                tv_rice_get.text = "米粒${String.format("%.2f",data.riceGrains)}"
+                            }else{
+                                ll_get_rice.visibility = View.GONE
+                            }
+                            if(data.poundage > 0){
+                                ll_get_charge.visibility = View.VISIBLE
+                                tv_charge_get.text = "手续费${data.poundage}%"
+                            }else{
+                                ll_get_charge.visibility = View.GONE
+                            }
 
-                        if(data.userLevel>0){
-                            ll_auth_view.visibility = View.GONE
-                            if(data.suffer>0){
-                                ll_exp_view.visibility = View.VISIBLE
-                                tv_user_cur_exp.text = data.userSuffer
-                                tv_user_total_exp.text = "/"+data.suffer
-                                tv_exp_get_way.text = data.sufferAccess
-                            }else{
-                                ll_exp_view.visibility = View.GONE
-                            }
-                            if(data.scrollNumber>0){
-                                ll_task_view.visibility = View.VISIBLE
-                                tv_task_target.text = if(data.scrollRequire == 0) "初" else data.scrollRequire.toString() + "级卷轴"
-                                tv_user_cur_task.text = data.userScrollNumber
-                                tv_user_total_task.text = "/"+data.scrollNumber
-                                tv_task_get_way.text = data.taskAccess
-                            }else{
-                                ll_task_view.visibility = View.GONE
-                            }
-                            if(data.upgradeAskVoList.isNotEmpty()){
-                                ll_team_view.visibility = View.VISIBLE
-                                val sb = StringBuffer()
-                                for(i in data.upgradeAskVoList.indices){
-                                    for (j in data.upgradeAskVoList[i].upgradeAskList.indices){
-                                        sb.append("<font color='#F36F4A'>${data.upgradeAskVoList[i].upgradeAskList[j].userNumberFirst}</font>/${data.upgradeAskVoList[i].upgradeAskList[j].numberFirst} v${data.upgradeAskVoList[i].upgradeAskList[j].levelFirst} ")
-                                        if(j<data.upgradeAskVoList[i].upgradeAskList.size-1){
-                                            sb.append("<font color='#666666'>且 </font>")
+                            if(data.userLevel>0){
+                                ll_auth_view.visibility = View.GONE
+                                if(data.suffer>0){
+                                    ll_exp_view.visibility = View.VISIBLE
+                                    tv_user_cur_exp.text = data.userSuffer
+                                    tv_user_total_exp.text = "/"+data.suffer
+                                    tv_exp_get_way.text = data.sufferAccess
+                                }else{
+                                    ll_exp_view.visibility = View.GONE
+                                }
+                                if(data.scrollNumber>0){
+                                    ll_task_view.visibility = View.VISIBLE
+                                    tv_task_target.text = if(data.scrollRequire == 0) "初" else data.scrollRequire.toString() + "级卷轴"
+                                    tv_user_cur_task.text = data.userScrollNumber
+                                    tv_user_total_task.text = "/"+data.scrollNumber
+                                    tv_task_get_way.text = data.taskAccess
+                                }else{
+                                    ll_task_view.visibility = View.GONE
+                                }
+                                if(data.upgradeAskVoList.isNotEmpty()){
+                                    ll_team_view.visibility = View.VISIBLE
+                                    val sb = StringBuffer()
+                                    for(i in data.upgradeAskVoList.indices){
+                                        for (j in data.upgradeAskVoList[i].upgradeAskList.indices){
+                                            sb.append("<font color='#F36F4A'>${data.upgradeAskVoList[i].upgradeAskList[j].userNumberFirst}</font>/${data.upgradeAskVoList[i].upgradeAskList[j].numberFirst} v${data.upgradeAskVoList[i].upgradeAskList[j].levelFirst} ")
+                                            if(j<data.upgradeAskVoList[i].upgradeAskList.size-1){
+                                                sb.append("<font color='#666666'>且 </font>")
+                                            }
+                                        }
+                                        if(i<data.upgradeAskVoList.size-1){
+                                            sb.append("<font color='#666666'>或</font><br/>")
                                         }
                                     }
-                                    if(i<data.upgradeAskVoList.size-1){
-                                        sb.append("<font color='#666666'>或</font><br/>")
-                                    }
+                                    tv_team_value.text = Html.fromHtml(sb.toString())
+                                    tv_team_get_way.text = data.teamAccess
+                                }else{
+                                    ll_team_view.visibility = View.GONE
                                 }
-                                tv_team_value.text = Html.fromHtml(sb.toString())
-                                tv_team_get_way.text = data.teamAccess
                             }else{
+                                ll_auth_view.visibility = View.VISIBLE
+                                ll_exp_view.visibility = View.GONE
+                                ll_task_view.visibility = View.GONE
                                 ll_team_view.visibility = View.GONE
+
+                                tv_auth_result.text = if(user!!.isReai == "1") "已实名" else "去实名"
                             }
-                        }else{
-                            ll_auth_view.visibility = View.VISIBLE
-                            ll_exp_view.visibility = View.GONE
-                            ll_task_view.visibility = View.GONE
-                            ll_team_view.visibility = View.GONE
 
-                            tv_auth_result.text = if(user!!.isReai == "1") "已实名" else "去实名"
+                            isLevelUp = data.isUpgrade
+                            tv_level_up.setBackgroundResource(if(data.isUpgrade) R.drawable.bg_main_full_2 else R.drawable.bg_main_1_full_2)
                         }
-
-                        isLevelUp = data.isUpgrade
-                        tv_level_up.setBackgroundResource(if(data.isUpgrade) R.drawable.bg_main_full_2 else R.drawable.bg_main_1_full_2)
                     }
                 }
                 SXContract.MEMBERUP -> {

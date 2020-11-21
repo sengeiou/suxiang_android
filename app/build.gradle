@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.protobuf'
 
 static def releaseTime() {
     return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
@@ -36,7 +37,7 @@ android {
 
     defaultConfig {
         applicationId "com.sx.enjoy"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 29
         versionCode 1004
         versionName "1.0.04"
@@ -72,6 +73,28 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    protobuf {
+        protoc {
+            artifact = 'com.google.protobuf:protoc:3.0.0'
+        }
+        plugins {
+            javalite {
+                artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+            }
+        }
+        generateProtoTasks {
+            all().each { task ->
+                task.builtins {
+                    remove java
+                }
+                task.plugins {
+                    javalite { }
+                }
+            }
+        }
+    }
+
 }
 
 
@@ -121,4 +144,8 @@ dependencies {
     implementation('com.yanzhenjie:permission:2.0.0-rc5') {
         exclude group: "com.android.support"
     }
+
+    implementation (name:'domob-ads-3.2.0', ext:'aar')
+    implementation 'com.google.protobuf:protobuf-lite:3.0.1'
+
 }
